@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.ReportMapper">
+  <resultMap id="reportTempleteMap" type="reportTemplate" autoMapping="true">
+      <result property="docPattern" javaType="_byte[]" column="doc_pattern" jdbcType="BLOB"/>
+  </resultMap>
+
+  <select id="findAuditDurationStage" resultType="ru.md.domain.AuditDurationStage">
+      select * from (
+      select m.id_mdtask,m.ID_PUP_PROCESS,m.MDTASK_NUMBER,g.name stage_name,
+      g.ID_SPG,d.SHORTNAME init_dep_name,m.tasktype,m.currency,m.mdtask_sum,ek.name ek_name,
+      (select max(a.value_var) from variables v inner join attributes a on a.id_var=v.id_var where v.name_var like 'Статус' and a.id_process=m.id_pup_process) status
+      from mdtask m
+      inner join STANDARD_PERIOD_GROUP g on g.ID_SPV=(select max(id_spv) from Standard_Period_Version v where v.id_type_process=#{processID})
+      inner join processes p on p.id_process=m.id_pup_process
+      left outer join DEPARTMENTS d on d.ID_DEPARTMENT=m.initdepartment
+      left outer join crm_ek ek on m.MAIN_ORG=ek.ID
+      where p.id_type_process=#{processID})
+      where exists (select 1 from tasks t
+        inner join task_events e on e.id_task=t.id_task and e.id_task_type_event in(1,3,4,5)
+        where t.id_process=ID_PUP_PROCESS and e.date_event between #{from} and #{to})
+      order by id_mdtask desc, id_spg
+  </select>
+  <select id="getStandardPeriodValueBySPG" resultType="Long">
+      select v.period from standard_period_value v
+        inner join standard_period_group g on v.id_spg=g.id_spg
+        where g.id_spv=#{idVersion} and g.name=#{stagename}
+  </select>
+  <select id="getAuditDurationTasksHistory" resultType="ru.md.domain.AuditDurationTasksHistory">
+      <![CDATA[
+        select t.ID_TASK,t.id_stage_to,
+        (select min(te.DATE_EVENT) from task_events te where te.ID_TASK=t.ID_TASK and te.ID_TASK_TYPE_EVENT=1) st,
+        (select max(te.DATE_EVENT) from task_events te where te.ID_TASK=t.ID_TASK and te.ID_TASK_TYPE_EVENT in(3,4,5)) en
+        from tasks t
+        where t.ID_PROCESS=#{processID}  and t.ID_STAGE_TO in (select id_stage from r_stage_standardgroup where ID_SPG=#{idSPG})
+        order by id_task
+      ]]>
+  </select>
+  <select id="getLastStandardPeriodValueChange" resultType="Long">
+      select p from (select * from
+      (select id,days p,ch.ID_MDTASK,ch.ID_SPG,g.name gname,ch.when_change from STANDARD_PERIOD_change_mdtask ch
+      inner join standard_period_group g on g.id_spg=ch.ID_SPG
+       where days is not null
+      union all
+      select id,v.PERIOD p,ch.ID_MDTASK,v.ID_SPG,g.name gname,ch.when_change from STANDARD_PERIOD_change_mdtask ch
+      inner join standard_period_value v on v.ID_SPVAL=ch.ID_STANDARD_PERIOD_VALUE
+      inner join standard_period_group g on g.id_spg=v.id_spg)
+
+      where ID_MDTASK=#{idmdtask} and gname=#{groupname}
+      <if test="iterEnd != null">
+          <![CDATA[
+            and when_change <= #{iterEnd}
+        ]]>
+      </if>
+      <![CDATA[
+      order by id desc) where rownum <= 1
+      ]]>
+  </select>
+    <select id="getLastTaskComment" resultType="ru.md.domain.TaskComment">
+        <![CDATA[
+select tc.COMMENT_BODY text,u.SURNAME||' '||u.NAME author,d.SHORTNAME depname from TASKCOMMENT tc
+inner join r_stage_standardgroup sg on sg.ID_STAGE=tc.ID_STAGE
+inner join users u on u.ID_USER=tc.WHO
+inner join DEPARTMENTS d on d.ID_DEPARTMENT=u.ID_DEPARTMENT
+where sg.ID_SPG=#{idSPG} and tc.ID_MDTASK=#{idmdtask} and tc.COMMENT_BODY is not null
+      ]]>
+      <if test="from != null">
+          <![CDATA[
+            and tc.when >= #{from}
+        ]]>
+      </if>
+      <if test="to != null">
+          <![CDATA[
+            and tc.when <= #{to}
+        ]]>
+      </if>
+        <![CDATA[
+order by tc.ID_TASKCOMMENT asc
+      ]]>
+    </select>
+
+    <select id="getLastComment" resultType="ru.md.domain.TaskComment">
+    select * from(
+    select tc.COMMENT_BODY text,u.SURNAME||' '||u.NAME||' '||u.patronymic author,d.SHORTNAME depname,
+    to_char(tc.when,'HH24:MI, dd.mm.yyyy') commenttime from TASKCOMMENT tc
+    inner join users u on u.ID_USER=tc.WHO
+    inner join DEPARTMENTS d on d.ID_DEPARTMENT=u.ID_DEPARTMENT
+    where tc.ID_MDTASK=#{idmdtask} and tc.COMMENT_BODY is not null
+    order by tc.ID_TASKCOMMENT desc
+    ) where rownum=1
+    </select>
+
+    <select id="getActualSPVersion" resultType="Long">
+      select * from (select v.id_spv from standard_period_version v
+        where v.id_type_process=#{idProcessType}
+        <if test="dt != null">
+        <![CDATA[
+            and v.date_version <= #{dt}
+        ]]>
+        </if>
+        <![CDATA[
+        order by v.id_spv desc) where rownum <= 1
+      ]]>
+    </select>
+
+    <update id="insertAuditClientReport">
+        insert into spo_standard_period_report
+        (id_mdtask, mdtask_number, org, task_sum, currency, task_type, status, init_dep, client_manager, proguct_manager, structurator, analist,
+        stage_name, start_date, end_date, period, cmnt, cmnt_user, cmnt_dep)
+        values
+        (#{idMdtask}, #{mdtaskNumber}, #{ekName}, #{mdtaskSum}, #{currency}, #{tasktypeDisplay}, #{status}, #{initDepName},
+        #{clientManager}, #{proguctManager}, #{structurator}, #{analist},
+        #{stageNameDisplay}, #{stageStart}, #{stageEnd}, #{period}, #{cmnt}, #{cmntUser}, #{cmntDep})
+    </update>
+
+    <select id="getCompendiumTemplate" resultMap="reportTempleteMap">
+        select rt.doc_pattern doc_pattern,
+               rt.template_name,
+               rt.filename
+          from report_template rt
+         where rt.is_active = 1
+           and rt.filename = #{templateKey}
+    <if test="systemName != null">
+           and rt.system = #{systemName}
+    </if>
+    </select>
+</mapper>

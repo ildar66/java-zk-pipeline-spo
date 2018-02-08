@@ -1,0 +1,107 @@
+/* The table displaying all of the tabs, panels and buttons which has 3 rows, each row has one cell for all tabs, panels and buttons*/
+.tabbedPanel, .fake_tabbedPanel {
+	border-color: #bababa;
+	width: 100%;
+	margin-bottom:1.5em;
+}
+
+.fake_tabbedPanel table.table {width:96%}
+
+
+/* The Cell displaying all of the tabs*/
+.tabbedPanel-Header, .fake_tabs {
+	border: 0px solid #bababa;
+	margin: 0px;
+	background: url("img/tab_bg.png") bottom left repeat-x;
+	height:23px;
+}
+/* The table inside the tabs cell*/
+.tabbedPanel-Header table {
+	margin-right: 0;
+	cursor: pointer;
+}
+/* Common style for active and inactive tabs*/
+.tabbedPanel-TabActive, .tabbedPanel-TabInactive {
+	font: bold Verdana;
+	text-decoration: none;
+	border-bottom-width: 0px;
+	padding: 2px 1px 1px 1px;
+	text-align:center;
+}
+.tabbedPanel-TabActive a {color:#444;}
+.tabbedPanel-TabInactive a {color:#fff;}
+/* style for active tab*/
+.tabbedPanel-TabActive label, .fake_tabs .ActiveButton {
+	background: #fff url("img/tab_active.png") top left no-repeat;
+	padding:4px 0 0 0;
+	color:#444;
+	width:175px;
+	height:23px;
+	font-size:1em;
+	cursor: default;
+	font-family: Verdana;
+}
+.fake_tabs .ActiveButton {padding:1px 0;}
+.short .tabbedPanel-TabActive label, .short .fake_tabs .ActiveButton
+{
+	background-image: url("img/tab_active_short.png");
+}
+/* style for inactive tab(s)*/
+.tabbedPanel-TabInactive label, .fake_tabs input.InactiveButton  {
+	background: url("img/tab_inactive.png") top left no-repeat;
+	padding:4px 0 1px 0;
+	color:#fff;
+	width:171px;
+	cursor:pointer;
+	height:23px;
+	font-size:1em;
+	font-family: Verdana;
+}
+.fake_tabs input.InactiveButton {padding:1px 0;}
+.fake_tabs .ActiveButton, .fake_tabs .InactiveButton {
+	border:0;
+	margin: 0 2px;
+	font-weight:bold;
+	font-family: Verdana, sans-serif;
+}
+
+.short .tabbedPanel-TabInactive label, .short .fake_tabs .InactiveButton
+{
+	background: url("img/tab_inactive_short.png") top left no-repeat;
+}
+
+/* style for the text in active tab*/
+.tabbedPanel-HyperActive {
+	text-decoration: none;
+}
+/* style for the text in inactive tab(s)*/
+.tabbedPanel-HyperInactive {
+	text-decoration: none;
+}
+.tabbedPanel-TabLabel {
+	cursor: pointer;
+	display:block;
+	width:175px;
+}
+.short .tabbedPanel-TabLabel, .fake_tabs .ActiveButton {width:115px;}
+.short .fake_tabs .InactiveButton {width:111px;}
+/* style for the panels*/
+.tabbedPanel-Body, .fake_tabbedPanel-Body {
+	padding: 4px;
+}
+/* style for the Div object which is inside the panels*/
+.tabbedPanel-Body .tabbedPanel_DIV, .fake_tabbedPanel-Body {
+	border: 2px solid #17c;
+	border-width:0 2px 2px 2px;
+	padding:10px;
+	background:#fff;
+}
+
+.tabbedPanel-Body .tabbedPanel_DIV table.table {width:90%;}
+
+
+/*Use for getting all the system image icons*/
+.tabbedPanel-classForTabSysIcons {
+	/*Sample style, please uncomment the following line and modify the icons path if you want use your own customized system icons*/
+	/*list-style-image:url("|previous=jsl/tab/icons/previous.gif|disprevious=jsl/tab/icons/previous_disabled.gif|next=jsl/tab/icons/next.gif|disnext=jsl/tab/icons/next_disabled.gif|");*/
+}

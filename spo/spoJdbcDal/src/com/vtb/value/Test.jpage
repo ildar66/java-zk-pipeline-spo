@@ -1,0 +1,10 @@
+//String fullName = "Пупкин";
+//String fullName = "Пупкин Иван";
+String fullName = "Пупкин Иван Михайлович";
+Name name = new Name();
+name.parse(fullName);
+System.out.println("Фамилие=\'" + name.getLast() + "\'");
+System.out.println("Имя=\'" + name.getFirst() + "\'");
+System.out.println("Отчество=\'" + name.getMiddle() + "\'");
+System.out.println("fullName=\'" + name + "\'");
+

@@ -1,0 +1,1723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.MdTaskMapper">
+
+    <resultMap id="dealPercentHistoryResultMap" type="dealPercentHistory" autoMapping="true">
+        <id property="id" column="ID"/>
+        <result property="useFrom" column="USEFROM"/>
+
+        <collection property="indrateHistories" ofType="indrateHistory" columnPrefix="IR_" resultMap="indrateHistoryResultMap" />
+        <collection property="factPercentHistories" ofType="factPercentHistory" columnPrefix="FP_" resultMap="factPercentHistoryResultMap" />
+    </resultMap>
+
+    <resultMap id="indrateHistoryResultMap" type="indrateHistory" autoMapping="true">
+        <id property="id" column="ID"/>
+    </resultMap>
+
+    <resultMap id="factPercentHistoryResultMap" type="factPercentHistory" autoMapping="true">
+        <id property="id" column="id"/>
+
+        <collection property="indrateHistories" ofType="indrateHistory" columnPrefix="IR_" resultMap="indrateHistoryResultMap" />
+    </resultMap>
+
+    <resultMap type="mdTask" id="mdTaskSimpleResultMap" autoMapping="true">
+        <id property="idMdtask" column="ID_MDTASK" />
+        <result property="supplyexist" column="IS_SUPPLY_EXIST" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <association property="mainOrganization" columnPrefix="MO_" resultMap="orgResultMap" />
+    </resultMap>
+
+    <resultMap type="mdTask" id="mdTaskResultMap" autoMapping="true">
+        <id property="idMdtask" column="ID_MDTASK" />
+        <result property="limitSum" column="LIMIT_SUM" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="debtSum" column="DEBT_SUM" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="fixedRate" column="FIXED_RATE" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="earlyRepaymentBan" column="EARLY_REPAYMENT_BAN" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <association property="mainOrganization" columnPrefix="MO_" resultMap="orgResultMap" />
+        <association property="baseRate" columnPrefix="BR_" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap" />
+        <association property="pipeline" columnPrefix="P_" resultMap="pipelineResultMap" />
+        <association property="productType" columnPrefix="PT_" resultMap="ru.md.persistence.ProductMapper.productResultMap" />
+        <collection property="otherOrganizations" ofType="mdTask" columnPrefix="OO_" resultMap="orgResultMap" />
+        <collection property="interestRates" ofType="interestRate" columnPrefix="IR_" resultMap="interestRateResultMap" />
+        <collection property="comissions" ofType="comission" columnPrefix="C_" resultMap="comissionResultMap" />
+        <collection property="productGroups" ofType="string">
+            <id column="PRODUCT_GROUP_NAME" />
+        </collection>
+    </resultMap>
+    
+    <resultMap type="org" id="orgResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+    </resultMap>
+
+<!-- таблица R_MDTASK_OTHERGOALS -->
+    <resultMap type="otherGoal" id="otherGoalResultMap" autoMapping="true">
+        <id property="id" column="ID_TARGET_GROUP_LIMIT_TYPE" />
+        
+        <result property="crmTargetTypeId" column="ID_CRM_TARGET_TYPE"/>
+        <result property="goal" column="DESCR"/>
+    </resultMap>
+
+<!-- таблица TARGET_GROUP_LIMIT_TYPE -->
+    <resultMap type="targetGroupLimitType" id="targetGroupLimitTypeResultMap" autoMapping="true">
+        <id property="id" column="ID_TARGET_GROUP_LIMIT_TYPE" />
+    </resultMap>
+    
+    <select id="SELECT_TARGET_GROUP_LIMIT_TYPE_BY_DEAL_ID" parameterType="long" resultMap="targetGroupLimitTypeResultMap">
+        SELECT ID_TARGET_GROUP_LIMIT_TYPE, ID_TARGET_GROUP_LIMIT, ID_TARGET, TARGET_TYPE_NAME
+          FROM TARGET_GROUP_LIMIT_TYPE C
+         WHERE C.ID_TARGET_GROUP_LIMIT = #{idTargetGroupLimit}
+         ORDER BY C.TARGET_TYPE_NAME
+    </select>
+
+<!-- таблица TARGET_GROUP_LIMIT -->
+    <resultMap type="targetGroupLimit" id="targetGroupLimitResultMap" autoMapping="true">
+        <id property="id" column="ID_TARGET_GROUP_LIMIT" />
+        
+        <collection property="targetGroupLimitTypes" column="ID_TARGET_GROUP_LIMIT" ofType="targetGroupLimitType" select="SELECT_TARGET_GROUP_LIMIT_TYPE_BY_DEAL_ID" />
+    </resultMap>
+        
+    <resultMap type="pipeline" id="pipelineResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+        <result property="syndication" column="SYNDICATION" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="publicDeal" column="PUBLIC_DEAL" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="managementPriority" column="MANAGEMENT_PRIORITY" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="statusManual" column="STATUS_MANUAL" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="newClient" column="NEW_CLIENT" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="prolongation" column="PROLONGATION" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="hideInReport" column="HIDE_IN_REPORT" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="hideInReportTraders" column="HIDE_IN_REPORT_TRADERS" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <result property="managerPriority" column="MANAGER_PRIORITY" typeHandler="ru.md.persistence.typehandler.YesNoBooleanTypeHandler" />
+        <association property="mdTask" columnPrefix="MT_" resultMap="mdTaskResultMap" />
+        <association property="productManager" columnPrefix="PM_" resultMap="ru.md.persistence.UserMapper.userResultMap" />
+        <association property="creditAnalyst" columnPrefix="CA_" resultMap="ru.md.persistence.UserMapper.userResultMap" />
+        <association property="structureInspector" columnPrefix="SI_" resultMap="ru.md.persistence.UserMapper.userResultMap" />
+        <association property="clientManager" columnPrefix="CM_" resultMap="ru.md.persistence.UserMapper.userResultMap" />
+        <collection property="financingObjectives" ofType="string">
+            <id column="FO" />
+        </collection>
+        <collection property="ensurings" columnPrefix="ENS_" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap" />
+    </resultMap>
+    
+    <resultMap type="comission" id="comissionResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+        <association property="type" columnPrefix="CT_" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap" />
+        <association property="period" columnPrefix="CP_" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap" />
+        <association property="mdTask" columnPrefix="MT_" resultMap="mdTaskResultMap" />
+    </resultMap>
+    
+    <resultMap type="comission" id="comissionSimpleResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+        <association property="type" columnPrefix="CT_" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap" />
+        <association property="period" columnPrefix="CP_" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap" />
+        <association property="mdTask" columnPrefix="MT_" resultMap="mdTaskSimpleResultMap" />
+    </resultMap>
+    
+    <resultMap type="interestRate" id="interestRateResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+    </resultMap>
+
+    <select id="getById" resultMap="mdTaskSimpleResultMap">
+        SELECT t.ID_MDTASK, t.TASKTYPE,t.ID_PUP_PROCESS,p.ID_TYPE_PROCESS,IS_IMPORTED,IS_IMPORTED_BM,p.ID_STATUS, t.PARENTID,t.mdtask_sum,
+        tp.DESCRIPTION_PROCESS processname,mdtask_number,currency,ek.name ekname,t.PRODUCT_NAME,period,periodDimension,t.VALIDTO,t.main_org_changeble,
+        t.IS_3FACES faces3,country,additional_contract,product_monitoring,ip.pay_int,
+        t.STATUSRETURN,ca.cc_cache_statusid,t.ID_INSTANCE,IS_SUPPLY_EXIST,
+        T.PROJECT_NAME,T.PROJECT_CLASS, T.PROJECT_INDUSTRY, T.PROJECT_REGION, T.PROJECT_RATING1, T.PROJECT_RATING2, T.PROJECT_RATING3, T.PROJECT_RATING4,
+        T.MAIN_ORG MO_ID, EK.NAME MO_NAME,t.VERSION,ek.GROUPNAME ekgroup,t.meeting_proposed_date,t.initdepartment,t.question_group,
+        T.PERIOD, T.PERIODDIMENSION PERIOD_DIMENSION, T.VALIDTO,T.PROPOSED_DT_SIGNING,d.shortname initdep,st_map.spo_status map_status
+        FROM mdtask t left outer join processes p on t.ID_PUP_PROCESS=p.ID_PROCESS
+        left outer join TYPE_PROCESS tp on tp.ID_TYPE_PROCESS=p.ID_TYPE_PROCESS
+        left outer join crm_ek ek on ek.ID=t.MAIN_ORG
+        left outer join INTEREST_PAY ip on ip.id_mdtask=t.id_mdtask
+        left outer join md_cc_cache ca on ca.id_mdtask= t.id_mdtask
+        left outer join departments d on t.initdepartment=d.id_department
+        left outer join spo_cc_status_map st_map on t.ID_DISPLAY_STATUS=st_map.cc_status_id
+        <where>
+            t.ID_MDTASK = #{id}
+        </where>
+    </select>
+    
+    <select id="getReportTemplateList" resultType="reportTemplate">
+        select t.TEMPLATE_NAME, t.FILENAME, t.REPORTING_ENGINE
+          from V_REPORT_TEMPLATE t
+         where t.system='СПО' and t.TYPE='PRINT_FORM_WORD' and t.FILENAME not like 'signature_report'
+         order by t.TEMPLATE_NAME
+    </select>
+    
+    <select id="isFavorite" resultType="boolean">
+        SELECT CASE WHEN EXISTS (SELECT F.MDTASK_FAVORITE_ID
+                           FROM MDTASK_FAVORITE F
+                          WHERE F.MDTASK_ID = #{mdTaskId}
+                            AND F.USER_ID = #{userId})
+                    THEN 1
+                    ELSE 0
+               END CASE
+          FROM DUAL 
+    </select>
+
+    <update id="favoriteSwitcher">
+        MERGE INTO MDTASK_FAVORITE USING (
+            SELECT #{mdTaskId} MDTASK_ID, #{userId} USER_ID 
+              FROM DUAL
+        ) Z ON (MDTASK_FAVORITE.MDTASK_ID = Z.MDTASK_ID AND MDTASK_FAVORITE.USER_ID = Z.USER_ID)
+        WHEN NOT MATCHED THEN 
+            INSERT (MDTASK_FAVORITE_ID, MDTASK_ID, USER_ID) 
+            VALUES (MDTASK_FAVORITE_SEQ.NEXTVAL, Z.MDTASK_ID, Z.USER_ID)
+        WHEN MATCHED THEN 
+            UPDATE SET MDTASK_FAVORITE.MDTASK_FAVORITE_ID = 0
+            DELETE WHERE MDTASK_FAVORITE.MDTASK_ID = Z.MDTASK_ID AND MDTASK_FAVORITE.USER_ID = Z.USER_ID
+    </update>
+    
+    <select id="getPipelineWithinMdTask" resultMap="mdTaskResultMap">
+          WITH UR AS (SELECT U.ID_USER, U.LOGIN, U.NAME, U.SURNAME, U.PATRONYMIC,
+                             R.ID_ROLE, R.NAME_ROLE
+                        FROM ASSIGN A JOIN USERS U ON U.ID_USER = A.ID_USER_TO
+                                      JOIN ROLES R ON R.ID_ROLE = A.ID_ROLE
+                                      JOIN USER_IN_ROLE UIR ON UIR.ID_ROLE = R.ID_ROLE and UIR.ID_USER=A.ID_USER_TO and UIR.STATUS='Y'
+                                      JOIN PROCESS_EVENTS PE ON PE.ID_PROCESS_EVENT = A.ID_PROCESS_EVENT
+                                      JOIN MDTASK MT ON MT.ID_PUP_PROCESS = PE.ID_PROCESS
+                                      JOIN PROJECT_TEAM PT ON PT.ID_MDTASK = MT.ID_MDTASK
+                                                          AND U.ID_USER = PT.ID_USER
+                       WHERE MT.ID_MDTASK = (SELECT Z.ID_MDTASK
+                                               FROM (SELECT M.ID_MDTASK, ROW_NUMBER() OVER(ORDER BY LEVEL DESC) RN
+                                                       FROM MDTASK M
+                                                    CONNECT BY PRIOR M.PARENTID = M.ID_MDTASK 
+                                                        AND PRIOR LOWER(NVL(M.TASKTYPE, 's')) = 's'
+                                                      START WITH M.ID_MDTASK = #{mdTaskId}) Z
+                                              WHERE RN = 1))
+        SELECT <!-- mdTask.pipeline -->
+               MT.ID_MDTASK P_ID, P.PLAN_DATE P_PLAN_DATE, P.STATUS P_STATUS, P.CLOSE_PROBABILITY P_CLOSE_PROBABILITY,
+               P.LAW P_LAW, P.GEOGRAPHY P_GEOGRAPHY, P.SUPPLY P_SUPPLY, P.DESCRIPTION P_DESCRIPTION, P.CMNT P_NOTE,
+               P.ADDITION_BUSINESS P_ADDITIONAL_BUSINESS, P.SYNDICATION P_SYNDICATION, P.SYNDICATION_CMNT P_SYNDICATION_NOTE, P.WAL P_WAL,
+               P.HURDLE_RATE P_HURDLE_RATE, P.MARKUP P_MARKUP, P.PC_CASH P_PC_CASH, P.PC_RES P_PC_RESERVE, P.PC_DER P_PC_DERIVATIVE,
+               P.PC_TOTAL P_PC_TOTAL, P.LINE_COUNT P_SELECTED_LINE_VOLUME, P.PUB P_PUBLIC_DEAL, P.PRIORITY P_MANAGEMENT_PRIORITY, P.STATUS_MANUAL P_STATUS_MANUAL,
+               P.NEW_CLIENT P_NEW_CLIENT, P.FLOW_INVESTMENT P_FLOW_INVESTMENT, P.FACTOR_PRODUCT_TYPE P_PRODUCT_TYPE_FACTOR,
+               P.FACTOR_PERIOD P_PERIOD_FACTOR, P.CONTRACTOR P_FUND_COMPANY, P.VTB_CONTRACTOR P_VTB_CONTRACTOR, P.TRADE_DESC P_TRADING_DESK,
+               P.PROLONGATION P_PROLONGATION, P.HIDEINREPORT P_HIDE_IN_REPORT, P.MANAGER_PRIORITY P_MANAGER_PRIORITY,P.margin P_MARGIN,P.trade_finance p_trade_finance,
+               ctf.name p_trade_finance_name, P.HIDEINREPORTTRADERS P_HIDE_IN_REPORT_TRADERS,
+               
+               <!-- mdTask.pipeline.mdTask -->
+               MT.ID_MDTASK P_MT_ID_MDTASK,
+               
+               <!-- mdTask.pipeline.financingObjectives -->
+               FO.VAL P_FO,
+               
+               <!-- mdTask.pipeline.productManager -->
+               PM.ID_USER P_PM_ID, PM.LOGIN P_PM_LOGIN, PM.NAME P_PM_FIRST_NAME, PM.SURNAME P_PM_LAST_NAME, PM.PATRONYMIC P_PM_PATRONYMIC,
+               
+               <!-- mdTask.pipeline.creditAnalyst -->
+               CA.ID_USER P_CA_ID, CA.LOGIN P_CA_LOGIN, CA.NAME P_CA_FIRST_NAME, CA.SURNAME P_CA_LAST_NAME, CA.PATRONYMIC P_CA_PATRONYMIC,
+               
+               <!-- mdTask.pipeline.structureInspector -->
+               SI.ID_USER P_SI_ID, SI.LOGIN P_SI_LOGIN, SI.NAME P_SI_FIRST_NAME, SI.SURNAME P_SI_LAST_NAME, SI.PATRONYMIC P_SI_PATRONYMIC,
+               
+               <!-- mdTask.pipeline.clientManager -->
+               CM.ID_USER P_CM_ID, CM.LOGIN P_CM_LOGIN, CM.NAME P_CM_FIRST_NAME, CM.SURNAME P_CM_LAST_NAME, CM.PATRONYMIC P_CM_PATRONYMIC,
+               
+               <!-- mdTask.pipeline.ensurings -->
+               ENS.ID P_ENS_ID, ENS.NAME P_ENS_NAME,
+               
+               <!-- mdTask -->
+               MT.ID_MDTASK,
+               (SELECT MIN(TE.DATE_EVENT)
+                  FROM TASK_EVENTS TE JOIN TASKS T ON T.ID_TASK = TE.ID_TASK
+                 WHERE T.ID_PROCESS = (SELECT Z.ID_PUP_PROCESS
+                                         FROM (SELECT M.ID_PUP_PROCESS, ROW_NUMBER() OVER(ORDER BY LEVEL DESC) RN
+                                                 FROM MDTASK M
+                                              CONNECT BY PRIOR M.PARENTID = M.ID_MDTASK AND PRIOR LOWER(NVL(M.TASKTYPE, 's')) = 's'
+                                                START WITH M.ID_MDTASK = #{mdTaskId}) Z
+                                        WHERE RN = 1)
+                   AND TE.ID_TASK_TYPE_EVENT = 1
+                 GROUP BY T.ID_PROCESS) CREATION_DATE, 
+               (SELECT MAX(TE.DATE_EVENT)
+                  FROM TASK_EVENTS TE JOIN TASKS T ON T.ID_TASK = TE.ID_TASK
+                 WHERE T.ID_PROCESS = MT.ID_PUP_PROCESS
+                   AND TE.ID_TASK_TYPE_EVENT = 3
+                 GROUP BY T.ID_PROCESS) LAST_UPDATE_DATE,
+               NVL((SELECT AI.VALUE_VAR
+                      FROM MDTASK MTI JOIN PROCESSES PI ON PI.ID_PROCESS = MTI.ID_PUP_PROCESS
+                                      JOIN ATTRIBUTES AI ON AI.ID_PROCESS = PI.ID_PROCESS
+                                      JOIN VARIABLES VI ON VI.ID_TYPE_PROCESS = PI.ID_TYPE_PROCESS
+                                                       AND VI.ID_VAR = AI.ID_VAR
+                     WHERE VI.NAME_VAR = 'Приоритет'
+                       AND MTI.ID_MDTASK = #{mdTaskId}), MT.SUBLIMIT_PRIORITY) PRIORITY, MT.PROPOSED_DT_SIGNING, CP.NAME PRODUCT_NAME, MT.TASKTYPE,
+               MT.PERIOD, MT.PERIODDIMENSION PERIOD_DIMENSION, MT.VALIDTO, MT.CURRENCY, MT.MDTASK_SUM, MT.LIMIT_ISSUE_SUM, MT.DEBT_LIMIT_SUM,
+               MT.IS_LIMIT_SUM LIMIT_SUM, MT.IS_DEBT_SUM DEBT_SUM, MT.IS_FIXED FIXED_RATE, MT.interest_rate_fixed interestRateFixed,MT.PROJECT_NAME,
+               MT.interest_rate_derivative interestRateDerivative,
+               MT.RATE5 FIXING_RATE_SPREAD,
+               MT.RATE6 EARLY_REPAYMENT_SPREAD, TP.DESCRIPTION_PROCESS PROCESSNAME, MT.DRAWDOWN_DATE_IN_MONTH, MT.USEPERIOD USE_PERIOD,
+               MT.USEDATE USE_DATE, 
+               (SELECT RATE
+                  FROM (SELECT CR.RATE, CR.CURRENCYCODE
+                          FROM CRM_FB_EXCHANGERATE CR
+                         WHERE CR.ACTIVEDATE &lt;= SYSDATE
+                         ORDER BY CR.ACTIVEDATE DESC) 
+                 WHERE CURRENCYCODE = MT.CURRENCY 
+                   AND ROWNUM = 1) CURRENT_CURRENCY_RATE,
+               (SELECT RATE
+                  FROM (SELECT CR.RATE, CR.CURRENCYCODE
+                          FROM CRM_FB_EXCHANGERATE CR
+                         WHERE CR.ACTIVEDATE &lt;= SYSDATE
+                           AND CR.CURRENCYCODE = 'USD'
+                         ORDER BY CR.ACTIVEDATE DESC) 
+                 WHERE ROWNUM = 1) USD_CURRENCY_RATE, MT.EARLY_PAYMENT_PROHIBITION EARLY_REPAYMENT_BAN, DL.DAYS_BAN_TO EARLY_REPAYMENT_BAN_PERIOD,
+               MT.RATE9 ARRANGEMENT_FEE, MT.RATE10 SUPPORT_COMISSION, MT.MARGIN,MT.VERSION,MT.mdtask_number,
+               
+               <!-- mdTask.productGroups -->
+               PG.NAME PRODUCT_GROUP_NAME,
+               
+               <!-- mdTask.otherOrganizations -->
+               OO.ID OO_ID, OO.NAME OO_NAME, 
+               
+               <!-- mdTask.mainOrganization -->
+               RO.ID_CRMORG MO_ID, MO.NAME MO_NAME, MO.GROUPNAME MO_GROUPNAME, RO.RATINGPKR MO_PRELIMINARY_RATING,MO.Industry MO_BRANCH,
+               
+               <!-- mdTask.baseRate -->
+               MTBR.ITEMN_ID BR_ID, MTBR.TEXT BR_NAME,
+               
+               <!-- mdTask.interestRates -->
+               F.ID IR_ID, F.RATE4 IR_LOAN_RATE, F.FONDRATE IR_FUNDING_RATE,F.INTEREST_RATE_FIXED IR_INTEREST_RATE_FIXED,F.INTEREST_RATE_DERIVATIVE IR_INTEREST_RATE_DERIVATIVE,
+               
+               <!-- mdTask.productType -->
+               CP.PRODUCTID PT_ID, CP.NAME PT_NAME,CP.FAMILY PRODUCT_FAMILY, LT.NAME_LIMIT_TYPE,
+               
+               <!-- mdTask.comissions -->
+               C.ID C_ID, C.CURRENCY C_CURRENCY, C.COMMISSION_VALUE C_VALUE, C.CURRENCY_RATE C_CURRENCY_RATE,
+               
+               <!-- mdTask.comissions.type -->
+               C.CT_ID C_CT_ID, C.CT_NAME C_CT_NAME,
+               
+               <!-- mdTask.comissions.period -->
+               C.CP_ID C_CP_ID, C.CP_NAME C_CP_NAME,
+               
+               <!-- mdTask.comissions.mdTask -->
+               MT.ID_MDTASK C_MT_ID_MDTASK,
+
+               d.shortname initdep,
+               CS.NAME cross_sell_name,CS.ID cross_sell_id
+          FROM MDTASK MT LEFT JOIN PIPELINE P ON MT.ID_MDTASK = P.ID_MDTASK
+                         LEFT JOIN cd_trade_finance ctf ON ctf.ID = p.trade_finance
+                         LEFT JOIN PROCESSES PS ON PS.ID_PROCESS = MT.ID_PUP_PROCESS
+                         LEFT JOIN TYPE_PROCESS TP ON TP.ID_TYPE_PROCESS = PS.ID_TYPE_PROCESS
+                         LEFT JOIN (SELECT O.ID_ORG ID, O.ORGANIZATION_NAME NAME, SC.GROUPNAME, O.Industry
+                                 FROM CRM_ORGANIZATION O LEFT JOIN CRM_EK SC ON SC.ID = O.ID_ORG) MO ON MO.ID = MT.MAIN_ORG
+                         LEFT JOIN R_ORG_MDTASK RO ON RO.ID_MDTASK = MT.ID_MDTASK
+                                             AND RO.ORDER_DISP = 0
+                         LEFT JOIN R_MDTASK_OPP_TYPE OT ON OT.ID_MDTASK = MT.ID_MDTASK
+                                                       AND MT.TASKTYPE = 'p'
+                         LEFT JOIN CRM_PRODUCT CP ON CP.PRODUCTID = OT.ID_OPP_TYPE
+                         LEFT JOIN LIMIT_TYPE LT ON LT.ID_LIMIT_TYPE = MT.ID_LIMIT_TYPE
+                         LEFT JOIN (SELECT E.ITEMN_ID ID, E.TEXT NAME, D.ID_MDTASK
+                                      FROM DEPOSIT D JOIN CRM_ENSURING E ON E.ITEMN_ID = D.ZALOG_OBJECT
+                                     GROUP BY E.ITEMN_ID, E.TEXT, D.ID_MDTASK) ENS ON ENS.ID_MDTASK = MT.ID_MDTASK
+                         LEFT JOIN R_PRODUCT_GROUP_MDTASK PG ON PG.ID_MDTASK = MT.ID_MDTASK
+                         LEFT JOIN PIPELINE_FIN_TARGET FO ON FO.ID_MDTASK = MT.ID_MDTASK
+                         LEFT JOIN CRM_FLOAT MTBR ON MTBR.ITEMN_ID = MT.IND_RATE
+                         LEFT JOIN FACTPERCENT F ON F.ID_MDTASK = MT.ID_MDTASK
+                         LEFT JOIN CD_CROSS_SELL CS ON CS.ID = MT.CROSS_SELL_TYPE
+                         LEFT OUTER JOIN departments d on mt.initdepartment=d.id_department
+                         LEFT JOIN (SELECT NVL(NVL((SELECT ORGANIZATION_NAME
+                                                     FROM CRM_ORGANIZATION O 
+                                                    WHERE FO.ID_UNITED_CLIENT = O.ID_ORG 
+                                                      AND FO.ID_UNITED_CLIENT IS NOT NULL),
+                                                   (SELECT O.ORGANIZATION_NAME 
+                                                       FROM CRM_ORGANIZATION O 
+                                                      WHERE O.ID_ORG = S.ID_CRMORG)),
+                                               (SELECT LTRIM(P.LAST_NAME || ' ') || LTRIM(P.NAME || ' ') || P.MIDDLE_NAME 
+                                                  FROM CD_PERSON P 
+                                                 WHERE ID_PERSON = S.ID_PERSON)) NAME,
+                                           S.ID_MDTASK, NVL(S.ID_CRMORG, S.ID_PERSON) ID
+                                      FROM R_ORG_MDTASK_SUPPLY S LEFT JOIN CRM_FINANCE_ORG FO ON FO.ID_ORG = S.ID_CRMORG
+                                                                 JOIN CONTRACTOR_TYPE_SUPPLY CTS ON CTS.ID_R = S.ID_R
+                                                                 JOIN CONTRACTOR_TYPE CT ON CTS.ID_CONTRACTOR_TYPE = CT.ID_CONTRACTOR_TYPE
+                                     WHERE S.DELETE_DATE IS NULL
+                                       AND CT.GROUP_KEY = 'WARRANTIES'
+                                     UNION
+                                    SELECT PN.HOLDER NAME, PN.ID_MDTASK, TO_CHAR(TRUNC(-1000000 * DBMS_RANDOM.VALUE)) ID
+                                      FROM PROMISSORY_NOTE PN) OO ON OO.ID_MDTASK = MT.ID_MDTASK
+                         LEFT JOIN UR PM ON LOWER(PM.NAME_ROLE) = LOWER('Продуктовый менеджер')
+                         LEFT JOIN UR CA ON LOWER(CA.NAME_ROLE) = LOWER('Кредитный аналитик')
+                         LEFT JOIN UR SI ON LOWER(SI.NAME_ROLE) IN (LOWER('Структуратор'), LOWER('Руководитель структуратора'))
+                         LEFT JOIN UR CM ON LOWER(CM.NAME_ROLE) = LOWER('Клиентский менеджер')
+                         LEFT JOIN CD_DEPENDING_LOAN DL ON DL.ID = MT.EARLY_PAYMENT_PROH_PER
+                         LEFT JOIN (SELECT C.ID_MDTASK, C.ID_COMMISSION ID, C.CURRENCY, C.COMMISSION_VALUE,
+                                           CT.SHORT_TEXT CT_ID, CT.TEXT CT_NAME,
+                                           CP.SHORT_TEXT CP_ID, CP.TEXT CP_NAME,
+                                           (SELECT RATE
+                                              FROM (SELECT CR.RATE, CR.CURRENCYCODE
+                                                      FROM CRM_FB_EXCHANGERATE CR
+                                                     WHERE CR.ACTIVEDATE &lt;= SYSDATE
+                                                     ORDER BY CR.ACTIVEDATE DESC) 
+                                             WHERE CURRENCYCODE = C.CURRENCY 
+                                               AND ROWNUM = 1) CURRENCY_RATE
+                                      FROM COMMISSION C JOIN CRM_COM_TYPE CT ON CT.SHORT_TEXT = C.CRM_COM_TYPE
+                                                        JOIN CRM_COM_PERIOD CP ON CP.SHORT_TEXT = C.CRM_COM_PERIOD
+                                     WHERE CT.SHORT_TEXT = 'COM_ZA_VID'
+                                       AND CT.IS_ACTIVE = 1
+                                       AND CP.IS_ACTIVE = 1) C ON C.ID_MDTASK = MT.ID_MDTASK
+        WHERE MT.ID_MDTASK = #{mdTaskId}
+        ORDER BY OO.NAME, FO.VAL, F.ID, ENS.NAME
+    </select>
+    
+    <update id="updateProject">
+        update mdtask
+        <set>
+          PROJECT_NAME=#{projectName},
+            PROJECT_CLASS=#{projectClass},
+            PROJECT_INDUSTRY=#{projectIndustry},
+            PROJECT_REGION=#{projectRegion},
+            PROJECT_RATING1=#{projectRating1},
+            PROJECT_RATING2=#{projectRating2},
+            PROJECT_RATING3=#{projectRating3},
+            PROJECT_RATING4=#{projectRating4}
+        </set>
+        where ID_MDTASK = #{idMdtask}
+    </update>
+
+    <update id="updatePipeline">
+        BEGIN
+            MERGE INTO PIPELINE USING (SELECT #{idMdtask} ID_MDTASK, #{pipeline.planDate} PLAN_DATE, #{pipeline.status} STATUS,#{pipeline.margin} MARGIN,
+                                              #{pipeline.closeProbability} CLOSE_PROBABILITY, #{pipeline.law} LAW, #{pipeline.geography} GEOGRAPHY,
+                                              #{pipeline.supply} SUPPLY, #{pipeline.description} DESCRIPTION, #{pipeline.note} CMNT,
+                                              #{pipeline.additionalBusiness} ADDITION_BUSINESS,
+                                              #{pipeline.syndication, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} SYNDICATION,
+                                              #{pipeline.syndicationNote} SYNDICATION_CMNT, #{pipeline.wal} WAL, #{pipeline.hurdleRate} HURDLE_RATE,
+                                              #{pipeline.markup} MARKUP, #{pipeline.pcCash} PC_CASH, #{pipeline.pcReserve} PC_RES,
+                                              #{pipeline.pcDerivative} PC_DER, #{pipeline.pcTotal} PC_TOTAL,
+                                              #{pipeline.selectedLineVolume} LINE_COUNT,
+                                              #{pipeline.managerPriority, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} MANAGER_PRIORITY,
+                                              #{pipeline.statusManual, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} STATUS_MANUAL,
+                                              #{pipeline.publicDeal, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} PUB,
+                                              #{pipeline.newClient, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} NEW_CLIENT,
+                                              #{pipeline.managementPriority, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} PRIORITY,
+                                              #{pipeline.flowInvestment} FLOW_INVESTMENT,#{pipeline.tradeFinance} TRADE_FINANCE,
+                                              #{pipeline.productTypeFactor} FACTOR_PRODUCT_TYPE,
+                                              #{pipeline.periodFactor} FACTOR_PERIOD, #{pipeline.fundCompany} CONTRACTOR, 
+                                              #{pipeline.vtbContractor} VTB_CONTRACTOR, #{pipeline.tradingDesk} TRADE_DESC,
+                                              #{pipeline.prolongation, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} PROLONGATION,
+                                              #{pipeline.hideInReport, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} HIDEINREPORT,
+                                              #{pipeline.hideInReportTraders, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler} HIDEINREPORTTRADERS
+                                         FROM DUAL) Z
+               ON (PIPELINE.ID_MDTASK = Z.ID_MDTASK)
+             WHEN NOT MATCHED THEN 
+                  INSERT (ID_MDTASK, PLAN_DATE, STATUS,MARGIN, CLOSE_PROBABILITY, LAW, GEOGRAPHY, SUPPLY, DESCRIPTION, CMNT, ADDITION_BUSINESS, SYNDICATION,
+                          SYNDICATION_CMNT, WAL, HURDLE_RATE, MARKUP, PC_CASH, PC_RES, PC_DER, PC_TOTAL, LINE_COUNT, MANAGER_PRIORITY, PUB,
+                          NEW_CLIENT, PRIORITY, FLOW_INVESTMENT, TRADE_FINANCE, FACTOR_PRODUCT_TYPE, FACTOR_PERIOD, CONTRACTOR, VTB_CONTRACTOR, TRADE_DESC,
+                          PROLONGATION, HIDEINREPORT,HIDEINREPORTTRADERS,STATUS_MANUAL)
+                  VALUES (Z.ID_MDTASK, Z.PLAN_DATE, Z.STATUS,Z.MARGIN, Z.CLOSE_PROBABILITY, Z.LAW, Z.GEOGRAPHY, Z.SUPPLY, Z.DESCRIPTION, Z.CMNT,
+                          Z.ADDITION_BUSINESS, Z.SYNDICATION, Z.SYNDICATION_CMNT, Z.WAL, Z.HURDLE_RATE, Z.MARKUP, Z.PC_CASH, Z.PC_RES, Z.PC_DER,
+                          Z.PC_TOTAL, Z.LINE_COUNT, Z.MANAGER_PRIORITY, Z.PUB, Z.NEW_CLIENT, Z.PRIORITY, Z.FLOW_INVESTMENT, Z.TRADE_FINANCE, Z.FACTOR_PRODUCT_TYPE,
+                          Z.FACTOR_PERIOD, Z.CONTRACTOR, Z.VTB_CONTRACTOR, Z.TRADE_DESC, Z.PROLONGATION, Z.HIDEINREPORT, Z.HIDEINREPORTTRADERS,Z.STATUS_MANUAL)
+             WHEN MATCHED THEN 
+                  UPDATE SET PLAN_DATE = Z.PLAN_DATE, STATUS = Z.STATUS,MARGIN = Z.MARGIN, CLOSE_PROBABILITY = Z.CLOSE_PROBABILITY, LAW = Z.LAW,
+                             GEOGRAPHY = Z.GEOGRAPHY, SUPPLY = Z.SUPPLY, DESCRIPTION = Z.DESCRIPTION, CMNT = Z.CMNT,
+                             ADDITION_BUSINESS = Z.ADDITION_BUSINESS, SYNDICATION = Z.SYNDICATION, SYNDICATION_CMNT = Z.SYNDICATION_CMNT, WAL = Z.WAL,
+                             HURDLE_RATE = Z.HURDLE_RATE, MARKUP = Z.MARKUP, PC_CASH = Z.PC_CASH, PC_RES = Z.PC_RES, PC_DER = Z.PC_DER,
+                             PC_TOTAL = Z.PC_TOTAL, LINE_COUNT = Z.LINE_COUNT, MANAGER_PRIORITY = Z.MANAGER_PRIORITY, PUB = Z.PUB,
+                             NEW_CLIENT = Z.NEW_CLIENT, PRIORITY = Z.PRIORITY, FLOW_INVESTMENT = Z.FLOW_INVESTMENT,TRADE_FINANCE=Z.TRADE_FINANCE,
+                             FACTOR_PRODUCT_TYPE = Z.FACTOR_PRODUCT_TYPE, FACTOR_PERIOD = Z.FACTOR_PERIOD, CONTRACTOR = Z.CONTRACTOR,
+                             VTB_CONTRACTOR = Z.VTB_CONTRACTOR, TRADE_DESC = Z.TRADE_DESC, PROLONGATION = Z.PROLONGATION,
+                             HIDEINREPORT = Z.HIDEINREPORT, HIDEINREPORTTRADERS = Z.HIDEINREPORTTRADERS, STATUS_MANUAL = Z.STATUS_MANUAL;
+            
+            DELETE 
+              FROM PIPELINE_FIN_TARGET FT
+             WHERE FT.ID_MDTASK = #{idMdtask};
+              
+        <if test="pipeline.financingObjectives != null">
+            <foreach collection="pipeline.financingObjectives" item="fo">
+                <if test="fo != null and fo != ''">
+            INSERT INTO PIPELINE_FIN_TARGET (ID_MDTASK, VAL) 
+            VALUES (${idMdtask}, #{fo});
+                </if>
+            </foreach>
+        </if>
+        
+            UPDATE MDTASK MT
+        <set>
+                   MT.DRAWDOWN_DATE_IN_MONTH = #{drawdownDateInMonth}, MT.PROPOSED_DT_SIGNING = #{proposedDtSigning},
+                   MT.CURRENCY = #{currency}, MT.IND_RATE = #{baseRate.id},
+                   MT.IS_FIXED = #{fixedRate, typeHandler=ru.md.persistence.typehandler.YesNoBooleanTypeHandler},
+                   MT.interest_rate_fixed = #{interestRateFixed},MT.interest_rate_derivative = #{interestRateDerivative},
+                   MT.RATE5 = #{fixingRateSpread}, MT.RATE6 = #{earlyRepaymentSpread},
+            MT.CROSS_SELL_TYPE = #{crossSellId},MT.MDTASK_SUM = #{mdtaskSum},
+            <choose>
+                <when test="product">
+                    <choose>
+                        <when test="limitSum">
+                   MT.LIMIT_ISSUE_SUM = #{mdtaskSum},
+                        </when>
+                        <when test="debtSum">
+                   MT.DEBT_LIMIT_SUM = #{mdtaskSum},
+                        </when>
+                    </choose>
+                </when>
+            </choose>
+            <if test="productType != null">
+                   MT.PRODUCT_NAME = #{productName}, 
+            </if>
+            <if test="sublimit">
+                   MT.SUBLIMIT_PRIORITY = #{priority}
+            </if>
+        </set>
+             WHERE MT.ID_MDTASK = #{idMdtask};
+        
+        <if test="productType != null">
+            MERGE INTO R_MDTASK_OPP_TYPE OT USING (SELECT #{idMdtask} ID_MDTASK, #{productType.productid} ID_OPP_TYPE
+                                                     FROM DUAL) Z
+               ON (OT.ID_MDTASK = Z.ID_MDTASK)
+             WHEN NOT MATCHED THEN
+                  INSERT (ID_MDTASK, ID_OPP_TYPE)
+                  VALUES (Z.ID_MDTASK, Z.ID_OPP_TYPE)
+             WHEN MATCHED THEN
+                  UPDATE SET OT.ID_OPP_TYPE = Z.ID_OPP_TYPE;
+        </if>
+        
+        <if test="limit or product">
+            UPDATE ATTRIBUTES A
+               SET A.VALUE_VAR = #{priority}
+             WHERE EXISTS (SELECT 1
+                             FROM PROCESSES P JOIN VARIABLES V ON V.ID_TYPE_PROCESS = P.ID_TYPE_PROCESS
+                                              JOIN MDTASK MT ON MT.ID_PUP_PROCESS = P.ID_PROCESS
+                            WHERE P.ID_PROCESS = A.ID_PROCESS
+                              AND V.ID_VAR = A.ID_VAR
+                              AND V.NAME_VAR = 'Приоритет'
+                              AND MT.ID_MDTASK = #{idMdtask});
+        </if>
+        
+            UPDATE R_ORG_MDTASK RO
+               SET RO.RATINGPKR = #{mainOrganization.preliminaryRating}
+             WHERE RO.ID_MDTASK = #{idMdtask}
+               AND RO.ORDER_DISP = 0;
+               
+        <foreach collection="interestRates" item="ir">
+            MERGE INTO FACTPERCENT FP USING (SELECT #{ir.id} ID, #{ir.loanRate} RATE4, #{ir.fundingRate} FONDRATE, ${idMdtask} ID_MDTASK
+                                               FROM DUAL) Z
+               ON (FP.ID = Z.ID AND FP.ID_MDTASK = Z.ID_MDTASK)
+             WHEN NOT MATCHED THEN
+                  INSERT (ID, RATE4, FONDRATE, ID_MDTASK)
+                  VALUES (FACTPERCENT_SEQ.NEXTVAL, Z.RATE4, Z.FONDRATE, Z.ID_MDTASK)
+             WHEN MATCHED THEN
+                  UPDATE SET FP.RATE4 = Z.RATE4, FP.FONDRATE = Z.FONDRATE;
+        </foreach>
+            
+        END;
+    </update>
+    
+    <select id="isPipelineReadonly" resultType="boolean">
+        SELECT CASE WHEN NOT EXISTS (SELECT 1
+                                       FROM ASSIGN A JOIN USERS U ON U.ID_USER = A.ID_USER_TO 
+                                                     JOIN ROLES R ON R.ID_ROLE = A.ID_ROLE
+                                                     join user_in_role ur on R.ID_ROLE=ur.id_role and ur.ID_USER=U.ID_USER and ur.STATUS='Y'
+                                                     JOIN PROCESS_EVENTS PE ON PE.ID_PROCESS_EVENT = A.ID_PROCESS_EVENT
+                                                     JOIN MDTASK MT ON MT.ID_PUP_PROCESS = PE.ID_PROCESS
+                                                     JOIN PROJECT_TEAM PT ON PT.ID_MDTASK = MT.ID_MDTASK
+                                                                         AND U.ID_USER = PT.ID_USER
+                                      WHERE MT.ID_MDTASK = (SELECT Z.ID_MDTASK
+                                                              FROM (SELECT M.ID_MDTASK, ROW_NUMBER() OVER(ORDER BY LEVEL DESC) RN
+                                                                      FROM MDTASK M
+                                                                   CONNECT BY PRIOR M.PARENTID = M.ID_MDTASK 
+                                                                       AND PRIOR LOWER(NVL(M.TASKTYPE, 's')) = 's'
+                                                                     START WITH M.ID_MDTASK = #{mdTaskId}) Z
+                                                             WHERE RN = 1)
+                                        AND U.ID_USER = #{userId}
+                                        AND R.NAME_ROLE = 'Продуктовый менеджер')
+                    THEN 1
+                    ELSE 0
+               END
+          FROM DUAL
+    </select>
+    
+    <select id="getForOnWorkCompletesNotifications" resultMap="mdTaskSimpleResultMap">
+        SELECT MT.ID_MDTASK, MT.MDTASK_NUMBER, MT.ADDITIONAL_CONTRACT, MT.PRODUCT_MONITORING, MT.VERSION
+          FROM MDTASK MT
+         WHERE MT.MDTASK_NUMBER = #{number}
+           AND MT.VERSION = #{version}
+           AND MT.ID_PUP_PROCESS IS NOT NULL
+    </select>
+    
+    <update id="updateOtherGoals">
+        BEGIN
+            DELETE TARGET_GROUP_LIMIT_TYPE TGLT
+             WHERE ID_TARGET_GROUP_LIMIT IN  ( SELECT ID_TARGET_GROUP_LIMIT
+                                                 FROM TARGET_GROUP_LIMIT
+                                                WHERE ID_MDTASK = #{mdTaskId} ) 
+               AND ID_TARGET NOT IN (0 
+        	<foreach item="otherGoal" collection="otherGoals" >
+                                    , NVL(#{otherGoal.idTarget}, 0)
+            </foreach>
+                                    );
+        
+            DELETE R_MDTASK_OTHERGOALS 
+             WHERE ID_MDTASK=#{mdTaskId}
+               AND ID_TARGET NOT IN (0 
+        	<foreach item="otherGoal" collection="otherGoals" >
+                                    , NVL(#{otherGoal.idTarget}, 0)
+            </foreach>
+                                    );
+
+        <if test="otherGoals != null">
+            MERGE INTO R_MDTASK_OTHERGOALS OG USING (
+                SELECT CAST(NULL AS NUMBER) ID_MDTASK, CAST(NULL AS NUMBER) ID_TARGET, CAST(NULL AS VARCHAR2(2000)) GOAL, CAST(NULL AS CHAR(12)) CRM_TARGET_TYPE_ID
+                  FROM DUAL
+                 WHERE 1 = 0
+            <foreach item="otherGoal" collection="otherGoals" >
+                UNION ALL 
+                SELECT CAST(#{mdTaskId} AS NUMBER) ID_MDTASK, CAST(#{otherGoal.idTarget} AS NUMBER) ID_TARGET, CAST(#{otherGoal.goal} AS VARCHAR2(2000)) GOAL, CAST(#{otherGoal.crmTargetTypeId} AS CHAR(12)) CRM_TARGET_TYPE_ID 
+                  FROM DUAL 
+            </foreach>
+            ) Z ON (OG.ID_TARGET = Z.ID_TARGET)
+            WHEN MATCHED THEN UPDATE SET OG.DESCR = Z.GOAL, OG.ID_CRM_TARGET_TYPE = Z.CRM_TARGET_TYPE_ID  
+            WHEN NOT MATCHED THEN INSERT(ID_TARGET, ID_MDTASK, DESCR, ID_CRM_TARGET_TYPE) 
+                                  VALUES (R_MDT_OTHERGOALS_SEQ.NEXTVAL, #{mdTaskId}, Z.GOAL, Z.CRM_TARGET_TYPE_ID);
+        </if>
+        END;
+    </update>
+    
+    <select id="getOtherGoals" resultMap="otherGoalResultMap">
+        SELECT ID_TARGET, 
+               ID_MDTASK, 
+               DESCR, 
+               ID_CRM_TARGET_TYPE
+          FROM R_MDTASK_OTHERGOALS
+         WHERE ID_MDTASK = #{mdTaskId}
+         ORDER BY DESCR
+    </select>
+    
+    <select id="getTargetGroupLimits" resultMap="targetGroupLimitResultMap">
+        SELECT  ID_TARGET_GROUP_LIMIT,
+                AMOUNT,
+                AMOUNT_CURRENCY,
+                NOTE
+          FROM TARGET_GROUP_LIMIT
+         WHERE ID_MDTASK = #{mdTaskId}
+         ORDER BY ID_TARGET_GROUP_LIMIT
+    </select>
+
+    <update id="updateTargetGroupLimits">
+        DECLARE
+            VAR_ID_TARGET_GROUP_LIMIT NUMBER;
+        BEGIN
+        
+            DELETE TARGET_GROUP_LIMIT_TYPE TGLT
+             WHERE ID_TARGET_GROUP_LIMIT IN  ( SELECT ID_TARGET_GROUP_LIMIT
+                                                 FROM TARGET_GROUP_LIMIT
+                                                WHERE ID_MDTASK = #{mdTaskId} ) 
+               AND ID_TARGET_GROUP_LIMIT NOT IN 
+                   (0 
+	   <foreach item="targetGroupLimit" collection="targetGroupLimits" >
+                   , NVL(#{targetGroupLimit.id}, 0)
+	   </foreach>
+                   );      
+        
+            DELETE TARGET_GROUP_LIMIT 
+             WHERE ID_MDTASK=#{mdTaskId}
+               AND ID_TARGET_GROUP_LIMIT NOT IN 
+                   (0 
+       <foreach item="targetGroupLimit" collection="targetGroupLimits" >
+                  , NVL(#{targetGroupLimit.id}, 0)
+       </foreach>
+	               );
+
+       <if test="targetGroupLimits != null">
+           <foreach item="targetGroupLimit" collection="targetGroupLimits" >
+                SELECT MAX(ID_TARGET_GROUP_LIMIT)
+                  INTO VAR_ID_TARGET_GROUP_LIMIT
+                  FROM TARGET_GROUP_LIMIT
+                 WHERE ID_TARGET_GROUP_LIMIT = #{targetGroupLimit.id};
+                
+                IF VAR_ID_TARGET_GROUP_LIMIT IS NOT NULL THEN 
+                    UPDATE TARGET_GROUP_LIMIT
+                       SET AMOUNT = #{targetGroupLimit.amount}, AMOUNT_CURRENCY = #{targetGroupLimit.amountCurrency}, NOTE = #{targetGroupLimit.note}
+                     WHERE ID_TARGET_GROUP_LIMIT = VAR_ID_TARGET_GROUP_LIMIT;
+                     
+	           <if test="targetGroupLimit.id != null and targetGroupLimit.targetGroupLimitTypes != null">
+                    DELETE TARGET_GROUP_LIMIT_TYPE
+                     WHERE ID_TARGET_GROUP_LIMIT = #{targetGroupLimit.id}
+                       AND ID_TARGET_GROUP_LIMIT_TYPE NOT IN 
+                                   (0 
+	               <foreach item="targetGroupLimitType" collection="targetGroupLimit.targetGroupLimitTypes" >
+                                   , NVL(#{targetGroupLimitType.id}, 0)
+	               </foreach>
+                	               );
+               </if>  
+                ELSE
+                    SELECT TARGET_GROUP_LIMIT_SEQ.NEXTVAL
+                      INTO VAR_ID_TARGET_GROUP_LIMIT
+                      FROM DUAL;
+                      
+                    INSERT INTO TARGET_GROUP_LIMIT(ID_TARGET_GROUP_LIMIT, ID_MDTASK, AMOUNT, AMOUNT_CURRENCY, NOTE) 
+                        VALUES (VAR_ID_TARGET_GROUP_LIMIT, #{mdTaskId}, #{targetGroupLimit.amount}, #{targetGroupLimit.amountCurrency}, #{targetGroupLimit.note});  
+                END IF;
+                
+	           <if test="targetGroupLimit.targetGroupLimitTypes != null">
+                MERGE INTO TARGET_GROUP_LIMIT_TYPE LT USING (
+                    SELECT CAST(NULL AS NUMBER) ID_TARGET_GROUP_LIMIT_TYPE,
+                           CAST(NULL AS NUMBER) ID_TARGET_GROUP_LIMIT,
+                           CAST(NULL AS NUMBER) ID_TARGET,
+                           CAST(NULL AS VARCHAR2(4000)) TARGET_TYPE_NAME
+                      FROM DUAL
+                     WHERE 1 = 0
+	               <foreach item="targetGroupLimitType" collection="targetGroupLimit.targetGroupLimitTypes" >
+                     UNION ALL
+                    SELECT CAST(#{targetGroupLimitType.id} AS NUMBER) ID_TARGET_GROUP_LIMIT_TYPE,
+                           CAST(VAR_ID_TARGET_GROUP_LIMIT AS NUMBER) ID_TARGET_GROUP_LIMIT,
+                           CAST(#{targetGroupLimitType.idTarget} AS NUMBER) ID_TARGET,
+                           CAST(#{targetGroupLimitType.targetTypeName} AS VARCHAR2(4000)) TARGET_TYPE_NAME
+                      FROM DUAL
+                   </foreach>
+                ) Z ON (Z.ID_TARGET_GROUP_LIMIT_TYPE = LT.ID_TARGET_GROUP_LIMIT_TYPE)
+                WHEN MATCHED THEN UPDATE SET LT.ID_TARGET = Z.ID_TARGET, LT.TARGET_TYPE_NAME = Z.TARGET_TYPE_NAME
+                WHEN NOT MATCHED THEN INSERT(ID_TARGET_GROUP_LIMIT_TYPE, ID_TARGET_GROUP_LIMIT, ID_TARGET, TARGET_TYPE_NAME)
+                    VALUES(TARGET_GROUP_LIMIT_TYPE_SEQ.NEXTVAL, VAR_ID_TARGET_GROUP_LIMIT, Z.ID_TARGET, Z.TARGET_TYPE_NAME);
+               </if>
+                
+	       </foreach>   
+      </if>
+       END;
+    </update>    
+    
+    <select id="getComissions" resultMap="comissionSimpleResultMap">
+        SELECT MT.CURRENCY, MT.MDTASK_SUM, MT.LIMIT_ISSUE_SUM, MT.DEBT_LIMIT_SUM,
+               MT.IS_LIMIT_SUM LIMIT_SUM, MT.IS_DEBT_SUM DEBT_SUM, MT.TASKTYPE,
+               MT.ID_MDTASK MT_ID, MT.PERIOD MT_PERIOD, MT.PERIODDIMENSION MT_PERIOD_DIMENSION, 
+               C.ID_COMMISSION C_ID, C.CURRENCY C_CURRENCY, C.COMMISSION_VALUE C_VALUE,
+               CT.SHORT_TEXT C_CT_ID, CT.TEXT C_CT_NAME,
+               CP.SHORT_TEXT C_CP_ID, CP.TEXT C_CP_NAME,
+               C.ID_MDTASK,
+               (SELECT RATE
+                  FROM (SELECT CR.RATE, CR.CURRENCYCODE
+                          FROM CRM_FB_EXCHANGERATE CR
+                         WHERE CR.ACTIVEDATE &lt;= SYSDATE
+                         ORDER BY CR.ACTIVEDATE DESC) 
+                 WHERE CURRENCYCODE = C.CURRENCY 
+                   AND ROWNUM = 1) C_CURRENCY_RATE 
+          FROM COMMISSION C JOIN CRM_COM_TYPE CT ON CT.SHORT_TEXT = C.CRM_COM_TYPE
+                            JOIN CRM_COM_PERIOD CP ON CP.SHORT_TEXT = C.CRM_COM_PERIOD
+                            JOIN MDTASK MT ON C.ID_MDTASK = MT.ID_MDTASK 
+                    WHERE CT.IS_ACTIVE = 1
+                      AND CT.ISUSEDINEFFSTAVRECALC = 'T'
+                      AND CP.IS_ACTIVE = 1
+                      AND MT.ID_MDTASK = #{mdTaskId}
+    </select>
+
+
+    
+    <select id="isLastApprovedVersion" resultType="boolean">
+        SELECT CASE WHEN cnt>0 THEN 0 ELSE 1 END CASE FROM
+        (select count(*) cnt from mdtask cur where cur.ID_MDTASK=#{mdTaskId}
+        and exists (select 1 from mdtask t
+        inner join PROCESSES p on p.ID_PROCESS=t.ID_PUP_PROCESS
+        inner join variables v on v.ID_TYPE_PROCESS=p.ID_TYPE_PROCESS
+        inner join attributes a on a.id_var=v.id_var and a.ID_PROCESS=p.ID_PROCESS
+        where t.MDTASK_NUMBER=cur.MDTASK_NUMBER and t.VERSION>cur.VERSION
+        and p.ID_STATUS=4 and v.NAME_VAR='Статус' and a.VALUE_VAR='Одобрено'))
+    </select>
+    
+    <select id="getOficcialNumber" resultType="string">
+        SELECT CDN.OFFICIAL_NUMBER
+          FROM V_CPS_CREDIT_DEAL_NUMBER CDN
+         WHERE CDN.ID_MDTASK = #{mdTaskId}
+    </select>
+
+    <select id="getLastCedConfirmedCreditDeal" resultMap="mdTaskSimpleResultMap">
+        SELECT ID_MDTASK, MDTASK_NUMBER, VERSION
+          FROM (SELECT M2.*,
+                       ROW_NUMBER() OVER(ORDER BY SIGN(M2.ID_PUP_PROCESS) NULLS FIRST, M2.VERSION DESC) RN
+                 FROM MDTASK M2 LEFT JOIN MDTASK M3 ON M2.ID_PUP_PROCESS IS NULL
+                                                   AND M3.ID_PUP_PROCESS IS NOT NULL
+                                                   AND M2.ROWID != M3.ROWID
+                                                   AND M2.MDTASK_NUMBER = M3.MDTASK_NUMBER
+                                                   AND M2.VERSION = M3.VERSION
+                                                   AND ROWNUM = 1
+                                LEFT JOIN V_SPO_STATUS_RETURN ST2 ON ST2.FB_SPO_RETURN_ID = M2.STATUSRETURN
+                                LEFT JOIN V_SPO_STATUS_RETURN ST3 ON ST3.FB_SPO_RETURN_ID = M3.STATUSRETURN
+                WHERE (
+                        COALESCE(ST2.STATUS_TYPE, ST3.STATUS_TYPE, '0') = 1
+                        OR
+                        M2.VERSION = 1
+                      )
+                  AND M2.MDTASK_NUMBER = #{creditDealNumber}
+        <if test="lessThenVersion != null">
+                  AND M2.VERSION &lt;= #{lessThenVersion}
+        </if>                  
+               ) M
+         WHERE M.RN = 1
+    </select>
+    <select id="getSectionNotEmpty" resultType="string">
+        select 'projectteam' from PROJECT_TEAM where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'contract' from CONTRACT where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'comments' from TASKCOMMENT where ID_MDTASK=#{mdTaskId} and COMMENT_BODY is not null
+        union all
+        select 'inLimit' from mdtask where ID_MDTASK=#{mdTaskId} and PARENTID is not null
+        union all
+        select 'inLimit' from mdtask where PARENTID=#{mdTaskId} and deleted!='Y'
+        union all
+        select 'docs' from appfiles a where a.OWNER_TYPE=0 and a.ID_OWNER in
+        (select TO_CHAR(ID_PUP_PROCESS) from mdtask where ID_MDTASK=#{mdTaskId})
+        union all
+        select 'active_decision' from mdtask where ID_MDTASK=#{mdTaskId} and active_decision is not null
+        union all
+        select 'stopFactors' from R_MDTASK_STOPFACTOR where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'conditions' from mdtask
+        where ID_MDTASK=#{mdTaskId} and (DEFINITION is not null or changed_conditions is not null or generalcondition is not null)
+        union all
+        select 'conditions' from EARLY_PAYMENT where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'conditions' from CPS_DEAL_CONDITION  where ID_SYSTEM_MODULE=1 and  ID_CREDIT_DEAL=#{mdTaskId}
+        union all
+        select 'supply' from warranty where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'supply' from GARANT where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'supply' from DEPOSIT where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'supply' from PROMISSORY_NOTE where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'supply' from CPS_DEAL_CONDITION where ID_CREDIT_DEAL=#{mdTaskId} and ID_CONDITION_TYPE=4
+        union all
+        select 'supply' from mdtask where ID_MDTASK=#{mdTaskId} and (IS_SUPPLY_EXIST='y' or cfactor is not null)
+        union all
+        select 'pipeline' from pipeline where ID_MDTASK=#{mdTaskId}
+        and (PLAN_DATE is not null or STATUS is not null or  CLOSE_PROBABILITY is not null or  LAW is not null or
+        SUPPLY is not null or  DESCRIPTION is not null or  CMNT is not null or
+        ADDITION_BUSINESS is not null or  SYNDICATION !='n' or SYNDICATION_CMNT is not null or
+        WAL is not null or  HURDLE_RATE is not null or  MARKUP is not null or  PC_CASH is not null or
+        PC_RES is not null or  PC_DER is not null or  PC_TOTAL is not null or  LINE_COUNT is not null or
+        MANAGER_PRIORITY !='n' or  PUB  !='n' or
+        NEW_CLIENT !='n' or  PRIORITY  !='n' or  FLOW_INVESTMENT is not null or  FACTOR_PRODUCT_TYPE is not null or
+        FACTOR_PERIOD is not null or  CONTRACTOR is not null or  VTB_CONTRACTOR is not null or
+        TRADE_DESC is not null or PROLONGATION  !='n' or  HIDEINREPORT  !='n')
+        union all
+        select 'graph' from payment_schedule where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'graph' from mdtask where ID_MDTASK=#{mdTaskId} and (amortized_loan='y')
+        union all
+        select 'graph' from INTEREST_PAY where ID_MDTASK=#{mdTaskId}
+        and (first_pay_dt is not null or final_pay_dt is not null or  num_day is not null
+        or description is not null or PAY_INT is not null or cmnt is not null or is_final_pay='y')
+        union all
+        select 'graph' from PRINCIPAL_PAY where ID_MDTASK=#{mdTaskId}
+        and(id_period_order is not null or first_pay_dt is not null or final_pay_dt is not null
+        or num_day is not null or description is not null or cmnt is not null or IS_FIRST_PAY='y'
+        or IS_DEPENDED='y')
+        union all
+        select 'priceConditionProduct' from fine where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'priceConditionProduct' from dual where
+        (select count(*) cnt from factpercent f where ID_MDTASK=#{mdTaskId})>1
+        union all
+        select 'priceConditionProduct' from factpercent where ID_MDTASK=#{mdTaskId} and
+        (supply is not null or rate11 is not null or indcondition is not null or fondrate is not null
+         or riskpremium is not null  or riskpremiumtype is not null or rate3 is not null
+         or rate4 is not null)
+        union all
+        select 'priceConditionProduct' from COMMISSION where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'priceConditionLimit' from COMMISSION where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'priceConditionLimit' from mdtask m
+        left outer join PROCENT p on m.ID_MDTASK = p.ID_MDTASK
+        where m.id_mdtask=#{mdTaskId} and
+        (rate2 is not null or capital_pay is not null or ktr is not null or pay_int is not null
+        or p.RISKPREMIUM is not null or p.PRICEINDCONDITION is not null or m.riskpremium is not null)
+        union all
+        select 'priceConditionLimit' from FINE where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'priceConditionLimit' from PREMIUM where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'priceConditionProduct' from mdtask where ID_MDTASK=#{mdTaskId}
+        and (fund_down is not null or rate2 is not null or rate5 is not null or rate6 is not null or rate7 is not null
+        or rate8 is not null or RATE2_NOTE is not null or interest_rate_fixed=1 or interest_rate_derivative=1
+        or fixrate='y')
+        union all
+        select 'department_agreement' from DEP_RESOLUTION where ID_MDTASK=#{mdTaskId}
+        union all
+        select 'expertus' from dual where exists
+        (select * from tasks t inner join stages s on t.id_stage_to=s.id_stage
+        inner join mdtask m on m.ID_PUP_PROCESS=t.ID_PROCESS
+        where id_mdtask=#{mdTaskId} and t.id_status=3 and s.description_stage like 'Акцепт перечня экспертиз%')
+        union all
+        select 'expertus' from dual where exists
+        (select * from tasks t inner join stages s on t.id_stage_to=s.id_stage
+        inner join mdtask m on m.ID_PUP_PROCESS=t.ID_PROCESS
+        where id_mdtask=#{mdTaskId} and s.description_stage like 'Проведение экспертизы%')
+    </select>
+    <select id="getCedTaskId" resultType="long">
+        SELECT ID_MDTASK
+        FROM MDTASK
+        WHERE MDTASK_NUMBER = #{mdTaskNumber}
+        AND VERSION = #{version}
+        AND ID_PUP_PROCESS IS NULL
+    </select>
+    <select id="getById4TaskList" resultType="mdTask">
+        SELECT t.ID_MDTASK, t.TASKTYPE,t.ID_PUP_PROCESS,t.mdtask_sum,
+        mdtask_number,currency,ek.name ekname,t.PRODUCT_NAME,period,periodDimension,t.VALIDTO,t.main_org_changeble,
+        t.IS_3FACES faces3,country,additional_contract,product_monitoring, t.STATUSRETURN,t.PROJECT_NAME
+        FROM mdtask t
+        left outer join crm_ek ek on ek.ID=t.MAIN_ORG
+        <where>
+            t.ID_MDTASK = #{id}
+        </where>
+    </select>
+
+    <select id="getCppsTaskIdByCedTaskId" resultType="long">
+        SELECT NVL(M2.ID_MDTASK, M1.ID_MDTASK) ID_MDTASK
+          FROM MDTASK M1 LEFT JOIN MDTASK M2 ON M1.MDTASK_NUMBER = M2.MDTASK_NUMBER AND M1.VERSION = M2.VERSION
+         WHERE M1.ID_MDTASK = #{cedTaskId}
+           AND M2.ID_PUP_PROCESS IS NOT NULL
+    </select>
+    <select id="getCedTaskIdByCppsTaskId" resultType="long">
+        SELECT NVL(M2.ID_MDTASK, M1.ID_MDTASK) ID_MDTASK
+          FROM MDTASK M1 LEFT JOIN MDTASK M2 ON M1.MDTASK_NUMBER = M2.MDTASK_NUMBER AND M1.VERSION = M2.VERSION
+         WHERE M1.ID_MDTASK = #{cppsTaskId}
+           AND M2.ID_PUP_PROCESS IS NULL
+    </select>
+    <select id="getNumberAndVersion" resultType="string">
+        select t.mdtask_number||' версия '||t.VERSION nbr from mdtask t where t.ID_MDTASK=#{mdTaskId}
+    </select>
+
+
+    <select id="getDealPercentHistoryUsers" resultMap="ru.md.persistence.UserMapper.userResultMap">
+        SELECT U.ID_USER ID,
+               U.SURNAME LAST_NAME,
+               U.NAME FIRST_NAME,
+               U.PATRONYMIC
+          FROM USERS U
+         WHERE EXISTS(SELECT 1
+                        FROM MDTASK_AUDIT M
+                       WHERE U.ID_USER = M.ID_CHANGE_USER_AUDIT
+                         AND M.MDTASK_NUMBER = #{creditDealNumber})
+        ORDER BY SURNAME, NAME, PATRONYMIC
+    </select>
+
+    <select id="getDealPercentHistoryDepartments" resultType="ru.md.domain.Department">
+        SELECT ID_DEPARTMENT ID,
+               SHORTNAME NAME
+        FROM DEPARTMENTS D
+        WHERE EXISTS(SELECT 1
+                       FROM MDTASK_AUDIT M
+                      WHERE D.ID_DEPARTMENT = M.ID_CHANGE_DEPARTMENT_AUDIT
+                        AND M.MDTASK_NUMBER = #{creditDealNumber})
+        ORDER BY NAME
+    </select>
+
+    <select id="getDealPercentHistories" resultMap="dealPercentHistoryResultMap">
+         SELECT M.ID_AUDIT ID,
+                M.ID_MDTASK ID_CREDIT_DEAL,
+                M.INTEREST_RATE_DERIVATIVE,
+                M.INTEREST_RATE_FIXED,
+                M.ID_CHANGE_USER_AUDIT ID_CHANGE_USER,
+                (SELECT RTRIM(((CASE WHEN SURNAME IS NOT NULL THEN SURNAME ||' ' END)
+                          || (CASE WHEN NAME IS NOT NULL THEN NAME ||' ' END ))
+                          || PATRONYMIC
+                         ) AS FULLNAME
+                   FROM USERS WHERE ID_USER = M.ID_CHANGE_USER_AUDIT
+                ) CHANGE_USER_FULL_NAME,
+                M.CHANGE_DATE_AUDIT CHANGE_DATE,
+                M.ID_CHANGE_DEPARTMENT_AUDIT ID_CHANGE_DEPARTMENT,
+                (SELECT SHORTNAME
+                   FROM DEPARTMENTS
+                  WHERE ID_DEPARTMENT = M.ID_CHANGE_DEPARTMENT_AUDIT) DEPARTMENT_NAME,
+                M.CHANGE_NUMBER,
+
+                IR.ID_AUDIT IR_ID,
+                IR.ID_MDTASK_AUDIT IR_ID_MDTASK,
+                IR.ID_FACTPERCENT_AUDIT IR_ID_FACTPERCENT,
+                IR.RATE IR_ADDITION_VALUE,
+                IR.VALUE IR_VALUE,
+                IR.REASON IR_REASON,
+                IR.USEFROM IR_START_DATE,
+                M.END_DATE IR_END_DATE,
+                IFRL.TEXT IR_RATE_TYPE,
+                IFRL.SHORTTEXT IR_RATE_SHORT_TYPE,
+                IR.IND_RATE IR_RATE_CRM_ID,                
+                IFRL.PART1OF3 IR_RATE_PART1OF3,
+                IFRL.PART2OF3 IR_RATE_PART2OF3,
+                IFRL.PART3OF3 IR_RATE_PART3OF3,
+
+                FP.ID_AUDIT FP_ID,
+                FP.START_DATE FP_START_DATE,
+                FP.END_DATE FP_END_DATE,
+                FP.RATE4 FP_RATE4,
+                FP.RATE4DESC FP_RATE4_DESCRIPTION,
+                FP.REASON FP_REASON,
+                FP.INTEREST_RATE_FIXED FP_INTEREST_RATE_FIXED,
+                FP.INTEREST_RATE_DERIVATIVE FP_INTEREST_RATE_DERIVATIVE,
+                FP.USEFROM FP_RATE4_START_DATE,
+                COALESCE(
+                  M.END_DATE,
+                  CASE
+                    WHEN 1 &lt; (SELECT COUNT(*)
+                                FROM FACTPERCENT_AUDIT
+                               WHERE ID_MDTASK_AUDIT = M.ID_AUDIT)
+                      THEN FP.END_DATE
+                    ELSE NULL
+                  END,
+                  M.VALIDTO
+                ) FP_RATE4_END_DATE,
+
+                FPIR.ID_AUDIT FP_IR_ID,
+                FPIR.ID_MDTASK_AUDIT FP_IR_ID_MDTASK,
+                FPIR.ID_FACTPERCENT_AUDIT FP_IR_ID_FACTPERCENT,
+                FPIR.RATE FP_IR_ADDITION_VALUE,
+                FPIR.VALUE FP_IR_VALUE,
+                FPIR.REASON FP_IR_REASON,
+                FPIR.USEFROM FP_IR_START_DATE,
+                M.END_DATE FP_IR_END_DATE,
+                FPIRFL.TEXT FP_IR_RATE_TYPE,
+                FPIRFL.SHORTTEXT FP_IR_RATE_SHORT_TYPE,
+                FPIR.IND_RATE FP_IR_RATE_CRM_ID,
+                FPIRFL.PART1OF3 FP_IR_RATE_PART1OF3,
+                FPIRFL.PART2OF3 FP_IR_RATE_PART2OF3,
+                FPIRFL.PART3OF3 FP_IR_RATE_PART3OF3
+
+           FROM (
+             SELECT MT.*,
+                    ROW_NUMBER() OVER(PARTITION BY MDTASK_NUMBER
+                                          ORDER BY ID_AUDIT) CHANGE_NUMBER,
+                    ROW_NUMBER() OVER(PARTITION BY MDTASK_NUMBER
+                                          ORDER BY ID_AUDIT DESC) REVERSE_CHANGE_NUMBER,
+                    TRUNC(LEAD (CHANGE_DATE_AUDIT-1, 1) OVER (PARTITION BY MDTASK_NUMBER
+                                                                ORDER BY ID_AUDIT)) END_DATE
+               FROM MDTASK_AUDIT MT
+             )M LEFT JOIN FACTPERCENT_AUDIT FP ON FP.ID_MDTASK_AUDIT = M.ID_AUDIT
+                LEFT JOIN INDRATE_MDTASK_AUDIT FPIR ON FPIR.ID_FACTPERCENT_AUDIT = FP.ID_AUDIT
+                LEFT JOIN V_CRM_FLOAT FPIRFL ON FPIRFL.ITEMN_ID = FPIR.IND_RATE
+                LEFT JOIN INDRATE_MDTASK_AUDIT IR ON IR.ID_MDTASK_AUDIT = M.ID_AUDIT AND IR.ID_FACTPERCENT_AUDIT IS NULL
+                LEFT JOIN V_CRM_FLOAT IFRL ON IFRL.ITEMN_ID = IR.IND_RATE
+          WHERE M.MDTASK_NUMBER = #{creditDealNumber}
+        <if test="startDate != null">
+            AND TRUNC(M.CHANGE_DATE_AUDIT) &gt;= TRUNC(#{startDate})
+        </if>
+        <if test="endDate != null">
+            AND TRUNC(M.CHANGE_DATE_AUDIT) &lt;= TRUNC(#{endDate})
+        </if>
+        <if test="performerId != null">
+            AND M.ID_CHANGE_USER_AUDIT = #{performerId}
+        </if>
+        <if test="departmentId != null">
+            AND M.ID_CHANGE_DEPARTMENT_AUDIT = #{departmentId}
+        </if>
+        <if test="isOnlyLatestChange != null and isOnlyLatestChange">
+            AND M.REVERSE_CHANGE_NUMBER = 1
+        </if>
+          ORDER BY M.ID_AUDIT, FP.ID_AUDIT, IR.ID_AUDIT, FPIR.ID_AUDIT
+    </select>
+
+    <select id="getNotConfirmedDealPercentHistories" resultMap="dealPercentHistoryResultMap">
+         SELECT M.ID_MDTASK ID,
+                M.ID_MDTASK ID_CREDIT_DEAL,
+                M.INTEREST_RATE_DERIVATIVE,
+                M.INTEREST_RATE_FIXED,
+                NULL ID_CHANGE_USER,
+                NULL CHANGE_USER_FULL_NAME,
+                NULL CHANGE_DATE,
+                NULL ID_CHANGE_DEPARTMENT,
+                NULL DEPARTMENT_NAME,
+                M.CHANGE_NUMBER,
+
+                IR.ID IR_ID,
+                IR.ID_MDTASK IR_ID_MDTASK,
+                IR.ID_FACTPERCENT IR_ID_FACTPERCENT,
+                IR.RATE IR_ADDITION_VALUE,
+                IR.VALUE IR_VALUE,
+                IR.REASON IR_REASON,
+                IR.USEFROM IR_START_DATE,
+                M.END_DATE IR_END_DATE,
+                IFRL.TEXT IR_RATE_TYPE,
+                IFRL.SHORTTEXT IR_RATE_SHORT_TYPE,
+                IR.IND_RATE IR_RATE_CRM_ID,
+                IFRL.PART1OF3 IR_RATE_PART1OF3,
+                IFRL.PART2OF3 IR_RATE_PART2OF3,
+                IFRL.PART3OF3 IR_RATE_PART3OF3,
+
+                FP.ID FP_ID,
+                FP.START_DATE FP_START_DATE,
+                FP.END_DATE FP_END_DATE,
+                FP.RATE4 FP_RATE4,
+                FP.RATE4DESC FP_RATE4_DESCRIPTION,
+                FP.REASON FP_REASON,
+                FP.INTEREST_RATE_FIXED FP_INTEREST_RATE_FIXED,
+                FP.INTEREST_RATE_DERIVATIVE FP_INTEREST_RATE_DERIVATIVE,
+                FP.USEFROM FP_RATE4_START_DATE,
+                COALESCE(
+                  CASE
+                    WHEN 1 &lt; (SELECT COUNT(*)
+                                FROM FACTPERCENT
+                               WHERE ID_MDTASK = M.ID_MDTASK)
+                      THEN FP.END_DATE
+                    ELSE NULL
+                  END,
+                  M.VALIDTO
+                ) FP_RATE4_END_DATE,
+
+                FPIR.ID FP_IR_ID,
+                FPIR.ID_MDTASK FP_IR_ID_MDTASK,
+                FPIR.ID_FACTPERCENT FP_IR_ID_FACTPERCENT,
+                FPIR.RATE FP_IR_ADDITION_VALUE,
+                FPIR.VALUE FP_IR_VALUE,
+                FPIR.REASON FP_IR_REASON,
+                FPIR.USEFROM FP_IR_START_DATE,
+                M.END_DATE FP_IR_END_DATE,
+                FPIRFL.TEXT FP_IR_RATE_TYPE,
+                FPIRFL.SHORTTEXT FP_IR_RATE_SHORT_TYPE,
+                FPIR.IND_RATE FP_IR_RATE_CRM_ID,
+                FPIRFL.PART1OF3 FP_IR_RATE_PART1OF3,
+                FPIRFL.PART2OF3 FP_IR_RATE_PART2OF3,
+                FPIRFL.PART3OF3 FP_IR_RATE_PART3OF3
+           FROM (
+             SELECT MT.*,
+                    1 CHANGE_NUMBER,
+                    1 REVERSE_CHANGE_NUMBER,
+                    SYSDATE END_DATE
+               FROM MDTASK MT
+            ) M LEFT JOIN FACTPERCENT FP ON FP.ID_MDTASK = M.ID_MDTASK
+                LEFT JOIN INDRATE_MDTASK FPIR ON FPIR.ID_FACTPERCENT = FP.ID
+                LEFT JOIN V_CRM_FLOAT FPIRFL ON FPIRFL.ITEMN_ID = FPIR.IND_RATE
+                LEFT JOIN INDRATE_MDTASK IR ON IR.ID_MDTASK = M.ID_MDTASK AND IR.ID_FACTPERCENT IS NULL
+                LEFT JOIN V_CRM_FLOAT IFRL ON IFRL.ITEMN_ID = IR.IND_RATE
+          WHERE M.ID_MDTASK = #{idCreditDeal}
+          ORDER BY M.ID_MDTASK, FP.ID, IR.ID, FPIR.ID
+    </select>
+
+    <update id="createKmPercentVersion">
+        DECLARE
+          PROCEDURE SP_CREATE_KM_PERCENT_VERSION(PAR_ID_NEW_MDTASK NUMBER, PAR_ID_MDTASK NUMBER) IS
+            VAR_ID_NEW_FACTPERCENT NUMBER;
+          BEGIN
+            IF PAR_ID_NEW_MDTASK IS NULL THEN
+              RAISE_APPLICATION_ERROR(-20001, 'PAR_ID_NEW_MDTASK IS NULL');
+            END IF;
+            IF PAR_ID_MDTASK IS NULL THEN
+              RAISE_APPLICATION_ERROR(-20002, 'PAR_ID_MDTASK IS NULL');
+            END IF;
+
+            INSERT INTO MDTASK(
+              ID_MDTASK,
+              INTEREST_RATE_FIXED,
+              INTEREST_RATE_DERIVATIVE,
+              FIXRATE,
+              FUND_DOWN,
+              RATE5,
+              RATE6,
+              RATE7,
+              RATE8,
+              INITDEPARTMENT)
+            SELECT PAR_ID_NEW_MDTASK,
+                   INTEREST_RATE_FIXED,
+                   INTEREST_RATE_DERIVATIVE,
+                   FIXRATE,
+                   FUND_DOWN,
+                   RATE5,
+                   RATE6,
+                   RATE7,
+                   RATE8,
+                   INITDEPARTMENT
+              FROM MDTASK
+             WHERE ID_MDTASK = PAR_ID_MDTASK;
+
+            INSERT INTO INDRATE_MDTASK (
+              ID,
+              ID_MDTASK,
+              ID_FACTPERCENT,
+              IND_RATE,
+              RATE,
+              VALUE,
+              REASON,
+              USEFROM)
+            SELECT INDRATE_MDTASK_SEQ.NEXTVAL,
+                   PAR_ID_NEW_MDTASK,
+                   NULL,
+                   IND_RATE,
+                   RATE,
+                   VALUE,
+                   REASON,
+                   USEFROM
+             FROM (
+                SELECT *
+                  FROM INDRATE_MDTASK
+                 WHERE ID_MDTASK = PAR_ID_MDTASK
+                   AND ID_FACTPERCENT IS NULL
+                 ORDER BY ID
+             ) IM;
+
+            FOR FP_REC IN (SELECT *
+                             FROM FACTPERCENT
+                            WHERE ID_MDTASK = PAR_ID_MDTASK and TRANCEID is null
+                            ORDER BY ID) LOOP
+
+              SELECT FACTPERCENT_SEQ.NEXTVAL
+                INTO VAR_ID_NEW_FACTPERCENT
+                FROM DUAL;
+
+              INSERT INTO FACTPERCENT(
+                ID,
+                ID_MDTASK,
+                RISKPREMIUM,
+                RISKDESCRIPTION,
+                PROCENT,
+                DESCRIPTION,
+                END_DATE,
+                START_DATE,
+                FONDRATE,
+                RATE2,
+                RATE3,
+                RATE4,
+                RATE5,
+                RATE6,
+                RATE7,
+                RATE8,
+                RATE9,
+                RATE10,
+                RATE11,
+                SUPPLY,
+                RISKPREMIUMTYPE,
+                RISKPREMIUM_CHANGE,
+                TRANCEID,
+                RATING_FONDRATE,
+                RATING_RISKPREMIUM,
+                RATING_RATE3,
+                RATING_C1,
+                RATING_C2,
+                RATING_CALC,
+                RATING_KTR,
+                PREMIUMTYPE,
+                PREMIUMVALUE,
+                PREMIUMCURR,
+                PREMIUMTEXT,
+                EFFRATE,
+                RISKSTEPUPFACTOR,
+                RATING_RISKSTEPUPFACTOR,
+                MANUAL_FONDRATE,
+                INDCONDITION,
+                RATE4DESC,
+                INTEREST_RATE_FIXED,
+                INTEREST_RATE_DERIVATIVE,
+                REASON,
+                USEFROM)
+              VALUES (VAR_ID_NEW_FACTPERCENT,
+                      PAR_ID_NEW_MDTASK,
+                      FP_REC.RISKPREMIUM,
+                      FP_REC.RISKDESCRIPTION,
+                      FP_REC.PROCENT,
+                      FP_REC.DESCRIPTION,
+                      FP_REC.END_DATE,
+                      FP_REC.START_DATE,
+                      FP_REC.FONDRATE,
+                      FP_REC.RATE2,
+                      FP_REC.RATE3,
+                      FP_REC.RATE4,
+                      FP_REC.RATE5,
+                      FP_REC.RATE6,
+                      FP_REC.RATE7,
+                      FP_REC.RATE8,
+                      FP_REC.RATE9,
+                      FP_REC.RATE10,
+                      FP_REC.RATE11,
+                      FP_REC.SUPPLY,
+                      FP_REC.RISKPREMIUMTYPE,
+                      FP_REC.RISKPREMIUM_CHANGE,
+                      FP_REC.TRANCEID,
+                      FP_REC.RATING_FONDRATE,
+                      FP_REC.RATING_RISKPREMIUM,
+                      FP_REC.RATING_RATE3,
+                      FP_REC.RATING_C1,
+                      FP_REC.RATING_C2,
+                      FP_REC.RATING_CALC,
+                      FP_REC.RATING_KTR,
+                      FP_REC.PREMIUMTYPE,
+                      FP_REC.PREMIUMVALUE,
+                      FP_REC.PREMIUMCURR,
+                      FP_REC.PREMIUMTEXT,
+                      FP_REC.EFFRATE,
+                      FP_REC.RISKSTEPUPFACTOR,
+                      FP_REC.RATING_RISKSTEPUPFACTOR,
+                      FP_REC.MANUAL_FONDRATE,
+                      FP_REC.INDCONDITION,
+                      FP_REC.RATE4DESC,
+                      FP_REC.INTEREST_RATE_FIXED,
+                      FP_REC.INTEREST_RATE_DERIVATIVE,
+                      FP_REC.REASON,
+                      FP_REC.USEFROM);
+
+              INSERT INTO INDRATE_MDTASK (
+                ID,
+                ID_MDTASK,
+                ID_FACTPERCENT,
+                IND_RATE,
+                RATE,
+                VALUE,
+                REASON,
+                USEFROM)
+              SELECT INDRATE_MDTASK_SEQ.NEXTVAL,
+                     PAR_ID_NEW_MDTASK,
+                     VAR_ID_NEW_FACTPERCENT,
+                     IND_RATE,
+                     RATE,
+                     VALUE,
+                     REASON,
+                     USEFROM
+               FROM (
+                  SELECT *
+                    FROM INDRATE_MDTASK
+                   WHERE ID_MDTASK = PAR_ID_MDTASK
+                     AND ID_FACTPERCENT = FP_REC.ID
+                   ORDER BY ID
+               ) IM;
+
+             END LOOP;
+          END;
+        BEGIN
+          SP_CREATE_KM_PERCENT_VERSION(#{idNewCreditDeal}, #{idCreditDeal});
+        END;
+    </update>
+
+    <update id="createDealPercentHistoryValue">
+        DECLARE
+
+          PROCEDURE SP_PERCENT_COPY(PAR_ID_MDTASK NUMBER, PAR_ID_USER NUMBER, PAR_ENDED_DATE DATE) IS
+            VAR_ID_NEW_MDTASK NUMBER;
+          BEGIN
+            IF PAR_ID_MDTASK IS NULL THEN
+              RAISE_APPLICATION_ERROR(-20001, 'PAR_ID_MDTASK IS NULL');
+            END IF;
+            IF PAR_ID_USER IS NULL THEN
+              RAISE_APPLICATION_ERROR(-20001, 'PAR_ID_USER IS NULL');
+            END IF;
+            IF PAR_ENDED_DATE IS NULL THEN
+              RAISE_APPLICATION_ERROR(-20001, 'PAR_ENDED_DATE IS NULL');
+            END IF;
+
+            SELECT MDTASK_SEQ.NEXTVAL
+              INTO VAR_ID_NEW_MDTASK
+              FROM DUAL;
+
+            INSERT INTO MDTASK_AUDIT(
+              ID_AUDIT,
+              ID_MDTASK,
+              MDTASK_NUMBER,
+              INTEREST_RATE_DERIVATIVE,
+              INTEREST_RATE_FIXED,
+              VALIDTO,
+              ID_CHANGE_USER_AUDIT,
+              CHANGE_DATE_AUDIT,
+              ID_CHANGE_DEPARTMENT_AUDIT)
+            SELECT VAR_ID_NEW_MDTASK,
+                   ID_MDTASK,
+                   MDTASK_NUMBER,
+                   INTEREST_RATE_DERIVATIVE,
+                   INTEREST_RATE_FIXED,
+                   VALIDTO,
+                   PAR_ID_USER ID_CHANGE_USER_AUDIT,
+                   PAR_ENDED_DATE CHANGE_DATE_AUDIT,
+                   (SELECT ID_DEPARTMENT
+                      FROM USERS
+                     WHERE ID_USER = PAR_ID_USER) ID_CHANGE_DEPARTMENT_AUDIT
+              FROM MDTASK
+             WHERE ID_MDTASK = PAR_ID_MDTASK;
+
+            INSERT INTO FACTPERCENT_AUDIT(
+              ID_AUDIT,
+              ID_MDTASK_AUDIT,
+              ID,
+              START_DATE,
+              END_DATE,
+              RATE4,
+              RATE4DESC,
+              USEFROM,
+              REASON,
+              INTEREST_RATE_FIXED,
+              INTEREST_RATE_DERIVATIVE)
+            SELECT FACTPERCENT_SEQ.NEXTVAL,
+                   VAR_ID_NEW_MDTASK,
+                   ID,
+                   START_DATE,
+                   END_DATE,
+                   RATE4,
+                   RATE4DESC,
+                   USEFROM,
+                   REASON,
+                   INTEREST_RATE_FIXED,
+                   INTEREST_RATE_DERIVATIVE
+              FROM (SELECT *
+                      FROM FACTPERCENT
+                     WHERE ID_MDTASK = PAR_ID_MDTASK
+                     ORDER BY ID);
+
+            INSERT INTO INDRATE_MDTASK_AUDIT (
+              ID_AUDIT,
+              ID_MDTASK_AUDIT,
+              ID_FACTPERCENT_AUDIT,
+              ID,
+              ID_MDTASK,
+              ID_FACTPERCENT,
+              RATE,
+              VALUE,
+              REASON,
+              USEFROM,
+              IND_RATE)
+            SELECT INDRATE_MDTASK_SEQ.NEXTVAL,
+                   VAR_ID_NEW_MDTASK,
+                   (SELECT ID_AUDIT
+                          FROM FACTPERCENT_AUDIT
+                         WHERE ID = IM.ID_FACTPERCENT
+                           AND ID_MDTASK_AUDIT = VAR_ID_NEW_MDTASK) ID_FACTPERCENT_AUDIT,
+                   ID,
+                   ID_MDTASK,
+                   ID_FACTPERCENT,
+                   RATE,
+                   VALUE,
+                   REASON,
+                   USEFROM,
+                   IND_RATE
+             FROM (
+                SELECT *
+                  FROM INDRATE_MDTASK
+                 WHERE ID_MDTASK = PAR_ID_MDTASK
+                 ORDER BY ID
+             ) IM;
+          END;
+        BEGIN
+          SP_PERCENT_COPY(#{idCreditDeal}, #{idPerformer}, SYSDATE);
+        END;
+    </update>
+
+    <select id="getIndrateHistoryByIdPayment" resultMap="indrateHistoryResultMap">
+        SELECT ID_AUDIT ID,
+               ID_MDTASK_AUDIT ID_MDTASK,
+               ID_FACTPERCENT_AUDIT ID_FACTPERCENT,
+               RATE ADDITION_VALUE,
+               VALUE,
+               REASON,
+               USEFROM START_DATE,
+<!--           TODO заполнение даты до для индикативной ставки -->
+               FL.TEXT RATE_TYPE,
+               FL.SHORTTEXT IR_RATE_SHORT_TYPE,
+               IR.IND_RATE IR_RATE_CRM_ID,                
+               FL.PART1OF3 IR_RATE_PART1OF3,
+               FL.PART2OF3 IR_RATE_PART2OF3,
+               FL.PART3OF3 IR_RATE_PART3OF3               
+          FROM INDRATE_MDTASK_AUDIT IR LEFT JOIN V_CRM_FLOAT FL ON FL.ITEMN_ID = IR.IND_RATE
+         WHERE IR.ID_AUDIT = (SELECT ID_INDRATE_MDTASK_AUDIT FROM DP_PAYMENT WHERE ID_PAYMENT = #{idDealPayment})
+    </select>
+
+    <select id="getFactPercentHistoryByIdPayment" resultMap="factPercentHistoryResultMap">
+        SELECT ID_AUDIT ID,
+               START_DATE,
+               END_DATE,
+               RATE4,
+               RATE4DESC RATE4_DESCRIPTION,
+               REASON,
+               INTEREST_RATE_FIXED,
+               INTEREST_RATE_DERIVATIVE
+          FROM FACTPERCENT_AUDIT
+         WHERE ID_AUDIT = (SELECT ID_FACTPERCENT_AUDIT FROM DP_PAYMENT WHERE ID_PAYMENT = #{idDealPayment})
+    </select>
+
+    <select id="getIdLastPaymentInPeriod" resultType="java.lang.Long">
+        SELECT
+        CASE
+          WHEN
+            (
+<!--             если в хронологии несколько периодов и системная дата попадает в период -->
+              1 &lt; (SELECT COUNT(*)
+                     FROM FACTPERCENT_AUDIT
+                    WHERE ID_MDTASK_AUDIT = #{idMdTaskAudit})
+              AND
+              EXISTS(SELECT 1
+                       FROM FACTPERCENT_AUDIT
+                      WHERE ID_MDTASK_AUDIT = #{idMdTaskAudit}
+                        AND TRUNC(SYSDATE) BETWEEN TRUNC(NVL(START_DATE, SYSDATE)) AND TRUNC(NVL(END_DATE, SYSDATE)))
+            )
+            THEN
+                (
+<!--                 то возвращаем id последней завершенной одобренной выдачи из периодов, куда попала системная дата -->
+                  SELECT MAX(DP.ID_PAYMENT)
+                    FROM DP_PAYMENT DP JOIN CED_COMMON_DEAL_CONCLUSION COM ON COM.ID_COMMON_DEAL_CONCLUSION = DP.ID_COMMON
+                   WHERE COM.STATUS = 'PAYMENT_COMPLETED'
+                     AND COM.ID_MDTASK IN (SELECT ID_MDTASK
+                                             FROM MDTASK
+                                            WHERE MDTASK_NUMBER = #{creditDealNumber})
+                     AND EXISTS(
+                           SELECT 1
+                             FROM FACTPERCENT_AUDIT FP
+                            WHERE TRUNC(DP.PLANNED_PAYMENT_DATE) BETWEEN TRUNC(START_DATE) AND TRUNC(END_DATE)
+                              AND TRUNC(SYSDATE) BETWEEN TRUNC(NVL(START_DATE, SYSDATE)) AND TRUNC(NVL(END_DATE, SYSDATE))
+                              AND FP.ID_MDTASK_AUDIT = #{idMdTaskAudit}
+                         )
+                )
+          WHEN
+            (
+<!--             если в хронологии несколько периодов и системная дата НЕ попадает ни в один период -->
+              1 &lt; (SELECT COUNT(*)
+                     FROM FACTPERCENT_AUDIT
+                    WHERE ID_MDTASK_AUDIT = #{idMdTaskAudit})
+              AND
+              NOT EXISTS (SELECT 1
+                            FROM FACTPERCENT_AUDIT
+                           WHERE ID_MDTASK_AUDIT = #{idMdTaskAudit}
+                            AND TRUNC(SYSDATE) BETWEEN TRUNC(NVL(START_DATE, SYSDATE)) AND TRUNC(NVL(END_DATE, SYSDATE)))
+            )
+            THEN
+                (
+<!--                 то возвращаем id последней завершенной одобренной выдачи из периодов, куда попала системная дата -->
+                  SELECT MAX(DP.ID_PAYMENT)
+                    FROM DP_PAYMENT DP JOIN CED_COMMON_DEAL_CONCLUSION COM ON COM.ID_COMMON_DEAL_CONCLUSION = DP.ID_COMMON
+                   WHERE COM.STATUS = 'PAYMENT_COMPLETED'
+                     AND COM.ID_MDTASK IN (SELECT ID_MDTASK
+                                             FROM MDTASK
+                                            WHERE MDTASK_NUMBER = #{creditDealNumber})
+                     AND NOT EXISTS(
+                           SELECT 1
+                             FROM FACTPERCENT_AUDIT FP
+                            WHERE TRUNC(DP.PLANNED_PAYMENT_DATE) BETWEEN TRUNC(NVL(START_DATE, SYSDATE)) AND TRUNC(NVL(END_DATE, SYSDATE))
+                              AND FP.ID_MDTASK_AUDIT = #{idMdTaskAudit}
+                         )
+                )
+          ELSE (
+                  SELECT MAX(DP.ID_PAYMENT)
+                    FROM DP_PAYMENT DP JOIN CED_COMMON_DEAL_CONCLUSION COM ON COM.ID_COMMON_DEAL_CONCLUSION = DP.ID_COMMON
+                   WHERE COM.STATUS = 'PAYMENT_COMPLETED'
+                     AND COM.ID_MDTASK IN (SELECT ID_MDTASK
+                                             FROM MDTASK
+                                            WHERE MDTASK_NUMBER = #{creditDealNumber})
+                )
+        END ID_PAYMENT
+        FROM DUAL
+    </select>
+
+<select id="getLastCedConfirmedCreditDealId" resultType="long">
+    SELECT ID_MDTASK
+      FROM (SELECT M2.*,
+                   ROW_NUMBER() OVER(ORDER BY SIGN(M2.ID_PUP_PROCESS) NULLS FIRST, M2.VERSION DESC) RN
+             FROM MDTASK M2 LEFT JOIN MDTASK M3 ON M2.ID_PUP_PROCESS IS NULL
+                                               AND M3.ID_PUP_PROCESS IS NOT NULL
+                                               AND M2.ROWID != M3.ROWID
+                                               AND M2.MDTASK_NUMBER = M3.MDTASK_NUMBER
+                                               AND M2.VERSION = M3.VERSION
+                                               AND ROWNUM = 1
+                            LEFT JOIN V_SPO_STATUS_RETURN ST2 ON ST2.FB_SPO_RETURN_ID = M2.STATUSRETURN
+                            LEFT JOIN V_SPO_STATUS_RETURN ST3 ON ST3.FB_SPO_RETURN_ID = M3.STATUSRETURN
+            WHERE (
+                    COALESCE(ST2.STATUS_TYPE, ST3.STATUS_TYPE, '0') = 1
+                    OR
+                    M2.VERSION = 1
+                  )
+              AND M2.MDTASK_NUMBER = #{creditDealNumber}
+           ) M
+     WHERE M.RN = 1
+</select>
+<select id="getLastSpoConfirmedCreditDealId" resultType="long">
+    SELECT ID_MDTASK
+      FROM (SELECT M2.ID_MDTASK,
+                   ROW_NUMBER() OVER(ORDER BY M2.VERSION DESC) RN
+              FROM MDTASK M2 LEFT JOIN V_SPO_STATUS_RETURN ST2 ON ST2.FB_SPO_RETURN_ID = M2.STATUSRETURN
+             WHERE (
+                     COALESCE(ST2.STATUS_TYPE, '0') = 1
+                     OR
+                     M2.VERSION = 1
+                   )
+               AND M2.MDTASK_NUMBER = #{creditDealNumber}
+               AND M2.ID_PUP_PROCESS IS NOT NULL
+           ) M
+     WHERE M.RN = 1
+</select>
+
+    <update id="copyMyBatisTask">
+        declare
+            newId number;
+        BEGIN
+            delete from R_MDTASK_OTHERGOALS WHERE ID_MDTASK = #{dstMdTaskId};
+            insert into R_MDTASK_OTHERGOALS(ID_TARGET, ID_MDTASK, DESCR, ID_CRM_TARGET_TYPE)
+            SELECT R_MDT_OTHERGOALS_SEQ.NEXTVAL, #{dstMdTaskId}, DESCR, ID_CRM_TARGET_TYPE FROM R_MDTASK_OTHERGOALS WHERE ID_MDTASK = #{sourceMdTaskId};
+            FOR rec IN (SELECT  ID_TARGET_GROUP_LIMIT id FROM TARGET_GROUP_LIMIT where id_mdtask = #{sourceMdTaskId}) LOOP
+                select TARGET_GROUP_LIMIT_SEQ.nextval into newId from dual;
+                insert into TARGET_GROUP_LIMIT(ID_TARGET_GROUP_LIMIT, AMOUNT, AMOUNT_CURRENCY, NOTE,id_mdtask)
+                SELECT newId, AMOUNT, AMOUNT_CURRENCY, NOTE,#{dstMdTaskId} FROM TARGET_GROUP_LIMIT where ID_TARGET_GROUP_LIMIT=rec.id;
+                insert into TARGET_GROUP_LIMIT_TYPE(ID_TARGET_GROUP_LIMIT_TYPE, ID_TARGET_GROUP_LIMIT, ID_TARGET, TARGET_TYPE_NAME)
+                SELECT TARGET_GROUP_LIMIT_TYPE_SEQ.nextval, newId, (select max(id_target) from r_mdtask_otherGoals where ID_MDTASK=#{dstMdTaskId}),
+                TARGET_TYPE_NAME FROM TARGET_GROUP_LIMIT_TYPE where ID_TARGET_GROUP_LIMIT=rec.id;
+            END LOOP;
+            delete from PIPELINE where ID_MDTASK=#{dstMdTaskId};
+            insert into PIPELINE (ID_MDTASK,  PLAN_DATE,  STATUS,  CLOSE_PROBABILITY,  LAW,  GEOGRAPHY,
+              SUPPLY,  DESCRIPTION,  CMNT,  ADDITION_BUSINESS,  SYNDICATION,  SYNDICATION_CMNT,
+              WAL,  HURDLE_RATE,  MARKUP,  PC_CASH,  PC_RES,  PC_DER,  PC_TOTAL,  LINE_COUNT,
+              PUB,  PRIORITY,  NEW_CLIENT,  FLOW_INVESTMENT,  RATING,  FACTOR_PRODUCT_TYPE,
+              FACTOR_PERIOD,  CONTRACTOR,  VTB_CONTRACTOR,  TRADE_DESC,  PROLONGATION,  HIDEINREPORT,
+              CLOSE_PROBABILITY_IS_MANUAL,  MANAGER_PRIORITY)
+            SELECT #{dstMdTaskId},  PLAN_DATE,  STATUS,  CLOSE_PROBABILITY,  LAW,  GEOGRAPHY,
+              SUPPLY,  DESCRIPTION,  CMNT,  ADDITION_BUSINESS,  SYNDICATION,  SYNDICATION_CMNT,
+              WAL,  HURDLE_RATE,  MARKUP,  PC_CASH,  PC_RES,  PC_DER,  PC_TOTAL,  LINE_COUNT,
+              PUB,  PRIORITY,  NEW_CLIENT,  FLOW_INVESTMENT,  RATING,  FACTOR_PRODUCT_TYPE,
+              FACTOR_PERIOD,  CONTRACTOR,  VTB_CONTRACTOR,  TRADE_DESC,  PROLONGATION,  HIDEINREPORT,
+              CLOSE_PROBABILITY_IS_MANUAL,  MANAGER_PRIORITY FROM PIPELINE where ID_MDTASK=#{sourceMdTaskId};
+            DELETE FROM PIPELINE_FIN_TARGET FT WHERE FT.ID_MDTASK = #{dstMdTaskId};
+            INSERT INTO PIPELINE_FIN_TARGET (ID_MDTASK, VAL)
+            select #{dstMdTaskId}, VAL from PIPELINE_FIN_TARGET where ID_MDTASK=#{sourceMdTaskId};
+            update mdtask set DRAWDOWN_DATE_IN_MONTH=(select DRAWDOWN_DATE_IN_MONTH from mdtask where ID_MDTASK=#{sourceMdTaskId}) where ID_MDTASK=#{dstMdTaskId};
+        END;
+    </update>
+
+    <select id="getMdTaskNumberById" resultType="long">
+        SELECT MDTASK_NUMBER
+          FROM MDTASK
+         WHERE ID_MDTASK = #{mdTaskId}
+    </select>
+
+    <select id="getStartDate" resultType="date">
+        select min(pe.date_event) from process_events pe
+        inner join mdtask t on t.id_pup_process=pe.id_process
+        where pe.id_process_type_event=1 and t.id_mdtask=#{mdTaskId}
+    </select>
+
+    <select id="getLastUpdateDate" resultType="date">
+        SELECT MAX(TE.DATE_EVENT)
+FROM TASK_EVENTS TE JOIN TASKS T ON T.ID_TASK = TE.ID_TASK
+inner join mdtask m on m.id_pup_process=t.id_process
+WHERE m.id_mdtask=#{mdTaskId}
+    </select>
+
+    <select id="getIndRatesByMdtask" resultType="ru.md.domain.IndRate">
+        select i.id,i.rate,f.TEXT name,i.id_factpercent from INDRATE_MDTASK i
+        inner join Crm_Float f on f.itemn_id=i.ind_rate
+        where id_mdtask=#{mdTaskId}
+    </select>
+
+    <select id="getCCQuestion" resultType="ru.md.domain.dashboard.CCQuestion">
+        select t.id_mdtask id,ca.cc_cache_protocol protocol, ca.cc_cache_statusid status,ca.cc_cache_date meeting_date, t.ID_AUTHORIZEDBODY id_dep,
+        t.credit_decision_project pkr,t.ID_QUESTION_TYPE cc_question_type, ca.id_report,st_map.spo_status map_status,d.shortname dep_name
+        from mdtask t
+        left outer join md_cc_cache ca on ca.id_mdtask= t.id_mdtask
+        left outer join spo_cc_status_map st_map on t.ID_DISPLAY_STATUS=st_map.cc_status_id
+        left outer join departments d on t.ID_AUTHORIZEDBODY=d.id_department
+        where t.id_mdtask=#{mdTaskId}
+    </select>
+    <select id="getIdMdtaskByQuestionGroup" resultType="long">
+        select t.id_mdtask from mdtask t where t.question_group=#{questionGroup} and DELETED='N' order by t.id_mdtask
+    </select>
+    <select id="getIdMdtaskByOrgId" resultType="long">
+        select distinct t.id_mdtask
+        from SPO_ALL_CONTRACTOR t
+        inner join mdtask m on m.id_mdtask=t.id_mdtask
+        inner join processes p on p.id_process=m.id_pup_process
+        where t.id_crmorg=#{orgid} and p.id_status=1
+    </select>
+
+    <update id="mergeCCQuestion">
+        BEGIN
+        MERGE INTO mdtask USING (
+            SELECT #{question.id} id, #{question.idDep} idDep,  #{question.pkr} pkr,  #{question.ccQuestionType} ccQuestionType,  #{questionGroup} questionGroup
+              FROM DUAL
+        ) Z ON (mdtask.ID_MDTASK = Z.id)
+        WHEN NOT MATCHED THEN
+        INSERT (id_mdtask, ID_AUTHORIZEDBODY, credit_decision_project, ID_QUESTION_TYPE, question_group)
+        VALUES (mdtask_seq.nextval, Z.idDep,  Z.pkr,  Z.ccQuestionType,  Z.questionGroup)
+        WHEN MATCHED THEN
+        UPDATE SET ID_AUTHORIZEDBODY=Z.idDep, credit_decision_project=Z.pkr, ID_QUESTION_TYPE=Z.ccQuestionType, question_group=Z.questionGroup;
+        END;
+    </update>
+    <update id="delMdtask">
+        update mdtask set DELETED='Y' where id_mdtask=#{mdTaskId}
+    </update>
+    <update id="initQuestionGroup">
+        update mdtask set question_group=question_group_seq.nextval where id_mdtask=#{mdTaskId}
+    </update>
+    <update id="syncQuestionGroupTask">
+        BEGIN
+        update mdtask t set t.mdtask_number=(select mdtask_number from mdtask where id_mdtask=#{mdTaskId}),
+        t.version=(select version from mdtask where id_mdtask=#{mdTaskId}),
+        t.mdtask_sum=(select mdtask_sum from mdtask where id_mdtask=#{mdTaskId}),
+        t.currency=(select currency from mdtask where id_mdtask=#{mdTaskId}),
+        t.period_days=(select period_days from mdtask where id_mdtask=#{mdTaskId})
+        where t.question_group=(select question_group from mdtask where id_mdtask=#{mdTaskId});
+        delete from r_org_mdtask r where r.id_mdtask in(
+        select m.id_mdtask from mdtask m where m.id_mdtask!=#{mdTaskId} and m.question_group in
+        (select t.question_group from mdtask t where t.id_mdtask=#{mdTaskId}));
+        insert into r_org_mdtask(id_r, id_crmorg, id_mdtask, order_disp)
+        select r_org_mdtask_seq.nextval, r.id_crmorg, m.id_mdtask, r.order_disp
+        from mdtask m inner join r_org_mdtask r on r.id_mdtask=#{mdTaskId}
+        where m.id_mdtask!=#{mdTaskId} and m.question_group in (select t.question_group from mdtask t where t.id_mdtask=#{mdTaskId});
+        END;
+    </update>
+    <select id="isFORCC" resultType="boolean">
+        select count(*) cnt from spo_4cc_appfiles where fileid=#{unid} and id_mdtask=#{mdTaskId}
+    </select>
+    <update id="setCloseProbabilityByStatusName">
+        BEGIN
+            insert into pipeline(id_mdtask)
+            select #{mdTaskId} from dual where not exists
+            (select * from pipeline where id_mdtask=#{mdTaskId});
+            update pipeline p set p.status=#{status},
+            p.close_probability=(select min(s.value) from CD_PIPELINE_STAGE s where s.name=#{status})
+            where id_mdtask=#{mdTaskId};
+        END;
+    </update>
+
+    <select id="getCreateApplicationKzTasksCount" resultType="long">
+        select count(*)
+        <include refid="getCreateApplicationKzTasksFrom"/>
+    </select>
+    <sql id="getCreateApplicationKzTasksFrom">
+        from mdtask t
+        inner join processes p on p.id_process=t.id_pup_process
+        inner join r_org_mdtask r on r.id_mdtask=t.id_mdtask and r.order_disp=0
+        left outer join crm_ek ek on ek.ID=r.id_crmorg
+        left outer join departments d on t.initdepartment=d.id_department
+        where t.tasktype=#{type} and r.id_crmorg=#{kzid}
+        and (p.id_status=1
+            or exists (select 1 from attributes a inner join variables v on v.id_var=a.id_var
+            where a.id_process=t.id_pup_process and v.name_var='Статус' and a.value_var='Одобрено'))
+    </sql>
+    <select id="getCreateApplicationKzTasks" resultMap="mdTaskSimpleResultMap">
+        select * from (select rownum rnum, a.* from (
+
+        select t.ID_MDTASK,t.mdtask_sum,mdtask_number,currency,ek.name ekname,period,periodDimension,t.VERSION,
+        d.shortname initdep,ek.GROUPNAME ekgroup,
+         (select max(a.VALUE_VAR) from ATTRIBUTES a
+            inner join VARIABLES v on v.ID_VAR=a.ID_VAR
+            where a.ID_PROCESS=t.ID_PUP_PROCESS and v.name_var='Статус') as map_status,
+        (select count(*) from project_team pt where pt.id_mdtask=t.id_mdtask and pt.id_user=#{userId} and pt.teamtype='p') user_in_project_team
+        <include refid="getCreateApplicationKzTasksFrom"/>
+
+        order by id_mdtask desc
+        <![CDATA[
+        ) a where rownum <= (10*(#{page}-1)+10) ) where rnum >= ((#{page}-1)*10+1)
+        ]]>
+    </select>
+
+    <select id="getCreateApplicationGroupTasksCount" resultType="long">
+        select count(*)
+        <include refid="getCreateApplicationGroupTasksFrom"/>
+    </select>
+    <sql id="getCreateApplicationGroupTasksFrom">
+        from mdtask t
+        inner join processes p on p.id_process=t.id_pup_process
+        inner join r_org_mdtask r on r.id_mdtask=t.id_mdtask and r.order_disp=0
+        inner join crm_ek ek on ek.ID=r.id_crmorg
+        left outer join departments d on t.initdepartment=d.id_department
+        where t.tasktype=#{type}
+        and (p.id_status=1
+            or exists (select 1 from attributes a inner join variables v on v.id_var=a.id_var
+            where a.id_process=t.id_pup_process and v.name_var='Статус' and a.value_var='Одобрено'))
+        and ek.groupname in(select eks.groupname from crm_ek eks where eks.id=#{kzid})
+    </sql>
+    <select id="getCreateApplicationGroupTasks" resultMap="mdTaskSimpleResultMap">
+        select * from (select rownum rnum, a.* from (
+
+        select t.ID_MDTASK,t.mdtask_sum,mdtask_number,currency,ek.name ekname,period,periodDimension,t.VERSION,
+        d.shortname initdep,ek.GROUPNAME ekgroup,
+        (select max(a.VALUE_VAR) from ATTRIBUTES a
+        inner join VARIABLES v on v.ID_VAR=a.ID_VAR
+        where a.ID_PROCESS=t.ID_PUP_PROCESS and v.name_var='Статус') as map_status,
+        (select count(*) from project_team pt where pt.id_mdtask=t.id_mdtask and pt.id_user=#{userId} and pt.teamtype='p') user_in_project_team
+        <include refid="getCreateApplicationGroupTasksFrom"/>
+
+        order by id_mdtask desc
+        <![CDATA[
+        ) a where rownum <= (10*(#{page}-1)+10) ) where rnum >= ((#{page}-1)*10+1)
+        ]]>
+    </select>
+</mapper>

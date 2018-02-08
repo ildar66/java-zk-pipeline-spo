@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.WithdrawMapper">
+  <select id="findByMdtask" resultType="ru.md.domain.Withdraw">
+    SELECT U.* FROM withdraw U
+	<where>
+    	U.id_trance is null and U.id_mdtask = #{mdtask}
+	</where>
+  </select>
+  <select id="findByTrance" resultType="ru.md.domain.Withdraw">
+    SELECT U.* FROM withdraw U
+	<where>
+    	U.id_trance = #{tranceid}
+	</where>
+  </select>
+</mapper>

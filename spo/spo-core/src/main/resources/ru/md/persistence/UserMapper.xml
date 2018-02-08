@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.UserMapper">
+    <resultMap type="user" id="userResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+    </resultMap>
+
+  <select id="getUserByLogin" resultType="ru.md.domain.User">
+    SELECT u.id_user id, u.login,u.NAME firstName,u.SURNAME lastName, u.patronymic, u.MAIL_USER email,u.id_department,d.SHORTNAME depname FROM USERS U
+	  inner join DEPARTMENTS d on d.ID_DEPARTMENT=u.id_department
+      inner join cd_login_alias a on a.id_user=u.id_user
+	<where>
+	LOWER(a.LOGIN) = LOWER(#{login})
+	</where>
+  </select>
+  <select id="getUserById" resultType="user">
+    SELECT id_user id, login,NAME firstName,SURNAME lastName, patronymic, MAIL_USER email,u.id_department,d.SHORTNAME depname FROM USERS U
+	inner join DEPARTMENTS d on d.ID_DEPARTMENT=u.id_department
+	<where>
+	id_user = #{id}
+	</where>
+  </select>
+  <select id="userAssignedAs" resultType="string">
+    select distinct r.NAME_ROLE from assign a 
+	inner join process_events pe on pe.id_process_event=a.id_process_event 
+	inner join roles r on r.id_role=a.id_role 
+	where a.id_user_to=#{idUser} and pe.id_process=#{idProcess} and r.ACTIVE=1
+	and exists (select 1 from user_in_role ur where ur.id_user=a.id_user_to
+	and ur.id_role=r.id_role and ur.status='Y')
+  </select>
+  <select id="userAssigned" resultType="long">
+    select distinct a.id_user_to from assign a
+	inner join process_events pe on pe.id_process_event=a.id_process_event
+	inner join roles r on r.id_role=a.id_role
+	where pe.id_process=#{idProcess} and r.ACTIVE=1
+	and exists (select 1 from user_in_role ur where ur.id_user=a.id_user_to
+	and ur.id_role=r.id_role and ur.status='Y')
+  </select>
+  <select id="userRoles" resultType="string">
+    select distinct r.NAME_ROLE from role_active ra
+	inner join roles r on ra.id_role=r.ID_ROLE
+	where id_user=#{idUser} and r.ID_TYPE_PROCESS=#{idTypeProcess}
+  </select>
+  <select id="userRolesStage" resultType="string">
+    select r.name_role from stages_in_role sr
+    inner join roles r on r.id_role=sr.id_role
+    inner join user_in_role ur on ur.id_role=sr.id_role and ur.status='Y'
+    where sr.id_stage=#{idStage} and r.active=1 and ur.id_user=#{idUser}
+  </select>
+  <select id="userAllRoles" resultType="string">
+    select distinct r.NAME_ROLE from role_active ra
+	inner join roles r on ra.id_role=r.ID_ROLE
+	where id_user=#{idUser}
+  </select>
+  <select id="userCpsRoles" resultType="string">
+    SELECT distinct r.name_ FROM CPS_MEMBERSHIP m
+    inner join CPS_ROLE r on m.GROUP_ID_=r.ID_
+    inner join users u on u.LOGIN=m.USER_ID_
+    WHERE m.IS_ACTIVE = 1 and u.ID_USER = #{idUser}
+  </select>
+
+    <select id="getRecipientsOnInterestRateToAccept" resultType="long">
+        SELECT T.COLUMN_VALUE USER_ID
+          FROM TABLE(SPO_INTEREST_RATE_CNG_RECIPS.GET_TO_ACCEPT_RECIPIENTS(#{currentUserId}, #{mdTaskId})) T
+    </select>
+
+    <select id="getRecipientsOnInterestRateReturn" resultType="long">
+        SELECT T.COLUMN_VALUE USER_ID
+          FROM TABLE(SPO_INTEREST_RATE_CNG_RECIPS.GET_RETURN_RECIPIENTS(#{currentUserId}, #{mdTaskId})) T
+    </select>
+
+    <select id="getRecipientsOnInterestRateAccepted" resultType="long">
+        SELECT T.COLUMN_VALUE USER_ID
+          FROM TABLE(SPO_INTEREST_RATE_CNG_RECIPS.GET_ACCEPTED_RECIPIENTS(#{currentUserId}, #{mdTaskId})) T
+    </select>
+
+    <select id="getProjectTeamAssignedAs" resultType="string">
+        select u.full_name from project_team p
+inner join user_in_role ur on ur.id_user=p.id_user and ur.status='Y'
+inner join users u on u.id_user=p.id_user
+inner join roles r on r.id_role=ur.id_role
+inner join mdtask t on t.id_mdtask=p.id_mdtask
+inner join processes pr on pr.id_process=t.id_pup_process and pr.id_type_process=r.id_type_process
+where p.id_mdtask=#{mdTaskId} and r.name_role like #{roleName}
+and exists (select 1 from assign a inner join process_events pe on a.id_process_event=pe.id_process_event
+where a.id_role=r.id_role and a.id_user_to=u.id_user and pe.id_process=t.id_pup_process)
+    </select>
+
+    <select id="isUserInRoleName" resultType="boolean">
+        SELECT CASE WHEN count(1) > 0 THEN 1 ELSE 0 END
+          from USER_IN_ROLE IR join ROLES R on R.ID_ROLE = IR.ID_ROLE and R.NAME_ROLE in
+            <foreach item="item" index="index" collection="roleNames" open="(" separator="," close=")">
+                '${item}'
+            </foreach>
+         where IR.id_user = #{idUser}
+           and R.ACTIVE = 1
+           and IR.STATUS = 'Y'
+    </select>
+
+</mapper>

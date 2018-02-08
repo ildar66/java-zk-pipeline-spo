@@ -1,0 +1,155 @@
+<?page id="index" docType="html" contentType="text/html;charset=UTF-8" title="Dashboards" ?>
+<?xel-method prefix="c" name="getVersion" class="com.vtb.util.ApplProperties"
+        signature="java.lang.String getVersion()"?>
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+    <style src="css/md-index-style.css"/>
+
+    <window height="100%" apply="ru.masterdm.spo.dashboard.IndexController" id="mainWindow"
+            viewModel="@id('vm') @init('ru.masterdm.spo.dashboard.IndexVM')">
+        <popup id="reportRestorePopup">
+            <div>Вы действительно хотите применить конфигурацию <label value="@load(vm.reportName)"/>?</div>
+            <div>Текущие настройки будут изменены.</div>
+            <div><button label="Да" onClick="@global-command('reportApply', rn=vm.reportName, pub=vm.pub)"/>
+            <button label="Нет" onClick="reportRestorePopup.close()" /></div>
+        </popup>
+        <popup id="reportDelPopup">
+            <div>Вы действительно хотите удалить конфигурацию <label value="@load(vm.reportNameNew)"/>?</div>
+            <div><button label="Да" id="delBtn" onClick="@command('reportDel')"/>
+            <button label="Нет" onClick="reportDelPopup.close()" /></div>
+        </popup>
+        <popup id="reportSavePopup" onOpen="@command('reportNameSetter', rn=0, pub=0)">
+            Сохранить конфигурацию
+            <div>Название: <textbox width="150px" tabindex="1" value="@bind(vm.reportName)" onCreate="self.setFocus(true)"/></div>
+            <div><button label="Сохранить" id="saveBtn" onClick="@command('reportSave')"/>
+            <button label="Отмена" onClick="reportSavePopup.close()" /></div>
+            <div><label sclass="error" style="color:#c00" value="@load(vm.reportNameErrorMsg)"/></div>
+        </popup>
+        <popup id="reportSharePopup">
+            Поделиться конфигурацией <label value="@load(vm.reportName)"/>
+            <div>Новое название: <textbox width="150px" tabindex="1" value="@bind(vm.reportName2)"/></div>
+            <div><button label="Поделиться" id="shareBtn" onClick="@command('reportShare')"/>
+            <button label="Отмена" onClick="reportSharePopup.close()" /></div>
+            <div><label sclass="error" style="color:#c00" value="@load(vm.reportNameErrorMsg)"/></div>
+        </popup>
+        <popup id="reportRenamePopup">
+            Переименовать конфигурацию <label value="@load(vm.reportName)"/>
+            <div>Новое название: <textbox width="150px" tabindex="1" value="@bind(vm.reportNameNew)"/></div>
+            <div><button label="Переименовать" id="renameBtn" onClick="@command('reportRename')"/>
+            <button label="Отмена" onClick="reportRenamePopup.close()" /></div>
+            <div><label sclass="error" style="color:#c00" value="@load(vm.reportNameErrorMsg)"/></div>
+        </popup>
+        <popup id="reportCopyPopup">
+            Копировать конфигурацию <label value="@load(vm.reportName)"/>
+            <div>Название: <textbox width="150px" tabindex="1" value="@bind(vm.reportName2)"/></div>
+            <div><button label="Копировать" id="reportCopyBtn" onClick="@command('reportCopy')"/>
+            <button label="Отмена" onClick="reportCopyPopup.close()" /></div>
+            <div><label sclass="error" style="color:#c00" value="@load(vm.reportNameErrorMsg)"/></div>
+        </popup>
+        <popup id="reportPopup" onOpen="renameLabel.setFocus(true)">
+            <vbox>
+                <button sclass="md-menu" id="renameLabel" label="Переименовать" popup="reportRenamePopup" />
+                <button sclass="md-menu" label="Копировать" popup="reportCopyPopup" />
+                <button sclass="md-menu" label="Удалить" popup="reportDelPopup" />
+                <separator bar="true"/>
+                <button sclass="md-menu" label="Поделиться" popup="reportSharePopup" />
+            </vbox>
+        </popup>
+        <popup id="reportPopupPub" onOpen="qqq.setFocus(true)">
+            <vbox>
+                <button sclass="md-menu" id="qqq" label="Переименовать" popup="reportRenamePopup" />
+                <button sclass="md-menu" label="Удалить" popup="reportDelPopup" />
+            </vbox>
+        </popup>
+        <borderlayout >
+            <west title="Заявки" size="220px" vflex="1" maxsize="260" splittable="true" collapsible="true">
+                <borderlayout>
+                <north>
+                    <navbar vflex="1" id="navbar" orient="vertical" collapsed="false" style="min-width: 40px;min-height: 250px;"
+                            onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'], c=self)">
+                        <nav label="Все" iconSclass="md-nav-icon-all"
+                             children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                        <nav label="Кредитные" iconSclass="md-nav-icon-credit"
+                             children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                        <nav label="Документарные" iconSclass="md-nav-icon-documentary"
+                             children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+                        <template name="navitem" var="navigationPage">
+                            <navitem label="@load(navigationPage.subTitle)" selected="@load(navigationPage.selected)"/>
+                        </template>
+                    </navbar>
+                </north>
+                <center title="Отчеты">
+                    <div sclass="filter-panel-section">
+                        <navbar vflex="1" id="navbar_report" orient="vertical" collapsed="false">
+                            <nav popup="reportSavePopup" label="Сохранить конфигурацию" iconSclass="z-icon-save" />
+                        </navbar>
+                        <h:br /><h:br />
+                        <div sclass="filter-title"><label value="Общие" sclass="filter-title"/></div>
+                        <h:ul class="filter-list">
+                            <forEach items="@load(vm.pubReports)" var="rep">
+                                <h:li><a sclass="filter-link" onClick="@global-command('reportApply', rn=rep.id)">
+                                    <label value="@load(rep.name)"></label></a>
+                                    <a href="#" sclass="filter-actions">
+                                        <span popup="reportPopupPub" onClick="@command('reportNameSetter', rn=rep.id, pub=1)">
+                                            <h:img src="img/buttones_01.png" /></span></a>
+                                    <div sclass="ajs-layer-placeholder"></div></h:li>
+                            </forEach>
+                        </h:ul>
+                        <div sclass="filter-title"><label value="Личные" sclass="filter-title"/></div>
+                        <h:ul class="filter-list">
+                            <forEach items="@load(vm.personalReports)" var="rep">
+                                <h:li><a sclass="filter-link" onClick="@global-command('reportApply', rn=rep.id)">
+                                    <label value="@load(rep.name)"></label></a>
+                                    <a href="#" sclass="filter-actions">
+                                        <span popup="reportPopup" onClick="@command('reportNameSetter', rn=rep.id, pub=0)">
+                                            <h:img src="img/buttones_01.png" /></span></a>
+                                    <div sclass="ajs-layer-placeholder"></div></h:li>
+                            </forEach>
+                        </h:ul>
+                    </div>
+                </center>
+                </borderlayout>
+            </west>
+            <north>
+                <h:table class="HeaderTable" cellpadding="0" cellspacing="0" width="100%">
+                    <h:tbody><h:tr>
+                        <h:td width="70px"><h:a href="./"><h:img src="img/logo-vtb.gif" style="margin:8px;" width="60" /></h:a></h:td>
+                        <h:td class="Gradient"> <label id="test" value="@load(vm.currentHeader)"/></h:td>
+                        <h:td class="TitleCaption">Dashboards</h:td>
+                    </h:tr></h:tbody>
+                </h:table>
+            </north>
+            <center id="centerHBox">
+                <include id="contentInclude"
+                         mode="instant"
+                         taskType="@load(vm.taskType)"
+                         creditDocumentary="@load(vm.creditDocumentary)"
+                         src="@load(vm.includeUri)"/>
+            </center>
+            <south hflex="min" border="none">
+                <div align="center">Разработка ООО «Мастер Домино». 2008–2016 г., Версия ${c:getVersion()}
+                    <label id="currentUser" value="@load(vm.currentUser)"/>
+                </div>
+            </south>
+        </borderlayout>
+    </window>
+              <html><![CDATA[
+                            <style>
+                               td.Gradient {
+                                    background: url(img/gradient.jpg) 100% 100% no-repeat;
+                                    background-size: cover;
+                                    margin: auto;
+                                    text-align: center;
+                               }
+                               td.Gradient .z-label {
+                                    white-space: nowrap;
+                                    color: #FFF;
+                                    text-align: center;
+                                    font-size: 27px;
+                                    font-family: Arial, sans-serif;
+                                    margin: auto;
+                                    width: 100%;
+                               }
+                            </style>
+              ]]></html>
+</zk>

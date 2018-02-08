@@ -1,0 +1,92 @@
+<?page title="Employee Maintenance" ?>
+<zk>
+<window id="employeesPage" border="none" width="100%" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('ru.masterdm.spo.pipeline.viewmodel.EmployeesVM')">
+	<panel width="99%" border="normal"  height="350px">
+		<caption label="Employees (click to edit/view)" style="text-align: left;">
+			 <button label="Create New" onClick="@command('createEmployee')" style="font-size:12px;" />
+		</caption>
+		<panelchildren>
+			<vlayout style="margin:10px;">
+				<listbox id="employeesList" model="@load(vm.employees)"
+						 selectedItem="@bind(vm.employee)"
+						 width="99%" rows="8">
+ 					<listhead sizable="true" menupopup="auto">
+						<listheader label="First" align="left"   width="130px"  sort="auto(firstName)" />
+						<listheader label="Last" align="left"   width="130px"  sort="auto(lastName)" />
+						<listheader label="Age" align="left" width="130px"  sort="auto(age)" />
+						<listheader label="Department" align="left"  width="160px"  sort="auto(department.name)" />
+					</listhead>
+					<template name="model" var="item">
+						<listitem onClick="@command('editEmployee')">
+							<listcell label="@load(item.firstName)"/>
+							<listcell label="@load(item.lastName)"/>
+							<listcell label="@load(item.age)"/>
+							<listcell label="@load(item.department.name)"/>
+						</listitem>
+					</template>
+				</listbox>
+			</vlayout>
+		</panelchildren>
+	</panel>
+	<panel visible="@load(!vm.hideForm)" height="300px" style="padding-top:10px;">
+		<caption label="@load(vm.employee.id ne null ? 'Update Employee':'Create Employee')" style="text-align: left;"/>
+		<panelchildren>
+			<vlayout style="padding:5px;"
+					 form="@id('emp')
+					@load(vm.employee)
+					@save(vm.employee, before='update'),
+					@save(vm.employee, before='add')">
+					<vlayout>
+						<grid>
+							<columns>
+								<column align="right" width="120px"/>
+								<column/>
+							</columns>
+							<rows>
+								<row visible="@load(vm.employee.id ne null)">
+									<cell sclass="row-title">ID:</cell>
+									<cell><textbox disabled="true" value="@bind(emp.id)" style="width:40px"/></cell>
+								</row>
+								<row>
+									<cell sclass="row-title">First Name:</cell>
+									<cell><textbox value="@bind(emp.firstName)" constraint="no empty" style="width:400px"/></cell>
+								</row>
+								<row>
+									<cell sclass="row-title">Last Name:</cell>
+									<cell><textbox value="@bind(emp.lastName)" constraint="no empty" style="width:400px"/></cell>
+								</row>
+								<row>
+									<cell sclass="row-title">Age:</cell>
+									<cell><textbox value="@bind(emp.age)" constraint="no empty" style="width:400px"/></cell>
+								</row>
+								<row>
+									<cell sclass="row-title">Department:</cell>
+									<cell>
+										 <listbox model="@load(vm.departments)" selectedItem="@bind(emp.department)"
+												 width="200px" mold="select" rows="1"
+												 id="departmentsList">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.name)"/>
+													</listitem>
+												</template>
+										</listbox>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</vlayout>
+					<vlayout>
+						<hlayout>
+							<button label="Update" onClick="@command('update')" visible="@load(vm.employee.id ne null)"/>
+							<button label="Delete" onClick="@command('delete')" visible="@load(vm.employee.id ne null)"/>
+							<button label="Add" onClick="@command('add')" visible="@load(vm.employee.id eq null)"/>
+							<button label="Cancel" onClick="@command('cancel')"/>
+						</hlayout>
+					</vlayout>
+				</vlayout>
+		</panelchildren>
+	</panel>
+</window>
+</zk>

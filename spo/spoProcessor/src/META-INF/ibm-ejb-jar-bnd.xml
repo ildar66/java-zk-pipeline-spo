@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar-bnd
+        xmlns="http://websphere.ibm.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-bnd_1_0.xsd"
+        version="1.0">
+
+	<session name="AttachmentActionProcessorFacade">
+		<resource-ref name="jdbc/VTBLOANS" binding-name="jdbc/LOANS"></resource-ref></session>
+	<session name="CRMActionProcessorFacade">
+		<resource-ref name="jdbc/CRM" binding-name="jdbc/CRM"></resource-ref>
+	</session>
+	<session name="SPOMessageActionProcessorFacade">
+		<resource-ref name="jdbc/VTBLOANS" binding-name="jdbc/LOANS"></resource-ref></session>
+	<session name="TaskActionProcessorFacadeBean">
+		<resource-ref name="jdbc/LOANS" binding-name="jdbc/LOANS"></resource-ref>
+		<resource-ref name="jdbc/CRM" binding-name="jdbc/CRM"></resource-ref>
+		</session>
+	<session name="ReportBuilderActionProcessorFacade"><ejb-ref
+			name="ejb/DBFlexWorkflowEJBLocal" binding-name="ejb/org/uit/director/db/DBFlexWorkflowHome" /></session>
+</ejb-jar-bnd>

@@ -1,0 +1,21 @@
+    <tabbox id="tb" onSelect="@command('navigateTab', target=self.selectedTab.id)">
+        <!--<attribute name="onCreate">
+            B.setSelected(true);
+        </attribute>-->
+        <tabs id="tabs">
+            <tab id="A" label="Tab A" />
+            <tab id="Customers in Tabs" label="Tab Customers in Tabs"
+                 selected="@load(currentPage.subTitle eq 'Customers in Tabs')"/>
+            <tab id="Change table columns in Tabs" label="Tab Change table columns in Tabs"
+                 selected="@load(currentPage.subTitle eq 'Change table columns in Tabs')" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>This is panel A</tabpanel>
+            <tabpanel>
+                <include id="content_B" mode="instant" sclass="content" src="index_0.zul"/>
+            </tabpanel>
+            <tabpanel>
+                <include id="content_C" mode="instant" sclass="content" src="temp.zul"/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>

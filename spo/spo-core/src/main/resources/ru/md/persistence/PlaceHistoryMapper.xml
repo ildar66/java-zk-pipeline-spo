@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.PlaceHistoryMapper">
+
+  <sql id="placeHistoryFilter">
+  </sql>
+
+  <sql id="placeHistorySelect">
+	SELECT PH.ID_MDTASK,
+			PH.ID_OLD_PLACE,
+			PH.ID_NEW_PLACE,
+		    (SELECT M.VERSION FROM MDTASK M WHERE ID_MDTASK=PH.ID_MDTASK) VERSION,
+			(SELECT FULLNAME FROM DEPARTMENTS WHERE ID_DEPARTMENT=PH.ID_OLD_PLACE) OLD_PLACE_NAME,
+			(SELECT FULLNAME FROM DEPARTMENTS WHERE ID_DEPARTMENT=PH.ID_NEW_PLACE) NEW_PLACE_NAME,
+			PH.USERID AS ID_PERFORMER,
+			(SELECT FULLNAME FROM V_CED_USER WHERE ID_USER=PH.USERID) PERFORMER_NAME,
+			(SELECT LOGIN FROM USERS WHERE ID_USER=PH.USERID) PERFORMER_LOGIN,
+			PH.LOG_DATE CHANGE_DATE
+			FROM PLACE_HISTORY PH
+	WHERE PH.ID_MDTASK
+  		<if test="filter.allversions == null">
+  			= #{filter.idmdtask}
+  		</if>
+  		<if test="filter.allversions != null">
+			IN (SELECT ID_MDTASK FROM MDTASK WHERE ID_PUP_PROCESS IS NOT NULL AND MDTASK_NUMBER=(SELECT MDTASK_NUMBER FROM MDTASK WHERE ID_MDTASK=#{filter.idmdtask}))
+  		</if>
+  </sql>
+  
+  <select id="getPlaceHistory" parameterType="map" resultType="ru.md.domain.PlaceHistory">
+    <include refid="placeHistorySelect"/>
+	ORDER BY PH.LOG_DATE
+  </select>
+
+  <select id="getPlaceHistoryPage" parameterType="map" resultType="ru.md.domain.PlaceHistory">
+    select * from (select rownum rnum, a.* from (
+
+    <include refid="placeHistorySelect"/>
+	ORDER BY PH.LOG_DATE
+
+    <![CDATA[
+	    ) a where rownum <= #{count} + #{start} ) where rnum >= #{start} + 1
+    ]]>
+  </select>
+
+  <select id="getPlaceHistoryCount" resultType="java.lang.Long">
+    select count(*) from 
+    (
+    	<include refid="placeHistorySelect"/>
+	    <include refid="placeHistoryFilter"/>
+    )
+  </select>
+
+  <insert id="setPlaceHistory">
+    INSERT INTO PLACE_HISTORY(ID_MDTASK, ID_OLD_PLACE, ID_NEW_PLACE, USERID, LOG_DATE)
+	VALUES(#{idmdtask}, #{oldplace}, #{newplace}, #{iduser}, #{date})
+  
+  </insert>
+  
+</mapper>

@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.CompendiumMapper">
+    <resultMap type="commonDictionary" id="commonDictionaryResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+    </resultMap>
+    <resultMap type="fundingCompany" id="fundingCompanyResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+    </resultMap>
+    <resultMap type="pipelineStage" id="pipelineStageResultMap" autoMapping="true">
+        <id property="id" column="ID" />
+    </resultMap>
+
+    <select id="getBaseRates" resultMap="commonDictionaryResultMap">
+        SELECT F.ITEMN_ID ID, F.TEXT NAME
+          FROM CRM_FLOAT F
+         WHERE F.IS_ACTIVE = 1
+         ORDER BY F.TEXT
+    </select>
+    <select id="getTradeFinance" resultMap="commonDictionaryResultMap">
+        select id,name from cd_trade_finance order by name
+    </select>
+
+    <select id="getCrossSellTypes" resultType="ru.md.domain.dict.CrossSell">
+        select id,name from cd_cross_sell
+        ORDER BY name
+    </select>
+
+    <select id="getFinancingObjectives" resultType="string">
+        SELECT PFG.NAME
+          FROM CD_PIPELINE_FINANCIAL_GOAL PFG
+         ORDER BY PFG.NAME
+    </select>
+    
+    <select id="getPipelineCoeffs" resultType="decimal">
+        SELECT PC.VALUE
+          FROM V_CD_PIPELINE_COEFFS PC
+         WHERE PC.ID_TYPE = #{typeId}
+         ORDER BY PC.VALUE
+    </select>
+    
+    <select id="getFundCompanies" resultType="string">
+        SELECT PFC.NAME
+          FROM CD_PIPELINE_FUNDING_COMPANY PFC
+         ORDER BY PFC.NAME
+    </select>
+    
+    <select id="getTradingDesks" resultType="string">
+        SELECT PTD.NAME
+          FROM CD_PIPELINE_TRADING_DESK PTD
+         ORDER BY PTD.NAME
+    </select>
+    <select id="getMoStatusReturnList" resultType="string">
+        SELECT r.name
+        FROM CD_SPORETURN r where r.id_resolution_status=4
+        union
+        select t.status_return name from CRM_STATUS_RETURN t where t.fb_spo_return_id not in (select r.fb_spo_return_id from R_RESST_FBSPORETURN r)
+        order by name
+    </select>
+    <select id="getCryptoIssuers" resultType="string">
+        SELECT VALUE
+          FROM GLOBAL_SETTINGS
+        WHERE MNEMO = 'cryptoIssuers'
+    </select>
+
+    <select id="getFixingRateSpreads" resultType="decimal">
+          WITH FRS AS (SELECT SS.* 
+                 FROM CRM_FB_STAVSPRED SS
+                WHERE SS.UNIT = #{currency}
+                  AND #{periodInDays} BETWEEN SS.DAYS_FROM AND SS.DAYS_TO)
+        SELECT DISTINCT FRS.STAV_SPRED
+          FROM FRS
+         WHERE FRS.ACTIVEDATE = (SELECT MAX(FRS1.ACTIVEDATE) 
+                                   FROM FRS FRS1)
+    </select>
+    
+    <select id="earlyRepaymentSpreads" resultType="decimal">
+          WITH ERS AS (SELECT ER.* 
+                 FROM CRM_EARLY_REPAYMENT ER
+                WHERE ER.ID_CURRENCY = #{currency}
+                  AND #{periodInDays} BETWEEN ER.DAYS_FROM AND ER.DAYS_TO)
+        SELECT DISTINCT ERS.SPREAD
+          FROM ERS
+         WHERE ERS.ACTIVEDATE = (SELECT MAX(ERS1.ACTIVEDATE) 
+                                   FROM ERS ERS1)
+    </select>
+    
+    <select id="moratoriumRateSpreads" resultType="decimal">
+          WITH MRS AS (SELECT DL.* 
+                 FROM CD_DEPENDING_LOAN DL
+                WHERE DL.ID_CURRENCY = #{currency}
+                  AND #{periodInDays} BETWEEN DL.DAYS_FROM AND DL.DAYS_TO
+                  AND DL.DAYS_BAN_TO = #{earlyRepaymentBanPeriod})
+        SELECT DISTINCT MRS.SPREAD
+          FROM MRS
+         WHERE MRS.ACTIVEDATE = (SELECT MAX(MRS1.ACTIVEDATE) 
+                                   FROM MRS MRS1)
+    </select>
+    
+  <select id="getMqFileHostTypeByDepId" resultType="java.lang.Long">
+    select FILEHOST_TYPE from MQ_SETTINGS where ID_DEPARTMENT = #{id}
+  </select>
+  <select id="findConditionTemplate" resultType="ru.md.domain.ContitionTemplate">
+    select c.ID_CONDITION id,c.ID_TYPE,c.name from CONDITION c where c.ID_TYPE = #{id} and IS_MIGRATED=0
+  </select>
+  <select id="findStatusReturnList" resultType="ru.md.domain.StatusReturn">
+    select s.fb_spo_return_id id,s.status_type type,s.status_return description from V_SPO_STATUS_RETURN s
+  </select>
+  <select id="findContractorTypeList" resultType="ru.md.domain.ContractorType">
+    select ID_CONTRACTOR_TYPE id,NAME_CONTRACTOR_TYPE name from CONTRACTOR_TYPE where GROUP_KEY like 'BORROWERS' and IS_ACTIVE=1 order by ID_CONTRACTOR_TYPE
+  </select>
+  <select id="getProductById" resultType="ru.md.domain.Product">
+    SELECT productid, name, actualid FROM CRM_PRODUCT U
+	<where>
+	U.productid = #{id}
+	</where>
+  </select>
+  <select id="getCcResolutionStatusCategoryId" resultType="java.lang.Long">
+    select s.ID_CATEGORY from CC_RESOLUTION_STATUS s where s.ID_RESOLUTION_STATUS = #{id}
+  </select>
+
+  <select id="getEkGroupId" resultType="java.lang.String">
+    select max(gc_id) from CRM_COMPANIESGROUP_LINKED where gc4_id= #{id}
+  </select>
+  <select id="getEkGroupName" resultType="java.lang.String">
+    select name from CRM_FB_COMPANIESGROUP g where g.FB_COMPANIESGROUPID=#{id}
+  </select>
+
+  
+  <!-- список контрагентов с фильром. В таблице больше миллиона записей -->
+  <select id="getKzPageTotalCount" resultType="java.lang.Long">
+    select count(*) from crm_organization o inner join crm_finance_org f on o.id_org=f.id_org
+    where o.IS_ACTIVE='y' and f.IS_ACTIVE='y'
+    <include refid="kzFilter"/>
+  </select>
+  
+  <sql id="kzFilter">
+    <if test="filter.name != null">
+			AND LOWER(organization_name) like '%' || #{filter.name} || '%'
+	</if>
+	<if test="filter.number != null">
+			and o.id_org like #{filter.number}
+	</if>
+    <if test="filter.inn != null">
+			and inn like #{filter.inn}
+	</if>
+    <if test="filter.type != null">
+			and ORG_TYPE like #{filter.type} 
+	</if>
+    <if test="filter.depName != null">
+			and region like #{filter.depName} 
+	</if>
+	<if test="filter.ek != null">
+			and ID_UNITED_CLIENT like #{filter.ek}
+	</if>
+    <if test="filter.mode != null and filter.mode == 'inlimit'">
+		and o.id_org in
+		(select id_crmorg from r_org_mdtask r inner join mdtask t on t.id_mdtask = r.ID_MDTASK and (t.tasktype='l' or t.tasktype is null)
+        union all
+        select ID_UNITED_CLIENT from crm_finance_org where id_org in (select id_crmorg from r_org_mdtask r inner join mdtask t on t.id_mdtask = r.ID_MDTASK and (t.tasktype='l' or t.tasktype is null))    
+        )
+	</if>
+    <if test="filter.mode != null and filter.mode == 'inprocess'">
+		and o.id_org in
+		(select id_crmorg from r_org_mdtask r inner join mdtask t on t.id_mdtask = r.ID_MDTASK and t.tasktype is not null
+        union all
+        select ID_UNITED_CLIENT from crm_finance_org where id_org in (select id_crmorg from r_org_mdtask r inner join mdtask t on t.id_mdtask = r.ID_MDTASK and t.tasktype is not null)    
+        )
+	</if>
+  </sql>
+  
+    <select id="getFundCompaniesFull" resultMap="fundingCompanyResultMap">
+        SELECT FC.ID, FC.NAME, NVL(FC.IS_RUN_PROCESS, 0) IS_RUN_PROCESS
+          FROM CD_PIPELINE_FUNDING_COMPANY FC
+        <if test="isRunProcess != null and isRunProcess">
+         WHERE FC.IS_RUN_PROCESS = 1
+        </if>
+         ORDER BY FC.ID
+    </select>
+
+    <select id="getPipelineStage" resultMap="pipelineStageResultMap">
+        select s.ID,s.name,s.description,s.value from cd_pipeline_stage s order by s.value
+    </select>
+
+  <select id="getEkPageTotalCount" resultType="java.lang.Long">
+    select count(*) from crm_ek o where o.IS_ACTIVE='y'
+    <if test="name != null">
+			AND LOWER(name) like '%' || #{name} || '%'
+	</if>
+	<if test="number != null">
+			and o.id like #{number}
+	</if>
+    <if test="inn != null">
+			and inn like #{inn}
+	</if>
+    <if test="type != null">
+			and ORG_TYPE like #{type} 
+	</if>
+	<if test="group != null ">
+            AND (LOWER(groupname) like '%'|| #{group} || '%'
+            <if test="group2 != null">
+              or LOWER(groupname) like '%'|| #{group2} || '%'
+            </if>
+            )
+    </if>
+  </select>
+  
+  <select id="getKzPage" parameterType="map" resultType="ru.md.domain.Org">
+    select * from (select rownum rnum, a.* from (
+	select rownum RN, o.id_org ID,organization_name as NAME,inn,client_category client_type,
+				D.FULLNAME as region,
+				D.ID_DEPARTMENT as region_id,
+				division
+	from crm_organization o
+	inner join crm_finance_org f on o.id_org=f.id_org
+  	LEFT JOIN CRM_FB_DEPARTMENT CD ON O.REGION=CD.DEP_NAME
+  	LEFT JOIN DEPARTMENTS D ON CD.FB_DEPARTMENTID=D.CRM_FB_DEPARTMENT AND D.IS_EXEC_DEP = 1
+	where o.IS_ACTIVE='y' and f.IS_ACTIVE='y' 
+    <include refid="kzFilter"/>
+	order by organization_name
+    <![CDATA[
+	    ) a where rownum <= #{count} + #{start} ) where rnum >= #{start} + 1
+    ]]>
+  </select>
+  
+  <select id="getEkPage" parameterType="map" resultType="ru.md.domain.Org">
+    select * from (select rownum rnum, a.* from (
+    select o.id,o.name,inn,ORG_TYPE client_type,groupname
+    from crm_ek o where o.IS_ACTIVE='y'
+    <if test="filter.name != null">
+			AND LOWER(name) like '%'|| #{filter.name} || '%'
+	</if>
+    <if test="filter.number != null">
+			and o.id like #{filter.number}
+	</if>
+    <if test="filter.inn != null">
+			and inn like #{filter.inn}
+	</if>
+    <if test="filter.type != null">
+			and ORG_TYPE like #{filter.type} 
+	</if>
+    <if test="filter.group != null">
+      AND (LOWER(groupname) like '%'|| #{filter.group} || '%'
+      <if test="filter.group2 != null">
+        or LOWER(groupname) like '%'|| #{filter.group2} || '%'
+      </if>
+      )
+	</if>
+	order by name
+    <![CDATA[
+		) a where rownum <= #{count} + #{start} ) where rnum >= #{start} + 1
+    ]]>
+  </select>
+  
+  <select id="getEkNameByOrgId" resultType="java.lang.String">
+select max(name) from(
+select ek.NAME from CRM_FINANCE_ORG f
+inner join crm_ek ek on ek.ID=f.ID_UNITED_CLIENT
+where f.ID_ORG=#{id}
+union all
+select e.name from crm_ek e 
+where e.ID=#{id})
+  </select>
+  <select id="getGroupNameByOrgId" resultType="java.lang.String">
+select max(groupname) from(
+select ek.groupname from CRM_FINANCE_ORG f
+inner join crm_ek ek on ek.ID=f.ID_UNITED_CLIENT
+where f.ID_ORG=#{id}
+union all
+select e.groupname from crm_ek e
+where e.ID=#{id})
+  </select>
+
+  <select id="getEkById" resultType="ru.md.domain.Org">
+     select o.id,o.name,inn,ORG_TYPE client_type,groupname,ogrn,resident,industry
+     from crm_ek o where o.ID=#{id}
+  </select>
+  <select id="getOrgById" resultType="ru.md.domain.Org">
+     select o.id_org ID,organization_name as NAME,inn,client_category client_type,region,division,f.id_united_client,o.industry
+	  from crm_organization o
+	  inner join crm_finance_org f on o.id_org=f.id_org
+      where o.id_org=#{id}
+  </select>
+  <select id="getTaskKzByMdtask" resultType="ru.md.domain.TaskKz">
+    SELECT r.ID_R, r.ID_CRMORG kzid,RATINGPKR,order_disp FROM R_ORG_MDTASK r
+    where ID_MDTASK=#{idMdtask} order by order_disp
+  </select>
+  <select id="getContractorTypeIdByIdR" resultType="java.lang.Long">
+    select id_contractor_type from r_contractor_type_mdtask where id_r=#{id}
+  </select>
+  
+    
+    <select id="getExtraChargeRates" resultType="ru.md.domain.ExtraChargeRate">
+        SELECT ID_EXTRA_CHARGE ID, COMMENTARY NAME 
+          FROM CD_EXTRA_CHARGE_RATE
+         ORDER BY COMMENTARY
+    </select>
+
+    <select id="getCurrencyRate" resultType="decimal">
+        SELEC
+        T * FROM (SELECT CR.RATE
+        FROM CRM_FB_EXCHANGERATE CR
+        WHERE CR.CURRENCYCODE = #{currency}
+        ORDER BY CR.ACTIVEDATE DESC)
+        WHERE ROWNUM = 1
+    </select>
+
+    <select id="getCurrencyRate4Date" resultType="decimal">
+        <![CDATA[
+        SELECT * FROM (SELECT CR.RATE
+        FROM CRM_FB_EXCHANGERATE CR
+        WHERE CR.CURRENCYCODE = #{currency} and CR.ACTIVEDATE < #{date}
+        ORDER BY CR.ACTIVEDATE DESC)
+        WHERE ROWNUM = 1
+        ]]>
+    </select>
+
+    <select id="isUsedInEffStavRecalc" resultType="java.lang.String">
+        select ISUSEDINEFFSTAVRECALC from crm_com_type where SHORT_TEXT= #{id}
+    </select>
+
+    <select id="getContactList" resultType="ru.md.domain.dict.Contact">
+        select c.lastname,c.firstname,c.middlename,c.title,c.department,c.description,c.contactid from crm_contact c
+        where c.accountid=#{orgID}
+        or c.accountid in (select id_org from crm_finance_org where id_united_client=#{orgID})
+    </select>
+
+</mapper>

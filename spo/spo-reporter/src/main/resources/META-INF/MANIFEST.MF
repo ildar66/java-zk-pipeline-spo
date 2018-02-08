@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Export-Package: ru.masterdm.spo.reporter;uses:="org.springframework.st
+ ereotype";version="18.09.0.spo133T-05-dev-SNAPSHOT"
+Built-By: Sergey Lysenkov
+Tool: Bnd-1.43.0
+Bundle-Name: Reporter Implemintation 18.09-spo133T-05-dev-SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Master-Domino
+Build-Jdk: 1.7.0_60
+Bundle-Version: 18.09.0.spo133T-05-dev-SNAPSHOT
+Bnd-LastModified: 1474527137569
+Bundle-ManifestVersion: 2
+Bundle-Description: Система предкредитной обра
+ ботки.
+Import-Package: org.eclipse.gemini.blueprint.service.exporter.support,
+ org.springframework.stereotype
+Bundle-DocURL: http://masterdm.ru
+Bundle-SymbolicName: ru.masterdm.spo.spo-reporter
+Originally-Created-By: Apache Maven Bundle Plugin
+

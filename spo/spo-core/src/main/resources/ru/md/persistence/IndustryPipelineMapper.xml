@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="ru.md.persistence.IndustryPipelineMapper">
+
+    <resultMap id="dealVolumeResult" type="DealVolume">
+        <result property="industryName" column="industry"/>
+    </resultMap>
+
+    <resultMap id="dealCountResult" type="DealCount">
+        <result property="industryName" column="industry"/>
+        <result property="orgName" column="org_Name"/>
+        <result property="sumRUR" column="sum_RUR"/>
+        <result property="sumUSD" column="sum_USD"/>
+        <result property="sumEUR" column="sum_EUR"/>
+    </resultMap>
+
+    <resultMap id="dealCountsSummaryResult" type="DealCount">
+        <result property="industryName" column="industry"/>
+        <result property="sumRUR" column="sum_RUR"/>
+        <result property="sumUSD" column="sum_USD"/>
+        <result property="sumEUR" column="sum_EUR"/>
+    </resultMap>
+
+    <select id="fetchDealVolumes" resultMap="dealVolumeResult">
+        SELECT SUM(volume)/1E6 volume, industry from (
+            SELECT SUM(m.mdtask_sum) AS volume, o.industry AS industry
+                FROM v_cps_credit_deal m
+            INNER JOIN crm_ek o ON m.id_borrower = o.id
+            WHERE industry IS NOT NULL AND m.mdtask_sum_currency = 'RUR'
+            GROUP BY industry
+            UNION
+            SELECT GET_CURRENCY_RATE('USD')*SUM(m.mdtask_sum) AS volume, o.industry AS industry
+                FROM v_cps_credit_deal m
+            INNER JOIN crm_ek o ON m.id_borrower = o.id
+            WHERE industry IS NOT NULL AND m.mdtask_sum_currency = 'USD'
+            GROUP BY industry
+            UNION
+            SELECT GET_CURRENCY_RATE('EUR')*SUM(m.mdtask_sum) AS volume, o.industry AS industry
+                FROM v_cps_credit_deal m
+            INNER JOIN crm_ek o ON m.id_borrower = o.id
+            WHERE industry IS NOT NULL AND m.mdtask_sum_currency = 'EUR'
+            GROUP BY industry
+        ) GROUP BY industry ORDER BY volume DESC
+    </select>
+
+    <select id="getSumDealVolumes" resultType="java.lang.Long">
+        SELECT SUM(volume)/1E6 volume from (
+            SELECT SUM(m.mdtask_sum) AS volume
+                FROM v_cps_credit_deal m
+            INNER JOIN crm_organization o ON m.id_borrower = o.id_org
+            WHERE industry IS NOT NULL AND m.mdtask_sum_currency = 'RUR'
+            UNION
+            SELECT GET_CURRENCY_RATE('USD')*SUM(m.mdtask_sum) AS volume
+                FROM v_cps_credit_deal m
+            INNER JOIN crm_organization o ON m.id_borrower = o.id_org
+            WHERE industry IS NOT NULL AND m.mdtask_sum_currency = 'USD'
+            UNION
+            SELECT GET_CURRENCY_RATE('EUR')*SUM(m.mdtask_sum) AS volume
+                FROM v_cps_credit_deal m
+            INNER JOIN crm_organization o ON m.id_borrower = o.id_org
+            WHERE industry IS NOT NULL AND m.mdtask_sum_currency = 'EUR'
+        )
+    </select>
+
+    <select id="fetchDealCounts" resultMap="dealCountResult">
+        /* TODO: after change temp rate=56 and 68 on function getRateForCurrency('USD'/'EUR') */
+        SELECT (sum(volume_RUR) + 56*sum(volume_USD) + 68*sum(volume_EUR))/1E6 AS sum,
+                sum(volume_RUR)/1E6 sum_RUR, sum(volume_USD)/1E6 sum_USD, sum(volume_EUR)/1E6 sum_EUR, sum(deal_count) count, organization_name org_Name, industry
+        FROM (
+                select sum(m.mdtask_sum) volume_RUR, 0 volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.organization_name, o.industry FROM v_cps_credit_deal m
+                          inner join crm_organization o on m.id_borrower = o.id_org
+                          where industry is not null AND m.mdtask_sum_currency = 'RUR'
+                          group by o.organization_name, industry
+                UNION
+                select 0 volume_RUR, sum(m.mdtask_sum) volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.organization_name, o.industry FROM v_cps_credit_deal m
+                          inner join crm_organization o on m.id_borrower = o.id_org
+                          where industry is not null AND m.mdtask_sum_currency = 'USD'
+                          group by o.organization_name, industry
+                UNION
+                select 0 volume_RUR, 0 volume_USD, sum(m.mdtask_sum) volume_EUR, count(id_mdtask) deal_count, o.organization_name, o.industry FROM v_cps_credit_deal m
+                          inner join crm_organization o on m.id_borrower = o.id_org
+                          where industry is not null AND m.mdtask_sum_currency = 'EUR'
+                          group by o.organization_name, industry
+        ) GROUP BY organization_name, industry
+        <include refid="dealCountFilter"/>
+        ORDER BY organization_name
+    </select>
+
+    <sql id="dealCountFilter">
+        <if test="searchString != null">
+            HAVING LOWER(organization_name) LIKE '%' || LOWER(TRIM(#{searchString})) || '%'
+            OR LOWER(industry) LIKE '%' || LOWER(TRIM(#{searchString})) || '%'
+        </if>
+    </sql>
+
+    <select id="fetchDealCountsSummary" resultMap="dealCountsSummaryResult">
+         SELECT (sum(volume_RUR) + 56*sum(volume_USD) + 68*sum(volume_EUR))/1E6 AS sum,
+                        sum(volume_RUR)/1E6 sum_RUR, sum(volume_USD)/1E6 sum_USD, sum(volume_EUR)/1E6 sum_EUR, sum(deal_count) count, industry
+                FROM (
+                        select sum(m.mdtask_sum) volume_RUR, 0 volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.industry FROM v_cps_credit_deal m
+                                  inner join crm_organization o on m.id_borrower = o.id_org
+                                  where industry is not null AND m.mdtask_sum_currency = 'RUR'
+                                  group by industry
+                        UNION
+                        select 0 volume_RUR, sum(m.mdtask_sum) volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.industry FROM v_cps_credit_deal m
+                                  inner join crm_organization o on m.id_borrower = o.id_org
+                                  where industry is not null AND m.mdtask_sum_currency = 'USD'
+                                  group by industry
+                        UNION
+                        select 0 volume_RUR, 0 volume_USD, sum(m.mdtask_sum) volume_EUR, count(id_mdtask) deal_count, o.industry FROM v_cps_credit_deal m
+                                  inner join crm_organization o on m.id_borrower = o.id_org
+                                  where industry is not null AND m.mdtask_sum_currency = 'EUR'
+                                  group by industry
+                ) GROUP BY industry ORDER BY sum desc
+    </select>
+
+    <select id="getCountDealCountsSummary" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM v_cps_credit_deal m
+            INNER JOIN crm_organization o on m.id_borrower = o.id_org
+            WHERE industry IS NOT NULL
+            <if test="searchString != null">
+                AND LOWER(o.organization_name) LIKE '%' || LOWER(TRIM(#{searchString})) || '%'
+                OR LOWER(o.industry) LIKE '%' || LOWER(TRIM(#{searchString})) || '%'
+            </if>
+    </select>
+
+    <select id="fetchCompaniesDealCounts" resultMap="dealCountResult">
+        /* TODO: after change temp rate=56 and 68 on function getRateForCurrency('USD'/'EUR') */
+        SELECT (sum(volume_RUR) + 56*sum(volume_USD) + 68*sum(volume_EUR))/1E6 AS sum,
+        sum(volume_RUR)/1E6 sum_RUR, sum(volume_USD)/1E6 sum_USD, sum(volume_EUR)/1E6 sum_EUR, sum(deal_count) count, organization_name org_Name
+        FROM (
+            select sum(m.mdtask_sum) volume_RUR, 0 volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.organization_name FROM v_cps_credit_deal m
+            inner join crm_organization o on m.id_borrower = o.id_org
+            where industry is not null AND m.mdtask_sum_currency = 'RUR'
+            group by o.organization_name
+        UNION
+            select 0 volume_RUR, sum(m.mdtask_sum) volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.organization_name FROM v_cps_credit_deal m
+            inner join crm_organization o on m.id_borrower = o.id_org
+            where industry is not null AND m.mdtask_sum_currency = 'USD'
+            group by o.organization_name
+        UNION
+            select 0 volume_RUR, 0 volume_USD, sum(m.mdtask_sum) volume_EUR, count(id_mdtask) deal_count, o.organization_name FROM v_cps_credit_deal m
+            inner join crm_organization o on m.id_borrower = o.id_org
+            where industry is not null AND m.mdtask_sum_currency = 'EUR'
+            group by o.organization_name
+        ) GROUP BY organization_name
+        <include refid="сompaniesDealCountFilter"/>
+        ORDER BY organization_name
+    </select>
+
+    <sql id="сompaniesDealCountFilter">
+        <if test="searchString != null">
+            HAVING LOWER(organization_name) LIKE '%' || LOWER(TRIM(#{searchString})) || '%'
+        </if>
+    </sql>
+
+    <select id="fetchIndustriesDealCounts" resultMap="dealCountResult">
+        /* TODO: after change temp rate=56 and 68 on function getRateForCurrency('USD'/'EUR') */
+        SELECT (sum(volume_RUR) + 56*sum(volume_USD) + 68*sum(volume_EUR))/1E6 AS sum,
+        sum(volume_RUR)/1E6 sum_RUR, sum(volume_USD)/1E6 sum_USD, sum(volume_EUR)/1E6 sum_EUR, sum(deal_count) count, industry
+        FROM (
+            select sum(m.mdtask_sum) volume_RUR, 0 volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.industry FROM v_cps_credit_deal m
+            inner join crm_organization o on m.id_borrower = o.id_org
+            where industry is not null AND m.mdtask_sum_currency = 'RUR'
+            group by industry
+        UNION
+            select 0 volume_RUR, sum(m.mdtask_sum) volume_USD, 0 volume_EUR, count(id_mdtask) deal_count, o.industry FROM v_cps_credit_deal m
+            inner join crm_organization o on m.id_borrower = o.id_org
+            where industry is not null AND m.mdtask_sum_currency = 'USD'
+            group by industry
+        UNION
+            select 0 volume_RUR, 0 volume_USD, sum(m.mdtask_sum) volume_EUR, count(id_mdtask) deal_count, o.industry FROM v_cps_credit_deal m
+            inner join crm_organization o on m.id_borrower = o.id_org
+            where industry is not null AND m.mdtask_sum_currency = 'EUR'
+            group by industry
+        ) GROUP BY industry
+        <include refid="industriesDealCountFilter"/>
+        ORDER BY industry
+    </select>
+
+    <sql id="industriesDealCountFilter">
+        <if test="searchString != null">
+            HAVING LOWER(industry) LIKE '%' || LOWER(TRIM(#{searchString})) || '%'
+        </if>
+    </sql>
+
+
+</mapper>

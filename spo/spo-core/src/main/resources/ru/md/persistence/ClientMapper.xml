@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.ClientMapper">
+    <select id="getDealStatusList" resultType="string">
+        select status from CD_DEAL_STATUS order by ID_DEAL_STATUS
+    </select>
+    <select id="getDecisionMakerList" resultType="string">
+        select distinct txt from
+        (select d.FULLNAME txt from DEPARTMENTS d where d.is_cc=1
+        union all
+        select a.fullname txt from authorized_person a)
+        order by txt
+    </select>
+    <select id="getBodydecisionList" resultType="string">
+        select distinct a.action
+        from CD_BODYDECISION d, CD_BODYACTION a
+        where a.id_bodydecision = d.id_bodydecision AND
+        d.suspend = 1 and d.active = 1
+        order by a.action
+    </select>
+    <select id="getDecisionBody" resultType="string">
+        select i.decisionmaker from SPO_CLIENT_INFO_DECISION_BODY i where id_decision=#{id}
+    </select>
+    <select id="getDocDecision" resultType="ru.md.domain.Decision">
+        select t.filename,DECISION_DATE,PROTOCOL_NO,ID_DECISION from SPO_CLIENT_INFO_DECISION t where t.ID_DECISION=#{id}
+    </select>
+    <select id="getDocData" resultType="ru.md.domain.Decision">
+        select t.filedata,t.contenttype,t.filename,DECISION_DATE,PROTOCOL_NO,ID_DECISION from SPO_CLIENT_INFO_DECISION t where t.ID_DECISION=#{id}
+    </select>
+    <select id="getClientInfo" resultType="ru.md.domain.ClientInfo">
+        select i.id,i.pub,status,security_last,security_validto,security_text,
+        GROUP_RATING,GROUP_RATING_REVIEW,RATING_METHOD,RATING,RATING_SCALE,RATING_SCALE_GROUP,
+        RATING_REVIEW,CORP_BLOCK,group_decision,client_decision,client_decision_review,group_decision_review,
+        SUSPEND_LIMIT_LOAN,SUSPEND_LIMIT_INVEST,
+        sublimit,validto_date,limit_decision,SUSPEND_LIMIT_INVEST_DECISION,SUSPEND_LIMIT_LOAN_DECISION,SUSPEND_LIMIT_LOAN_DATE,SUSPEND_LIMIT_INVEST_DATE
+        from spo_client_info i where i.id=#{id}
+    </select>
+    <update id="saveClientInfo">
+        DECLARE
+            VAR_ID_DECISION NUMBER;
+        BEGIN
+        insert into spo_client_info(id) select #{id} from dual
+        where not exists (select * from spo_client_info where id=#{id});
+        UPDATE spo_client_info SET pub=#{info.pub},status=#{info.status},
+        security_last=#{info.securityLast},security_validto=#{info.securityValidto},security_text=#{info.securityText},
+        GROUP_RATING=#{info.groupRating},GROUP_RATING_REVIEW=#{info.groupRatingReview},
+        RATING_METHOD=#{info.ratingMethod}, RATING=#{info.rating},RATING_SCALE=#{info.ratingScale},RATING_SCALE_GROUP=#{info.ratingScaleGroup},
+        RATING_REVIEW=#{info.ratingReview},
+        SUSPEND_LIMIT_LOAN=#{info.suspendLimitLoan},SUSPEND_LIMIT_INVEST=#{info.suspendLimitInvest},
+        CORP_BLOCK=#{info.corpBlock},
+        sublimit=#{info.sublimit},validto_date=#{info.validtoDate},
+        SUSPEND_LIMIT_LOAN_DATE=#{info.suspendLimitLoanDate},SUSPEND_LIMIT_INVEST_DATE=#{info.suspendLimitInvestDate}
+        where id=#{id};
+
+        SELECT group_decision INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set group_decision=VAR_ID_DECISION where id=#{id};
+        END IF;
+        SELECT client_decision INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set client_decision=VAR_ID_DECISION where id=#{id};
+        END IF;
+        SELECT group_decision_review INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set group_decision_review=VAR_ID_DECISION where id=#{id};
+        END IF;
+        SELECT client_decision_review INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set client_decision_review=VAR_ID_DECISION where id=#{id};
+        END IF;
+        SELECT limit_decision INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set limit_decision=VAR_ID_DECISION where id=#{id};
+        END IF;
+        SELECT SUSPEND_LIMIT_INVEST_DECISION INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set SUSPEND_LIMIT_INVEST_DECISION=VAR_ID_DECISION where id=#{id};
+        END IF;
+        SELECT SUSPEND_LIMIT_LOAN_DECISION INTO VAR_ID_DECISION FROM spo_client_info WHERE id = #{id};
+        IF VAR_ID_DECISION IS NULL THEN
+            SELECT SPO_CLIENT_INFO_DECISION_SEQ.NEXTVAL INTO VAR_ID_DECISION FROM DUAL;
+            INSERT INTO SPO_CLIENT_INFO_DECISION(ID_DECISION) VALUES (VAR_ID_DECISION);
+            update spo_client_info set SUSPEND_LIMIT_LOAN_DECISION=VAR_ID_DECISION where id=#{id};
+        END IF;
+
+        END;
+    </update>
+    <update id="updateDecision">
+        BEGIN
+        UPDATE SPO_CLIENT_INFO_DECISION SET DECISION_DATE=#{decision.decisionDate},PROTOCOL_NO=#{decision.protocolNo}
+        where ID_DECISION=#{decision.idDecision};
+        delete from SPO_CLIENT_INFO_DECISION_BODY where ID_DECISION=#{decision.idDecision};
+        <foreach collection="decision.decisionBody" item="item">
+            INSERT INTO SPO_CLIENT_INFO_DECISION_BODY (ID_DECISION,decisionmaker)
+            VALUES (#{decision.idDecision}, #{item});
+        </foreach>
+        END;
+    </update>
+    <update id="updateDecisionData">
+        UPDATE SPO_CLIENT_INFO_DECISION SET filename=#{decision.filename},contenttype=#{decision.contenttype},filedata=#{decision.filedata}
+        where ID_DECISION=#{decision.idDecision}
+    </update>
+</mapper>

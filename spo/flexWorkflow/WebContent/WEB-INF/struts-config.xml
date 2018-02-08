@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="WINDOWS-1251"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="uploadForm" type="org.uit.director.action.forms.UploadForm" />
+		<form-bean name="controlActionsForm"
+			type="org.uit.director.action.forms.ControlActionsForm" />
+		<form-bean name="UploadFilesForm"
+			type="org.uit.director.action.forms.UploadFilesForm">
+		</form-bean>
+
+		<!-- message -->
+
+		<form-bean name="formIdMessage" type="ru.md.message.forms.FormIdMessage" />
+		<form-bean name="formSendMessage" type="ru.md.message.forms.FormSendMessage" />
+
+		<!-- message -->
+
+
+		<!-- attachment -->
+
+		<form-bean name="formUploadFile" type="ru.md.attachment.forms.FormUploadFile" />
+		<form-bean name="formFileAttribute" type="ru.md.attachment.forms.FormFileAttribute" />
+		<form-bean name="AttachmentsList" type="ru.md.attachment.forms.AttachmentsListForm" />
+
+		<!-- attachment -->
+	</form-beans>
+
+	<global-exceptions>
+	</global-exceptions>
+
+	<global-forwards>
+		<forward name="redirectTasks" path="/redirectTasks.jsp" />
+		<forward name="newTasks" path="/showTaskList.do?typeList=noAccept" />
+		<forward name="acceptedTasks" path="/showTaskList.do?typeList=accept" />
+		<forward name="performTasks" path="/showTaskList.do?typeList=perform" />
+		<forward name="allProcesses" path="/showTaskList.do?typeList=all" />
+		<forward name="createProcess" path="/createProcess.do" />
+		<forward name="execPlugin" path="/plugin.action.do" />
+		<forward name="administrator" path="/administration.do" />
+
+		<forward name="start" path="/showTaskList.do?typeList=noAccept" />
+		<forward name="errorPage" path="/errorPage.jsp" />
+		<forward name="failure" path="/errorPage.jsp" />
+
+		<forward name="pageNewTasks" path="/VTB.jsp?typeList=noAccept" />
+		<forward name="pageAcceptedTasks" path="/VTB.jsp?typeList=accept" />
+		<forward name="pagePerformTasks" path="/VTB.jsp?typeList=perform" />
+		<forward name="pageProcessList" path="/VTB.jsp?typeList=all" />
+		<forward name="pageContextTask" path="/form.jsp" />
+		<forward name="textPage" path="/textPage.jsp" />
+		<forward name="commitPage" path="/commit.jsp" />
+		<forward name="assignAcceptPage" path="/assignAccept.jsp" />
+		<forward name="administratorPage" path="/adminPage.jsp" />
+		<forward name="reportPage" path="/reportPage.jsp" />
+		<forward name="stagesDirectionPage" path="/stagesDirectionPage.jsp" />
+		
+		<forward name="messages" path="/messages.do" />
+		<forward name="UPDPage" path="/UPDview.jsp" redirect="false"
+			contextRelative="false">
+			<display-name>UPDView</display-name>
+		</forward>
+		<forward name="control" path="/controlActions.jsp">
+		</forward>
+		<forward name="performTasks" path="/showTaskList.do?typeList=perform">
+		</forward>
+		<forward name="pageAssignTasks" path="/reassignTasks.jsp">
+		</forward>
+		<forward name="refuseOperationListFromAcceptAction" path="refuseOperationList.do?department=-1?readonly=1">
+		</forward>
+
+	</global-forwards>
+
+	<action-mappings>
+		<action path="/refuseOperationList" type="org.uit.director.action.RefuseOperationAction">
+			<forward name="success" path="/refuseOperationList.jsp?readonly=1">
+			</forward>
+		</action>
+		
+		<action path="/reportActiveStages" type="org.uit.director.action.ReportActiveStagesAction">
+			<forward name="success" path="/reportActiveStagesReport.jsp">
+			</forward>
+		</action>
+		
+		<action path="/reportRoleTree" type="org.uit.director.action.ReportRoleTreeAction">
+			<forward name="success" path="/reportRoleTreeReport.jsp" />
+		</action>
+
+		<action path="/reportAttributeTreeReport"
+			type="org.uit.director.action.ReportAttributeTreeReportAction">
+			<forward name="success" path="/reportAttributeTreeReport.jsp" />
+		</action>
+
+		<action path="/reportRolesReport" type="org.uit.director.action.ReportRolesReportAction">
+			<forward name="success" path="/reportRolesReport.jsp" />
+		</action>
+
+		<action path="/reportRolesByOperationReport"
+			type="org.uit.director.action.ReportRolesByOperatonReportAction">
+			<forward name="success" path="/reportRolesByOperationReport.jsp" />
+		</action>
+
+		<action path="/reportTaskReport" type="org.uit.director.action.ReportTaskReportAction">
+			<forward name="success" path="/reportTaskReport.jsp" />
+		</action>
+
+		<action path="/reportNewDocumentsForGOReportClaims"
+			type="org.uit.director.action.ReportNewDocumentsForGOReportClaimsAction">
+			<forward name="success" path="/reportNewDocumentsForGOReportClaims.jsp" />
+		</action>
+
+		<action path="/reportNewDocumentsForGOReportOrgs"
+			type="org.uit.director.action.ReportNewDocumentsForGOReportOrgsAction">
+			<forward name="success" path="/reportNewDocumentsForGOReportOrgs.jsp" />
+		</action>
+
+		<action path="/reportPrintFormRenderAction"
+			type="org.uit.director.action.ReportPrintFormRenderAction">
+			<forward name="success" path="/reportPrintFormRender.jsp" />
+		</action>
+		<action path="/reportPrintAccessAction"
+				type="org.uit.director.action.ReportPrintAccessAction">
+			<forward name="success" path="/accesslist.jsp" />
+		</action>
+		<action path="/reporterAction"
+				type="org.uit.director.action.ReporterAction">
+			<forward name="success" path="/reportertest.jsp" />
+		</action>
+
+		<action path="/reportUsersByReport"
+			type="org.uit.director.action.ReportUsersByReportAction">
+			<forward name="success" path="/reportUsersByRoleReport.jsp" />
+		</action>
+
+
+		<action path="/reportOpportunityFilter"
+			type="org.uit.director.action.ReportOpportunityFilterAction">
+			<forward name="success" path="/reportOpportunityReport.jsp" />
+		</action>
+
+		<action path="/reportOrderStages" type="org.uit.director.action.ReportOrderStagesAction">
+			<forward name="success" path="/reportOrderStagesReport.jsp">
+			</forward>
+		</action>
+
+		<action path="/reportDurationStages" type="org.uit.director.action.ReportDurationStagesAction">
+			<forward name="success" path="/reportDurationStagesReport.jsp">
+			</forward>
+		</action>
+		<action path="/auditStagesReport" type="org.uit.director.action.ReportAuditStagesAction">
+			<forward name="success" path="/auditStagesReport.jsp">
+			</forward>
+		</action>
+
+		<action path="/reportDurationExpertise" type="org.uit.director.action.ReportDurationExpertiseAction">
+			<forward name="success" path="/reportDurationExpertiseReport.jsp">
+			</forward>
+		</action>
+
+		<action path="/refusal" type="org.uit.director.action.RefusalAction" />
+
+		<action path="/close.application" type="org.uit.director.action.CloseAction">
+			<forward name="ok" path="/close.jsp" />
+		</action>
+
+		<action path="/redirect.all.tasks" type="org.uit.director.action.RedirectTasksAction" />
+
+		<action path="/direction.users" type="org.apache.struts.actions.ForwardAction"
+			parameter="/usersDirection.jsp" />
+		<action path="/addWorkflowUser" type="org.uit.director.action.AddWorkflowUserAction" />
+
+		<action path="/tasks.print" type="org.uit.director.action.PrintTasksAction" />
+
+		<action path="/createProcess" type="org.uit.director.action.CreateProcessPageAction" />
+
+		<action path="/showTaskList" type="org.uit.director.action.TasksListAction" />
+
+		<action path="/tasks.sort" type="org.uit.director.action.TasksSortAction" />
+
+		<action path="/workflow.run" type="org.uit.director.action.CreateProcessAction" />
+
+		<action path="/task.context" type="org.uit.director.action.TaskContextAction" />
+
+		<action path="/updateVariables" type="org.uit.director.action.UpdateAttributesAction"></action>
+
+		<action path="/plugin.action" type="org.uit.director.action.PluginAction">
+			<icon>
+				<small-icon>/resources/0.gif</small-icon>
+				<large-icon>/resources/1.gif</large-icon>
+			</icon>
+		</action>
+
+		<action path="/task.complete" type="org.uit.director.action.TasksCompleteAction">
+			<forward name="back" path="/task.context.do" redirect="false" />
+			<forward name="assignAccept" path="/assign.accept.do"
+				redirect="false" />
+		</action>
+
+		<action path="/assign.accept" type="org.uit.director.action.AssignAcceptAction">
+		</action>
+		<action path="/decline.accept" type="org.uit.director.action.DeclineAcceptAction"></action>
+		<action path="/approve.accept" type="org.uit.director.action.ApproveAcceptAction">
+			<forward name="assignAccept" path="/assign.accept.do"
+				redirect="false" />
+		</action>
+
+		<action path="/task.accept" type="org.uit.director.action.TaskAcceptAction" />
+
+		<action path="/administration" type="org.uit.director.action.AdminAction" />
+
+		<action path="/uploadProcess" name="uploadForm" scope="request"
+			validate="false" type="org.uit.director.action.UploadProcessAction" />
+
+		<action path="/reload" type="org.uit.director.action.ReloadAction" />
+
+
+		<action path="/report" type="org.uit.director.action.ReportAction" />
+
+		<action path="/printVersion" type="org.apache.struts.actions.ForwardAction"
+			parameter="/reportPrint.jsp" />
+
+		<action path="/goback" type="org.uit.director.action.GoBackAction" />
+
+		<action path="/direction.stages" type="org.uit.director.action.DirectionStagesAction">
+			<forward name="stagesDirectionPage" path="/stagesDirectionPage.jsp" />
+		</action>
+
+		<action path="/task.redirect" type="org.uit.director.action.RedirectAction" />
+		<action path="/edit.process" type="org.uit.director.action.EditProcessAction" />
+		<action path="/delete.process" type="org.uit.director.action.DeleteProcessAction" />
+		<action path="/remote.create.process" type="org.uit.director.action.RemoteCreateAction" />
+		<action path="/messages" type="org.uit.director.action.MessagesAction" />
+		<action path="/start" type="org.apache.struts.actions.ForwardAction"
+			parameter="/showTaskList.do?typeList=accept" />
+		<!--
+			action path="/start" type="org.apache.struts.actions.ForwardAction"
+			parameter="/head.jsp"/
+		-->
+
+		<action path="/user.in.roles" type="org.uit.director.action.UserInRoleAction" />
+		<action name="uploadForm" path="/uploadPacketMVD" scope="request"
+			type="org.uit.director.action.UploadPacketMVDAction">
+		</action>
+		<action path="/view.doc.packet" type="org.uit.director.action.ViewDocPacketAction">
+		</action>
+		<action path="/addSpetialReportsPage" type="org.apache.struts.actions.ForwardAction"
+			parameter="addSpetialReportPage.jsp">
+		</action>
+		<action path="/addSpetialReport" type="org.uit.director.action.AddSpetialReportAction">
+		</action>
+		<action path="/control.action" type="org.uit.director.action.ControlAction"
+			scope="request" name="controlActionsForm">
+		</action>
+		<action path="/deleteSchema" type="org.uit.director.action.DeleteSchemaAction">
+			<forward contextRelative="false" name="target" path="./deleteSchema.jsp">
+			</forward>
+		</action>
+		<action path="/commit.upload" type="org.uit.director.action.CommitUploadAction">
+		</action>
+		<action path="/assign.user" type="org.uit.director.action.AssignUserAction">
+		</action>
+		<action path="/reassign.user" type="org.uit.director.action.ReassignUserAction">
+		</action>
+		<action path="/assignTasks" type="org.uit.director.action.TasksAssignAction" />
+		<action path="/deleteAssign" type="org.uit.director.action.DeleteAssignAction">
+			<forward name="target" path="./reassignList.jsp">
+			</forward>
+		</action>
+		<action path="/print.report" type="org.uit.director.action.ShowReportAction">
+			<forward name="success" path="/ShowFilledForms.jsp" />
+		</action>
+		<action path="/add.sublimit" type="org.uit.director.action.AddSublimitAction">
+		</action>
+
+		<action path="/uploadFiles" type="org.uit.director.action.UploadFilesAction"
+			name="UploadFilesForm" scope="request">
+			<forward name="success" path="/uploadFilesForm.jsp">
+			</forward>
+		</action>
+		<action path="/showtaskcrm" type="org.uit.director.action.CRMTaskListAction">
+			<forward name="success" path="/crmlimitlist.jsp">
+			</forward>
+		</action>
+		<action path="/spoprom" type="org.uit.director.action.SPO6ListAction">
+			<forward name="success" path="/spo6list.jsp">
+			</forward>
+		</action>
+
+		<action path="/print_form" type="org.uit.director.action.PrintFormAction">
+		</action>
+
+		<!-- attachment -->
+
+		<action name="formUploadFile" path="/actionUploadFile"
+			type="ru.md.attachment.actions.ActionUploadFile" scope="request"
+			input="/Error.jsp">
+			<forward name="result" path="/attachment/ResultUploadedFile.jsp"></forward>
+		</action>
+		<action path="/AttachmentList" type="ru.md.attachment.actions.AttachmentListAction"
+			scope="request" name="AttachmentsList">
+			<forward name="success" path="/attachment/ShowAllAttachments.jsp">
+			</forward>
+		</action>
+		<action name="formUploadFile" path="/download" scope="request"
+			type="ru.md.attachment.actions.DownloadAction">
+		</action>
+		<action path="/clientRefuse" type="org.uit.director.action.ClientRefuseAction">
+			<forward name="success" path="/showTaskList.do?typeList=all"></forward>
+		</action>
+		<action path="/getVersion" type="org.uit.director.action.GetVersionAction">
+		</action>
+		<action path="/ajax/rating" type="ru.md.servlet.RatingAjaxAction">
+		</action>
+		<action path="/ajax/validateOnSave" type="ru.md.servlet.ValidatorOnFormSaveAjaxAction">
+		</action>
+		<action path="/loadLimit" type="org.uit.director.action.CRMLoadLimitAction">
+		</action>
+
+		<action path="/loadProduct" type="org.uit.director.action.CRMLoadProductAction">
+		</action>
+		<action path="/ajax/counter" type="ru.md.servlet.CounterAjaxAction">
+		</action>
+		<action path="/downloadResolution" type="org.uit.director.action.DownloadAction">
+		</action>
+		<action path="/ajax/ratingPercent" type="ru.md.servlet.RatingPercentAjaxAction">
+		</action>
+		<action path="/ajax/acceptAttach" type="ru.md.servlet.AcceptAttachAction">
+		</action>
+		<action path="/ajax/signAttach" type="ru.md.servlet.SignAttachAction">
+		</action>
+		<action path="/rprt" type="ru.md.servlet.UrlShortenerAction">
+		</action>
+		<action path="/ajax/attachCount" type="ru.md.servlet.AttachCountAjaxAction">
+		</action>
+		<action path="/ajax/user4assign" type="ru.md.servlet.User4assignAjaxAction">
+		</action>
+		<action path="/ajax/deleteAttach" type="ru.md.servlet.DeleteAttachAction">
+		</action>
+		<action path="/ajax/attach4cc" type="ru.md.servlet.Attach4ccAction">
+		</action>
+		<action path="/upload" type="ru.md.servlet.UploadAttachAction">
+		</action>
+		<action path="/ajax/newProjectTeam" type="ru.md.servlet.NewProjectTeamAction">
+		</action>
+		<action path="/ajax/addExpertTeam" type="ru.md.servlet.AddExpertTeamAction">
+		</action>
+		<action path="/ajax/delProjectTeam" type="ru.md.servlet.DelPjojectTeamAction">
+		</action>
+		<action path="/ajax/delExpertTeam" type="ru.md.servlet.DelExpertTeamAction">
+		</action>
+		<action path="/ajax/AssignProjectTeam" type="ru.md.servlet.AssignProjectTeamAction">
+		</action>
+		<action path="/startMemorandum" type="ru.md.servlet.StartMemorandumAction">
+		</action>
+		<action path="/ajax/limittree" type="ru.md.servlet.LimitTreeAjaxAction">
+		</action>
+		<action path="/ajax/sendRequest" type="ru.md.servlet.SendRequestAction">
+		</action>
+		<action path="/ajax/changeStandardPeriod" type="ru.md.servlet.ChangeStandardPeriodAction">
+		</action>
+		<action path="/ajax/delSublimit" type="ru.md.servlet.DelSublimitAjaxAction">
+		</action>
+		<action path="/ajax/addSublimit" type="ru.md.servlet.AddSublimitAjaxAction">
+		</action>
+		<action path="/ajax/inSublimit" type="ru.md.servlet.InSublimitAjaxAction">
+		</action>
+		<action path="/ajax/recalculatePercentRate" type="ru.md.servlet.RecalculatePercentRateAjaxAction">
+		</action>
+		<action path="/pauseProcess" type="ru.md.servlet.PauseProcessAction">
+		</action>
+		<action path="/resumeProcess" type="ru.md.servlet.ResumeProcessAction">
+		</action>
+		<action path="/traderApprove" type="ru.md.servlet.TraderApproveAction">
+		</action>
+		<action path="/ajax/fundList" type="ru.md.controller.FundList"></action>
+		<action path="/ajax/n6List" type="ru.md.controller.N6List"></action>
+
+	</action-mappings>
+	<message-resources parameter="flexworkflow.resources.MessageResource">
+	</message-resources>
+
+	<!--
+		<controller
+		processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>
+	-->
+
+	<!--message-resources parameter="workflow"/-->
+
+	<!--
+		<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config"
+		value="/WEB-INF/tiles-defs.xml"/> <set-property property="moduleAware"
+		value="true"/> <set-property property="definitions-parser-validate"
+		value="true"/> </plug-in> <plug-in
+		className="org.apache.struts.validator.ValidatorPlugIn"> <set-property
+		property="pathnames"
+		value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
+		</plug-in>
+	-->
+</struts-config>

@@ -1,0 +1,237 @@
+/* FILTER elements */
+.md-normal-datebox-border {
+    border: 1px white solid;
+    box-sizing: content-box;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.md-warning-datebox-border {
+    border: 1px red solid;
+    box-sizing: content-box;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.md-datemode-selected {
+    border: 2px #01b7ff solid;
+    width: 70px;
+}
+
+.md-datemode-unselected {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 70px;
+}
+
+/* для отладки маркированиеэлементов таблицы фильтра */
+.md-filter-table-marker {
+    /*border: 1px solid red;*/
+}
+.md-filter-areference-plate {
+    padding-left: 8px;
+    padding-right: 4px;
+}
+.md-filter-selected-plate {
+    border-spacing: 0px 0px;
+    max-height: 58px;
+    font-size: 6px;
+    padding-top: 0px;
+}
+
+.md-filter-selected-tile {
+    padding-right: 8px;
+    font-size: 9px;
+}
+.md-filter-selected-popup-tile {
+    padding-right: 12px;
+    font-size: 12px;
+}
+
+/* элементы дерева подразделений */
+td.md-treecell-unelected-child span.z-treerow-checkbox {
+    background-color: #B3B2B2;
+}
+
+.edit-erase-bandbox .z-icon-search::before {
+    content: "\f00d";
+}
+
+.md-filter-date-hlayout div.z-hlayout-inner {
+    border-spacing: 0px 0px;
+}
+
+/* правый тулбар настроек */
+.md-filter-settings-toolbarbutton span.z-toolbarbutton-content  {
+    font-family: FontAwesome;
+    font-size: 26px;
+    color: #6A6868;
+}
+
+.md-settings-popup div.z-popup-content {
+    padding: 2px;
+    border: 1px black solid;
+}
+
+/* MAIN plate elements */
+.md-chartmode-selected {
+    border: 2px #01b7ff solid;
+    font-family: FontAwesome;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.md-chartmode-unselected {
+    padding-left: 13px;
+    padding-right: 13px;
+    padding-top: 4px;
+    font-family: FontAwesome;
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.md-datemode-shift-button-disabled {
+    opacity: 0.4
+}
+
+.md-chart-table-marker {
+    /*border: 1px solid red;*/
+}
+
+/* GRID elements */
+.md-z-datagrid {
+}
+/* Многострочные заголовки таблиц и тот же размер шрифта в ячейке */
+th.md-z-column-content-hidden div.z-column-content {
+    white-space: nowrap;
+    font-weight: normal;
+    font-family: Tahoma;
+    font-size: 12px;
+    text-align: center;
+}
+th.md-z-column-content div.z-column-content {
+    white-space: normal;
+    font-weight: normal;
+    font-family: Tahoma;
+    font-size: 12px;
+    text-align: center;
+}
+th.md-z-column-content .z-column-button {
+    position: absolute;
+    bottom: 0px;
+    top: auto;
+}
+.md-z-rowcell-content {
+    font-size: 12px;
+}
+.md-z-rowcell-content-right {
+    font-size: 12px;
+    float: right;
+}
+
+/* MAIN data area */
+.md-main-portal-tail {
+    padding: 0px;
+    width: auto;
+}
+
+/* Main data panel title height */
+.md-title-widget-panel div.z-panel-head {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 1px;
+    border-bottom-color: #9BBDE7;
+}
+
+.md-title-widget-panel div.z-panel-header {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    font-size: 12px;
+    line-height: normal;
+    font-family: Tahoma;
+    font-weight: normal;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.md-title-widget-panel .z-panel-icon {
+    height: 16px;
+    margin-left: 0px;
+    font-size: 12px;
+    line-height: normal;
+}
+
+.md-title-widget-panel .z-panel-icon .z-icon-caret-up::before {
+    content: "\f106";
+}
+
+.md-title-widget-panel .z-panel-icon .z-icon-caret-down::before {
+    content: "\f107";
+}
+
+/*.md-title-widget-panel .z-panel-icon .z-icon-times::before {
+    content: "\f2d4";
+}*/
+
+/* Summary plates */
+.md-summary-value {
+    font:28px/32px Arial,Helvetica,sans-serif;
+    margin-bottom:7px;
+}
+.md-summary-count {
+    font:18px Arial,Helvetica,sans-serif;
+    margin-left:47px;
+    color:gray;
+}
+
+.md-summary-panel {
+    margin-bottom:4px;
+    margin-left:4px;
+    margin-right:4px;
+    border-radius: 4px;
+    background: white;
+}
+
+.md-summary-panel div.z-panel-head {
+    background: white;
+    border-style: none;
+    border-bottom: 0px none white;
+}
+
+.md-summary-panel div.z-panel-header {
+    background: white;
+    border-style: none;
+    border-bottom: 0px none white;
+    font-size: 13px;
+    font-family: Tahoma;
+    line-height: normal;
+}
+
+.md-summary-panel div.z-panel-body {
+    border-style: none;
+    border-radius: 0 0 4px 4px;
+    border-top: 0px none white;
+    padding-top: 4px;
+}
+
+.md-summary-content-plate {
+    padding-left:10px;
+    padding-bottom:10px;
+    padding-top:10px;
+    border-style: none;
+    border-top: 0px none white;
+}
+
+.departments_tree span.z-tree-line.z-tree-spacer, .departments_tree span.z-treerow-checkable.z-treerow-checkbox, .departments_tree span.z-tree-icon {
+    display: block;
+    float: left;
+}
+.departments_tree .department_long_name {
+    display:block;
+    overflow: hidden;
+}
+.error {
+    color:#c00;
+    font-size:12px;
+    font-weight:bold;
+}

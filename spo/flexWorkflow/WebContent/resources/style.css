@@ -1,0 +1,115 @@
+.navtext{
+border-width:2px;
+border-style:outset;
+border-color:white;
+background-color: #000000;
+color:white;
+font:bold 9pt sans-serif;
+width:235px;
+text-align:left;
+layer-background-color:tan;
+}
+body{
+font-size:9pt;
+scrollbar-arrow-color:#f5f5f5;
+scrollbar-base-color:#000000;
+}
+A:link{
+color:#0000FF;
+text-decoration:none;
+
+}
+A:visited{
+color:purple;
+text-decoration:none;
+}
+A:active{
+color:#000000;
+text-decoration:underline;
+}
+A:hover{
+color:#000000;
+text-decoration:underline;
+}
+button{
+border:thick double;
+border-color:#5B88C4;
+cursor:hand;
+background-color:#EBF0F8; 
+border-style: double;
+}
+.button100{
+border:thick double;
+border-color:#000000;
+cursor:hand;
+width:40%;
+text-align:center;
+}
+.Caption{
+border:thick double;
+margin-bottom:3px;
+color:#5B88C4;
+background-color:#EBF0F8;
+font-family:Arial,'MS Sans Serif';
+font-size:18px;
+font-style:normal;
+font-weight:bold;
+width:100%;
+text-align:center;
+}
+.header {
+    background: #EBF0F8;
+    text-align: left;
+    width:100%;
+}
+
+.header h1 {
+    font-size: 24pt;
+    color:#669;
+    margin:0;
+    padding:0;
+}
+
+.header h2 {
+    margin:0;
+    padding:0;
+    font-size:10pt;
+    color:#669;
+}
+
+/** Element: header-menu */
+
+#header-menu {
+    font-size:12px;
+    background: #EBF0F8;
+    text-align: right;
+    padding-bottom:2px;
+    border-bottom: 1px dotted #5B88C4;
+}
+
+#header-menu a{
+    color:#000;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+#header-menu a:hover {
+    color:#ccc;
+}
+
+/** Element: header-link */
+
+#header-link {
+    font-size:12px;
+    text-align: left;
+}
+
+#header-link a{
+    color:black;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+#header-link a:hover {
+    color:#ccc;
+}

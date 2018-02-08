@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ru.masterdm.spo</groupId>
+    <artifactId>spoSystem</artifactId>
+    <version>19.25-219-01-dev-SNAPSHOT</version>
+  </parent>
+  <artifactId>spo-reporter</artifactId>
+  <packaging>bundle</packaging>
+  <name>Reporter Implemintation</name>
+
+  <dependencies>
+    <dependency>
+  	    <groupId>com.aspose</groupId>
+	    <artifactId>aspose-words</artifactId>
+            <classifier>md</classifier>
+	    <version>16.6.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>3.0.6.RELEASE</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>ru.masterdm.reportsystem</groupId>
+        <artifactId>ReportSystem</artifactId>
+        <exclusions>
+        	<exclusion>
+  	    		<groupId>com.aspose.words</groupId>
+	    		<artifactId>AsposeWords</artifactId>
+        	</exclusion>
+      	</exclusions>
+    </dependency>
+    <dependency>
+        <groupId>com.aspose</groupId>
+	    <artifactId>aspose-cells</artifactId>
+        <classifier>md</classifier>
+	    <version>8.9.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>woodstox-core-asl</artifactId>
+        <version>4.4.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.solidfire.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.6.2</version>
+    </dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.7.2</version>
+	</dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.groupId}.${project.artifactId}-${project.version}</finalName>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>3.2.0</version>
+        <extensions>true</extensions>
+
+        <configuration>
+          <instructions>
+            <Bundle-Name>${project.name} ${project.version}</Bundle-Name>
+            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+            <Export-Package>ru.masterdm.spo.reporter</Export-Package>
+            <Import-Package>org.eclipse.gemini.blueprint.service.exporter.support, com.aspose.words.net.*, com.aspose.words;verison="16.6.0";-split-package:=first, !com.aspose.words;verison="3.3.0", !com.aspose.words;verison="14.11.0",
+							ru.md.report, *</Import-Package>
+            <Private-Package>ru.masterdm.spo.reporter.impl, com.aspose.cells, com.aspose.words;verison="16.6.0";-split-package:=first, com.aspose.words.net.*,
+                             asposewobfuscated;verison="16.6.0";-split-package:=first, resources;verison="16.6.0";-split-package:=first,
+                             com.ctc.wstx.stax</Private-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>

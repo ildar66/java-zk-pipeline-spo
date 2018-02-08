@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<openejb-jar xmlns="http://www.openejb.org/openejb-jar/1.1">
+     
+    <ejb-deployment  ejb-name="AttachmentActionProcessorFacade" 
+                     deployment-id="AttachmentActionProcessorFacade" 
+                     container-id="DefaultStatelessContainer">
+         <resource-link res-ref-name="jdbc/VTBLOANS" 
+                   		res-id="jdbc/VTBLOANS"/>
+    </ejb-deployment>
+    <ejb-deployment  ejb-name="SPOMessageActionProcessorFacade" 
+                     deployment-id="SPOMessageActionProcessorFacade" 
+                     container-id="DefaultStatelessContainer">
+         <resource-link res-ref-name="jdbc/VTBLOANS" 
+                   		res-id="jdbc/VTBLOANS"/>
+    </ejb-deployment>
+    <ejb-deployment  ejb-name="CRMActionProcessorFacade" 
+                     deployment-id="CRMActionProcessorFacade" 
+                     container-id="DefaultStatelessContainer">
+         <resource-link res-ref-name="jdbc/CRM" 
+                   		res-id="jdbc/CRM"/>
+    </ejb-deployment>
+    <ejb-deployment  ejb-name="TaskActionProcessorFacade" 
+                     deployment-id="TaskActionProcessorFacade" 
+                     container-id="DefaultStatelessContainer">
+         <resource-link res-ref-name="jdbc/VTBLOANS" 
+                   		res-id="jdbc/VTBLOANS"/>
+         <resource-link res-ref-name="jdbc/CRM" 
+                   		res-id="jdbc/CRM"/>
+         <resource-link res-ref-name="jdbc/VTBLOANS6" 
+                   		res-id="jdbc/VTBLOANS6"/>
+    </ejb-deployment>
+    <ejb-deployment  ejb-name="ReportBuilderActionProcessorFacade" 
+                     deployment-id="ReportBuilderActionProcessorFacade" 
+                     container-id="DefaultStatelessContainer">
+    </ejb-deployment>
+
+</openejb-jar>
+	

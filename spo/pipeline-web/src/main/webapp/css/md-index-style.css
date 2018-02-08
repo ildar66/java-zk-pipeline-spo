@@ -1,0 +1,180 @@
+table.HeaderTable {
+    width: 100%;
+    border-bottom: solid 0px #444;
+    height: 39px;
+}
+
+
+td.TitleCaption {
+    width: 30%;
+    white-space: nowrap;
+    background-color: #00377B;
+    color: #FFF;
+    text-align: right;
+    padding-right: 30px;
+    font-size: 170%;
+    font-family: Arial, sans-serif
+}
+
+.z-nav-text {
+    color: #353434;
+    font-size: 15px;
+    font-family: Arial, sans-serif
+}
+
+.z-navbar .z-navitem-selected .z-navitem-content {
+    color: #fff;
+    background: #B6DDED;
+}
+
+.z-tab-text {
+    cursor: default;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.z-panel-header {
+    font-weight: bold;
+    font-size: 12px;
+    background: #9BBDE7;
+}
+
+.z-panel-head {
+    background: #9BBDE7
+}
+
+.z-window-header {
+    background: #9BBDE7;
+    border-color: #9BBDE7;
+    font-size: 120%;
+    padding-left: 20px;
+}
+
+.z-window-noborder {
+    padding: 0;
+}
+
+.md-nav-icon-all {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-size: 16px;
+}
+.md-nav-icon-all::before {
+    content:"\f0b1"
+}
+
+.md-nav-icon-credit {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-size: 16px;
+}
+.md-nav-icon-credit::before {
+    content:"\f09d"
+}
+
+.md-nav-icon-documentary {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-size: 16px;
+}
+.md-nav-icon-documentary::before {
+    content:"\f0f6"
+}
+
+.error {
+    color:#c00;
+    font-size:12px;
+    font-weight:bold;
+}
+
+button.md-menu {
+    padding: 0;
+    border: none;
+    background: none !important;
+    min-height: 12px !important;
+    outline: none;
+}
+.md-menu:focus {
+    outline: none !important;
+    border:1px solid #f8f8f8;
+    box-shadow: 0 0 10px #f8f8f8;
+}
+
+/* левое меню для сохранения конфигураций */
+.filter-title {
+    color: #707070;
+    font-size: 12px;
+    line-height: normal;
+    padding: 0 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.filter-panel-section {
+    font-size: 12px;
+}
+.filter-list>li .filter-link {
+    padding: 5px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    color: rgb(59, 115, 175);
+}
+.filter-list {
+    padding: 0 10px;
+}
+.filter-list>li {
+    padding: 0;
+    position: relative;
+}
+.filter-list>li:hover, .filter-list>li.hover {
+    background-color: #e6e6e6;
+}
+.filter-panel-section {
+    margin-top: -1px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+.filter-list>li .filter-link {
+    text-decoration: none;
+    font-size: 14px;
+}
+.filter-list>li .filter-actions {
+    overflow: hidden;
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    z-index: 1;
+    visibility: hidden;
+}
+.filter-list>li:hover .filter-actions {
+    visibility: visible;
+}
+.filter-list>li .filter-actions:hover>span {
+    background-color: #3c78b5;
+}
+.filter-list>li .filter-actions:hover {
+    overflow: visible;
+    visibility: visible;
+    background-color: darkred;
+}
+.filter-list>li .filter-actions>span {
+    border-radius: 2px;
+    display: block;
+    float: left;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    /*text-indent: -999em;*/
+    width: 15px;
+}
+.filter-list>li .filter-actions>span:after {
+    content: "";
+    height: 0;
+    position: absolute;
+    right: 4px;
+    top: 6px;
+    width: 0;
+}

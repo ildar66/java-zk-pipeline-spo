@@ -1,0 +1,77 @@
+<?page id="index" docType="html" contentType="text/html;charset=UTF-8" title="Pipeline" ?>
+<?xel-method prefix="c" name="getVersion" class="com.vtb.util.ApplProperties" signature="java.lang.String getVersion()"?>
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+    <style src="css/md-index-style.css"/>
+    <window height="100%" apply="ru.masterdm.spo.pipeline.IndexController" id="mainWindow"
+            viewModel="@id('vm') @init('ru.masterdm.spo.pipeline.IndexVM')">
+        <borderlayout>
+            <west title="${labels.sections}" size="220px" vflex="1" maxsize="260" splittable="true" collapsible="true">
+                <borderlayout>
+                    <north>
+                        <navbar vflex="1" id="navbar" orient="vertical" style="min-width: 40px;min-height: 250px;" collapsed="false"
+                                onSelect="@command('navigatePage', target=self.selectedItem.attributes['navigationPage'])">
+                            <!--<navitem label="click me" onClick="do_something_in_Java()"/>-->
+                            <!--<navitem label="Customers" href="pages/index_0.zul"/>-->
+                            <!--<navitem label="Смена колонок таблиц" href="pages/temp.zul"/>-->
+
+                            <nav label="Pages" iconSclass="z-icon-star"
+                                 children="@load(vm.pageMap[self.label].values()) @template('navitem')"/>
+
+                            <template name="navitem" var="navigationPage">
+                                <navitem label="@load(navigationPage.subTitle)" selected="@load(navigationPage.selected)"/>
+                            </template>
+                        </navbar>
+                    </north>
+                    <center>Список отчетов</center>
+                    <south>Нижний список</south>
+                </borderlayout>
+            </west>
+            <north>
+                <h:table class="HeaderTable" cellpadding="0" cellspacing="0" width="100%">
+                    <h:tbody>
+                        <h:tr>
+                            <h:td width="70px">
+                                <h:a href="./"><h:img src="img/logo-vtb.gif" style="margin:8px;" width="60" /></h:a>
+                            </h:td>
+                            <h:td class="Gradient"> <label id="test" value="@load(vm.currentHeader)"/></h:td>
+                           <!-- <h:td class="TitleCaption">Pipeline</h:td>-->
+                        </h:tr>
+                    </h:tbody>
+                </h:table>
+            </north>
+            <center id="centerHBox">
+                <include id="contentInclude" mode="instant" sclass="content"
+                         currentPage="@ref(vm.currentPage)"
+                         src="@load(currentPage.includeUri)" />
+            </center>
+            <south hflex="min" border="none">
+                <div align="center">Разработка ООО «Мастер Домино». 2017 г., Версия ${c:getVersion()}
+                    <label id="currentUser" value="@load(vm.currentUser)"/>
+                </div>
+            </south>
+        </borderlayout>
+    </window>
+    <html>
+        <![CDATA[
+            <style>
+                    td.Gradient {
+                            background: url(img/gradient.jpg) 100% 100% no-repeat;
+                            background-size: cover;
+                            margin: auto;
+                            text-align: center;
+                            }
+                    td.Gradient .z-label {
+                            white-space: nowrap;
+                            color: #FFF;
+                            text-align: center;
+                            font-size: 27px;
+                            font-family: Arial, sans-serif;
+                            margin: auto;
+                            width: 100%;
+                            }
+             </style>
+
+        ]]>
+    </html>
+</zk>

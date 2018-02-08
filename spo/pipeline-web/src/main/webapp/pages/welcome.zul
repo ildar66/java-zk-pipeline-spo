@@ -1,0 +1,30 @@
+<borderlayout xmlns:n="native" sclass="no-borders transparent-background">
+    <north height="100px" sclass="no-borders transparent-background">
+        <vbox vflex="1" hflex="1">
+            <hbox align="center" sclass="page-home-field-search" hflex="1">
+                <separator hflex="1"/>
+                <vbox hflex="2">
+                    <hlayout spacing="0" hflex="1">
+                        <textbox value="@bind(vm.searchString)" onOK="@command('search')" hflex="1" onCreate="@command('focus')"/>
+                        <button iconSclass="z-icon-search" autodisable="self" onClick="@command('search')" tooltiptext="@init(labels.search_button)"/>
+                    </hlayout>
+                    <label value="@init(labels.welcome_search_title)" sclass="label-search"/>
+                </vbox>
+                <separator hflex="1"/>
+            </hbox>
+        </vbox>
+    </north>
+    <center sclass="no-borders  transparent-background" margins="20, 10, 0, 0" autoscroll="true" >
+        <hbox align="start" pack="center" spacing="10px">
+            <include id="content_A" mode="instant" sclass="content" src="pages/welcomes/volumeDealOnBranch.zul"/>
+            <include id="content_B" mode="instant" sclass="content" src="pages/welcomes/nearbyIssues.zul"/>
+            <include id="content_C" mode="instant" sclass="content" src="pages/welcomes/favorites.zul"/>
+        </hbox>
+    </center>
+    <south sclass="no-borders footer  transparent-background" height="30px">
+        <div zclass="copyright text-muted text-center small">
+            <n:small>${labels.layout_developer}</n:small>
+            <n:small>${labels.layout_app_version} ${labels.projectInfo} ${labels.buildBranch}</n:small>
+        </div>
+    </south>
+</borderlayout>

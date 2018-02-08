@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-bnd
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://websphere.ibm.com/xml/ns/javaee"
+    xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee http://websphere.ibm.com/xml/ns/javaee/ibm-application-bnd_1_0.xsd" version="1.0">
+  
+
+  
+
+  
+
+  <security-role name="ALL">
+    <special-subject type="ALL_AUTHENTICATED_USERS"/>
+
+  </security-role>
+
+  <security-role name="workflowUser">
+    <special-subject type="ALL_AUTHENTICATED_USERS"/>
+
+  </security-role>
+
+  <security-role name="workflowAdmin">
+    <special-subject type="ALL_AUTHENTICATED_USERS"/>
+
+  </security-role>
+
+  <security-role name="administrator">
+    <special-subject type="ALL_AUTHENTICATED_USERS"/>
+
+  </security-role>
+
+  <security-role name="adminDictionary">
+  	</security-role>
+  <security-role name="administratorApprove"></security-role>
+  <security-role name="administratorRoles"></security-role>
+  <security-role name="administratorUsers"></security-role>
+  <security-role name="administratorSPO">
+  	<special-subject type="ALL_AUTHENTICATED_USERS" /></security-role>
+  <security-role name="AllAuthenticated">
+  	<special-subject type="ALL_AUTHENTICATED_USERS" /></security-role></application-bnd>
+

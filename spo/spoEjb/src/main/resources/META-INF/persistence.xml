@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+    <persistence-unit name="CRMPU" transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>jdbc/CRM</jta-data-source>
+        
+        <class>ru.md.crm.dbobjects.LimitQueueJPA</class>
+        <class>ru.md.crm.dbobjects.LimitJPA</class>
+        <class>ru.md.crm.dbobjects.UserInfoJPA</class>
+        <class>ru.md.crm.dbobjects.AccountJPA</class>
+        <class>ru.md.crm.dbobjects.FbAccountJPA</class>
+        <class>ru.md.crm.dbobjects.FbSpoRatingNewJPA</class>
+        <class>ru.md.crm.dbobjects.NetworkWagerJPA</class>
+        <class>ru.md.crm.dbobjects.ProductQueueJPA</class>
+        <class>ru.md.crm.dbobjects.FbSpoGraficpogashJPA</class>
+        <class>ru.md.crm.dbobjects.FbSpoOpportunityComissJPA</class>
+        <class>ru.md.crm.dbobjects.FbSpoOpportunityProductNewJPA</class>
+        <class>ru.md.crm.dbobjects.FbSpoLogStatusJPA</class>
+        <class>ru.md.crm.dbobjects.SpoFbOpportunityJPA</class>
+        <class>ru.md.crm.dbobjects.SpoProductJPA</class>
+        <class>ru.md.crm.dbobjects.SpoOpportunityProductJPA</class>
+
+        <properties>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.dialect" value="ru.md.spo.util.HibernateDialect" />
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+            <property name="hibernate.transaction.manager_lookup_class"
+                      value="org.hibernate.transaction.WebSphereExtendedJTATransactionLookup"/>
+        </properties>
+    </persistence-unit>
+	<persistence-unit name="flexWorkflowEJBJPA" transaction-type="JTA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>jdbc/LOANS</jta-data-source>
+        <class>ru.md.pup.dbobjects.TaskInfoJPA</class>
+        <class>ru.md.pup.dbobjects.StageJPA</class>
+        <class>ru.md.pup.dbobjects.UserJPA</class>
+        <class>ru.md.pup.dbobjects.TaskEventJPA</class>
+        <class>ru.md.pup.dbobjects.AttributeJPA</class>
+        <class>ru.md.pup.dbobjects.VariableJPA</class>
+        <class>ru.md.pup.dbobjects.ProcessTypeJPA</class>
+        <class>ru.md.pup.dbobjects.RoleJPA</class>
+        <class>ru.md.pup.dbobjects.AssignJPA</class>
+        <class>ru.md.pup.dbobjects.ProcessJPA</class>
+        <class>ru.md.pup.dbobjects.PauseParamJPA</class>
+        <class>ru.md.pup.dbobjects.ProcessEventJPA</class>
+        <class>ru.md.pup.dbobjects.AcceptJPA</class>
+        <class>ru.md.pup.dbobjects.DepartmentJPA</class>
+        <class>ru.md.pup.dbobjects.DepTypeJPA</class>
+        <class>ru.md.pup.dbobjects.DocumentGroupJPA</class>
+        <class>ru.md.pup.dbobjects.DocumentTypeJPA</class>
+        <class>ru.md.pup.dbobjects.AttachJPA</class>
+        
+        <class>ru.md.dict.dbobjects.OperationTypeJPA</class>
+        <class>ru.md.dict.dbobjects.DepositorFinStatusJPA</class>
+        <class>ru.md.dict.dbobjects.EarlyRepaymentJPA</class>
+        <class>ru.md.dict.dbobjects.SupplyTypeJPA</class>
+        <class>ru.md.dict.dbobjects.RiskStepupFactorJPA</class>
+        
+        <class>ru.md.spo.dbobjects.StandardPeriodValueJPA</class>
+        <class>ru.md.spo.dbobjects.StandardPeriodChangeJPA</class>
+        <class>ru.md.spo.dbobjects.StandardPeriodVersionJPA</class>
+        <class>ru.md.spo.dbobjects.StandardPeriodGroupJPA</class>
+        <class>ru.md.spo.dbobjects.StatusReturnJPA</class>
+        <class>ru.md.spo.dbobjects.CdCreditTurnoverCriteriumJPA</class>
+        <class>ru.md.spo.dbobjects.CdCreditTurnoverPremiumJPA</class>
+        <class>ru.md.spo.dbobjects.CdPremiumTypeJPA</class>
+        <class>ru.md.spo.dbobjects.CdAcredetivSourcePaymentJPA</class>
+        <class>ru.md.spo.dbobjects.CdRiskpremiumJPA</class>
+        <class>ru.md.spo.dbobjects.FundDownJPA</class>
+        <class>ru.md.spo.dbobjects.OrgJPA</class>
+        <class>ru.md.spo.dbobjects.PromissoryNoteJPA</class>
+        <class>ru.md.spo.dbobjects.FactPercentJPA</class>
+        <class>ru.md.spo.dbobjects.OperDecisionJPA</class>
+        <class>ru.md.spo.dbobjects.IndConditionJPA</class>
+        <class>ru.md.spo.dbobjects.ContractJPA</class>
+        <class>ru.md.spo.dbobjects.ProjectTeamJPA</class>
+        <class>ru.md.spo.dbobjects.TaskStopFactorJPA</class>
+        <class>ru.md.spo.dbobjects.StopFactorJPA</class>
+        <class>ru.md.spo.dbobjects.StopFactorTypeJPA</class>
+        <class>ru.md.spo.dbobjects.ManagerJPA</class>
+        <class>ru.md.spo.dbobjects.GlobalSettingsJPA</class>
+        <class>ru.md.spo.dbobjects.StavspredJPA</class>
+        <class>ru.md.spo.dbobjects.StartDepartmentJPA</class>
+        <class>ru.md.spo.dbobjects.AuthorizedPersonJPA</class>
+        <class>ru.md.spo.dbobjects.TaskJPA</class>
+        <class>ru.md.spo.dbobjects.TaskVersionJPA</class>
+        <class>ru.md.spo.dbobjects.LimitTypeJPA</class>
+        <class>ru.md.spo.dbobjects.ProductTypeJPA</class>
+        <class>ru.md.spo.dbobjects.RequestLogJPA</class>
+        
+        <properties>
+	        <property name="hibernate.show_sql" value="false"/>
+	        <property name="hibernate.dialect" value="ru.md.spo.util.HibernateDialect" />
+	        <property name="hibernate.cache.use_query_cache" value="false"/>
+	        <property name="hibernate.cache.use_second_level_cache" value="true"/>
+	        <property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider"/>
+	        <property name="hibernate.transaction.manager_lookup_class"
+                      value="org.hibernate.transaction.WebSphereExtendedJTATransactionLookup"/>
+	    </properties>
+	</persistence-unit>
+</persistence>

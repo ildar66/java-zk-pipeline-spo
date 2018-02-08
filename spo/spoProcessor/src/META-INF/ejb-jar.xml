@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar id="ejb-jar_ID" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+	<display-name>
+	VtbSpoProcessor</display-name>
+	<enterprise-beans>
+		<session id="AttachmentActionProcessorFacade">
+			<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+			
+			
+			
+			<business-local>com.vtb.ejb.AttachmentActionProcessorFacadeLocal</business-local><business-remote>com.vtb.ejb.AttachmentActionProcessorFacade</business-remote>
+			<ejb-class>com.vtb.ejb.AttachmentActionProcessorFacadeBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			
+			<resource-ref id="ResourceRef_1227451673375">
+				<description>
+				</description>
+				<res-ref-name>jdbc/VTBLOANS</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="SPOMessageActionProcessorFacade">
+			<ejb-name>SPOMessageActionProcessorFacade</ejb-name>
+			
+			
+			
+			<business-local>com.vtb.ejb.SPOMessageActionProcessorFacadeLocal</business-local><business-remote>com.vtb.ejb.SPOMessageActionProcessorFacade</business-remote>
+			<ejb-class>com.vtb.ejb.SPOMessageActionProcessorFacadeBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			
+			<resource-ref id="ResourceRef_1228643466244">
+				<description>
+				</description>
+				<res-ref-name>jdbc/VTBLOANS</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="CRMActionProcessorFacade">
+			<ejb-name>CRMActionProcessorFacade</ejb-name>
+			
+			
+			
+			<business-local>com.vtb.ejb.CRMActionProcessorFacadeLocal</business-local><business-remote>com.vtb.ejb.CRMActionProcessorFacade</business-remote>
+			<ejb-class>com.vtb.ejb.CRMActionProcessorFacadeBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1249474089765">
+				<description>
+				</description>
+				<res-ref-name>jdbc/CRM</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+
+		<session>
+			<ejb-name>ReportBuilderActionProcessorFacade</ejb-name><business-local>com.vtb.ejb.ReportBuilderActionProcessorLocal</business-local><business-remote>com.vtb.ejb.ReportBuilderActionProcessorRemote</business-remote>
+			<ejb-class>com.vtb.ejb.ReportBuilderActionProcessorFacadeBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<ejb-local-ref>
+				<description></description>
+				<ejb-ref-name>ejb/DBFlexWorkflowEJBLocal</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>
+				<local-home>org.uit.director.db.ejb.DBFlexWorkflowLocalHome</local-home>
+				<local>org.uit.director.db.ejb.DBFlexWorkflowLocal</local>
+				<ejb-link>DBFlexWorkflow</ejb-link>
+			</ejb-local-ref>
+			</session>
+			
+			</enterprise-beans>
+	<assembly-descriptor>
+		<container-transaction>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-intf>Local</method-intf>
+				<method-name>putRequestedFileToMQ</method-name>
+				<method-params>
+					<method-param>com.vtb.domain.FileRequest</method-param>
+				</method-params>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>getReceivedFileToDB</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+        <container-transaction>
+            <method>
+                <ejb-name>SPOCCIntegrationFacade</ejb-name>
+                <method-name>getStatus</method-name>
+            </method>
+            <method>
+                <ejb-name>SPOCCIntegrationFacade</ejb-name>
+                <method-name>statusNotification</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>		
+		
+		<container-transaction>
+			
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findAttachemntByOwnerAndType</method-name>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findAttachemntByPK</method-name>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findAttachmentDataByPK</method-name>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findNotCompletedRequest</method-name>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findNotCompletedRequestByUnidAndDep</method-name>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findSettingsForWAS</method-name>
+			</method>
+			<method>
+				<ejb-name>AttachmentActionProcessorFacade</ejb-name>
+				<method-name>findSpoSettings</method-name>
+			</method>
+			<method>
+				<ejb-name>CRMActionProcessorFacade</ejb-name>
+				<method-name>findSpoHistoryByPrimaryKey</method-name>
+			</method>
+			<method>
+				<ejb-name>ReportBuilderActionProcessorFacade</ejb-name>
+				<method-name>findByFilename</method-name>
+			</method>
+			<method>
+				<ejb-name>ReportBuilderActionProcessorFacade</ejb-name>
+				<method-name>findByType</method-name>
+			</method>
+			<method>
+				<ejb-name>ReportBuilderActionProcessorFacade</ejb-name>
+				<method-name>getBuilder</method-name>
+			</method>
+			<method>
+				<ejb-name>ReportBuilderActionProcessorFacade</ejb-name>
+				<method-name>getReport</method-name>
+			</method>
+			<method>
+				<ejb-name>ReportBuilderActionProcessorFacade</ejb-name>
+				<method-name>getReportTemplateMapper</method-name>
+			</method>
+			<method>
+				<ejb-name>SPOMessageActionProcessorFacade</ejb-name>
+				<method-name>getListByReceiver</method-name>
+			</method>
+			<method>
+				<ejb-name>SPOMessageActionProcessorFacade</ejb-name>
+				<method-name>getListBySender</method-name>
+			</method>
+			<method>
+				<ejb-name>SPOMessageActionProcessorFacade</ejb-name>
+				<method-name>getMessage</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+	</assembly-descriptor>
+	<ejb-client-jar>spoProcessorClient1.jar</ejb-client-jar>
+</ejb-jar>

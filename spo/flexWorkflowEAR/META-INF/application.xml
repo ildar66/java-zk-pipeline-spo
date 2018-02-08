@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application id="Application_ID" version="5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd">
+	<display-name>
+	flexWorkflowEAR</display-name>
+	<module id="Module_1268998964250">
+		<ejb>dbPupEjb.jar</ejb>
+	</module>
+	<module id="Module_1268998964500">
+		<web>
+			<web-uri>flexWorkflow.war</web-uri>
+			<context-root>ProdflexWorkflow</context-root>
+		</web>
+	</module>
+	<module id="Module_1268998734578">
+		<ejb>spoProcessor.jar</ejb>
+	</module>
+	<module id="Module_1300869819989">
+		<ejb>spoEjb.jar</ejb>
+	</module>
+	<security-role id="SecurityRole_1240430707166">
+		<role-name>ALL</role-name>
+	</security-role>
+	<security-role id="SecurityRole_1240430707167">
+		<description>
+		Пользователь системы</description>
+		<role-name>workflowUser</role-name>
+	</security-role>
+	<security-role id="SecurityRole_1240430707181">
+		<description>
+		Пользователь с правами Администратора</description>
+		<role-name>workflowAdmin</role-name>
+	</security-role>
+	<security-role id="SecurityRole_1240430707182">
+		<description>
+		Администратор системы</description>
+		<role-name>administrator</role-name>
+	</security-role>
+	<security-role>
+		<role-name>AllAuthenticated</role-name>
+	</security-role>
+	<security-role>
+		<role-name>administratorSPO</role-name>
+	</security-role>
+	<security-role>
+		<role-name>administratorUsers</role-name>
+	</security-role>
+	<security-role>
+		<role-name>administratorRoles</role-name>
+	</security-role>
+	<security-role>
+		<role-name>administratorApprove</role-name>
+	</security-role>
+	<security-role>
+		<role-name>adminDictionary</role-name>
+	</security-role></application>

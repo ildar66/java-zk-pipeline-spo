@@ -1,0 +1,1173 @@
+--liquibase formatted sql
+
+--changeset svaliev:spo-18.00-VTBSPO-346 logicalFilePath:spo-18.00-VTBSPO-346 endDelimiter:/
+ALTER TABLE PIPELINE ADD CONSTRAINT PIPELINE_PK PRIMARY KEY (ID_MDTASK)
+/
+ALTER TABLE PIPELINE ADD CONSTRAINT PIPELINE_FK01 FOREIGN KEY (ID_MDTASK) REFERENCES MDTASK (ID_MDTASK)
+/
+
+--changeset svaliev:spo-18.00-VTBSPO-346-managerPriority logicalFilePath:spo-18.00-VTBSPO-346-managerPriority endDelimiter:/
+ALTER TABLE PIPELINE ADD MANAGER_PRIORITY CHAR(1) DEFAULT 'n'
+/
+COMMENT ON COLUMN PIPELINE.MANAGER_PRIORITY IS 'Приоритет менеджера'
+/
+
+--changeset svaliev:spo-18.00-VTBSPO-346-drawdownDateInMonth logicalFilePath:spo-18.00-VTBSPO-346-drawdownDateInMonth endDelimiter:/
+ALTER TABLE MDTASK ADD DRAWDOWN_DATE_IN_MONTH NUMBER(38) DEFAULT NULL
+/
+COMMENT ON COLUMN MDTASK.DRAWDOWN_DATE_IN_MONTH IS 'Срок погашения (мес)'
+/
+
+--changeset svaliev:spo-18.00-VTBSPO-355-SUBLIMIT_PRIORITY logicalFilePath:spo-18.00-VTBSPO-355-SUBLIMIT_PRIORITY endDelimiter:/
+ALTER TABLE MDTASK ADD SUBLIMIT_PRIORITY VARCHAR(64) DEFAULT NULL
+/
+COMMENT ON COLUMN MDTASK.SUBLIMIT_PRIORITY IS 'Приоритет сублимита'
+/
+
+--changeset svaliev:spo-18.00-VTBSPO-417 logicalFilePath:spo-18.00-VTBSPO-417 endDelimiter:/
+ALTER TABLE MDTASK ADD MARGIN NUMBER DEFAULT NULL
+/
+COMMENT ON COLUMN MDTASK.MARGIN IS 'Маржа для лимита сублимита'
+/
+--changeset akirilchev:spo-18.00-VTBSPO-415 logicalFilePath:spo-18.00-VTBSPO-415 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('MDTASK', 'RATE2_NOTE', 'CLOB');  
+END;
+/
+COMMENT ON COLUMN MDTASK.RATE2_NOTE IS 'Комментарий к Надбавка к процентной ставке за поддержание кредитовых оборотов менее установленного размера'
+/
+
+
+--changeset ebekkauer:spo-18.00-VTBSPO-430 logicalFilePath:spo-18.00-VTBSPO-430 endDelimiter:/
+ALTER TABLE PRINCIPAL_PAY ADD CURRENCY CHAR(3) DEFAULT NULL
+/
+COMMENT ON COLUMN PRINCIPAL_PAY.CURRENCY IS 'Валюта суммы платежа'
+/
+
+--changeset ebekkauer:spo-18.00-VTBSPO-429 logicalFilePath:spo-18.00-VTBSPO-429 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('MDTASK', 'TARGET_TYPE_COMMENT', 'CLOB');  
+END;
+/
+COMMENT ON COLUMN MDTASK.TARGET_TYPE_COMMENT IS 'Комментарий к контролю целевого использования'
+/
+
+--changeset imatushak:spo-18.00-VTBSPO-426 logicalFilePath:spo-18.00-VTBSPO-426 endDelimiter:/
+ALTER TABLE PAYMENT_SCHEDULE ADD COM_BASE VARCHAR(4000)
+/
+
+--changeset ebekkauer:spo-18.00-VTBSPO-431-2 logicalFilePath:spo-18.00-VTBSPO-431-2 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('EARLY_PAYMENT', 'DAYS_BEFORE_NOTIFY_BANK', 'NUMBER'); 
+END;
+/
+BEGIN
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('EARLY_PAYMENT', 'PERIOD_TYPE', 'VARCHAR2(20)');  
+END;
+/
+COMMENT ON COLUMN EARLY_PAYMENT.DAYS_BEFORE_NOTIFY_BANK IS 'За сколько дней Заемщик должен уведомить Банк о досрочном погашении'
+/
+COMMENT ON COLUMN EARLY_PAYMENT.PERIOD_TYPE IS 'Тип периода - рабочие или календарные дни'
+/
+--changeset ebekkauer:spo-18.00-VTBSPO-406 logicalFilePath:spo-18.00-VTBSPO-406 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('INTEREST_PAY', 'FIRST_DATE_PAY_NOTE', 'CLOB');  
+END;
+/
+COMMENT ON COLUMN INTEREST_PAY.FIRST_DATE_PAY_NOTE IS 'Комментарий к дате первой оплаты'
+/
+
+--changeset imatushak:spo-18.00-VTBSPO-427-3 logicalFilePath:spo-18.00-VTBSPO-427-3 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('R_MDTASK_FORBIDDEN',
+'CREATE TABLE R_MDTASK_FORBIDDEN (  
+ID_TARGET NUMBER(38,0), 
+ID_MDTASK NUMBER(38,0), 
+DESCR CLOB
+)');
+END;
+/
+BEGIN
+PKG_DDL_UTILS.ADD_CONSTRAINT('R_MDTASK_FORBIDDEN_PK', 'ALTER TABLE R_MDTASK_FORBIDDEN ADD CONSTRAINT R_MDTASK_FORBIDDEN_PK PRIMARY KEY (ID_TARGET)');
+END;
+/
+BEGIN
+PKG_DDL_UTILS.ADD_INDEX('R_FORBIDDEN_FK_I', 'CREATE INDEX R_FORBIDDEN_FK_I ON R_MDTASK_FORBIDDEN (ID_MDTASK)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('R_FORBIDDEN_FK', 'ALTER TABLE R_MDTASK_FORBIDDEN ADD CONSTRAINT R_FORBIDDEN_FK FOREIGN KEY (ID_MDTASK) REFERENCES MDTASK (ID_MDTASK) ON DELETE CASCADE');
+END;
+/
+BEGIN
+PKG_DDL_UTILS.RECREATE_SEQUENCE_FOR_TABLE('R_MDTASK_FORBIDDEN', 'ID_TARGET', 'R_MDTASK_FORBIDDEN_SEQ');
+END;
+/
+
+--changeset imatushak:spo-18.00-VTBSPO-426-1 logicalFilePath:spo-18.00-VTBSPO-426-1 endDelimiter:/
+ALTER TABLE PAYMENT_SCHEDULE DROP COLUMN COM_BASE
+/
+ALTER TABLE PAYMENT_SCHEDULE ADD COM_BASE CLOB
+/
+
+--changeset apavlenko:spo-18.00-VTBSPO-378 logicalFilePath:spo-18.00-VTBSPO-378 endDelimiter:/
+alter table MDTASK add additional_contract NUMBER(1) default 0 not null
+/
+alter table MDTASK add product_monitoring NUMBER(1) default 0 not null
+/
+comment on column MDTASK.additional_contract is 'Требуется формирование Дополнительного соглашения'
+/
+comment on column MDTASK.product_monitoring is 'Решение влияет на мониторинг Сделки'
+/
+--changeset akirilchev:spo-18.00-VTBSPO-460 logicalFilePath:spo-18.00-VTBSPO-460 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('TARGET_GROUP_LIMIT', 
+'CREATE TABLE TARGET_GROUP_LIMIT (
+ID_TARGET_GROUP_LIMIT NUMBER NOT NULL,
+AMOUNT NUMBER,
+AMOUNT_CURRENCY VARCHAR2(3),
+ID_MDTASK NUMBER NOT NULL,
+NOTE CLOB,
+CONSTRAINT TARGET_GROUP_LIMIT_PK PRIMARY KEY(ID_TARGET_GROUP_LIMIT)
+)');  
+END;
+/
+BEGIN
+PKG_DDL_UTILS.RECREATE_SEQUENCE_FOR_TABLE('TARGET_GROUP_LIMIT', 'ID_TARGET_GROUP_LIMIT', 'TARGET_GROUP_LIMIT_SEQ');
+END;
+/
+BEGIN
+PKG_DDL_UTILS.ADD_CONSTRAINT('TARGET_GROUP_LIMIT_MDTASK_FK', 'ALTER TABLE TARGET_GROUP_LIMIT ADD CONSTRAINT TARGET_GROUP_LIMIT_MDTASK_FK FOREIGN KEY (ID_MDTASK) REFERENCES MDTASK(ID_MDTASK)');
+END;
+/
+COMMENT ON TABLE TARGET_GROUP_LIMIT IS 'лимит группы целевых назначений'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT.ID_TARGET_GROUP_LIMIT IS 'первичный ключ'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT.AMOUNT IS 'сумма'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT.AMOUNT_CURRENCY IS 'валюта'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT.ID_MDTASK IS 'id сделки'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT.NOTE IS 'комментарии'
+/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('TARGET_GROUP_LIMIT_TYPE',
+'CREATE TABLE TARGET_GROUP_LIMIT_TYPE (
+ID_TARGET_GROUP_LIMIT_TYPE NUMBER,
+ID_TARGET_GROUP_LIMIT NUMBER NOT NULL,
+ID_TARGET NUMBER NOT NULL,
+TARGET_TYPE_NAME VARCHAR2(4000) NOT NULL,
+CONSTRAINT TARGET_GROUP_LIMIT_TYPE_PK PRIMARY KEY(ID_TARGET_GROUP_LIMIT_TYPE)
+)');
+END;
+/
+BEGIN
+PKG_DDL_UTILS.RECREATE_SEQUENCE_FOR_TABLE('TARGET_GROUP_LIMIT_TYPE', 'ID_TARGET_GROUP_LIMIT_TYPE', 'TARGET_GROUP_LIMIT_TYPE_SEQ');
+END;
+/
+BEGIN
+PKG_DDL_UTILS.ADD_CONSTRAINT('TARGET_GR_L_T_GROUP_FK', 'ALTER TABLE TARGET_GROUP_LIMIT_TYPE ADD CONSTRAINT TARGET_GR_L_T_GROUP_FK FOREIGN KEY (ID_TARGET_GROUP_LIMIT) REFERENCES TARGET_GROUP_LIMIT(ID_TARGET_GROUP_LIMIT)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('TARGET_GR_L_T_GOAL_FK', 'ALTER TABLE TARGET_GROUP_LIMIT_TYPE ADD CONSTRAINT TARGET_GR_L_T_GOAL_FK FOREIGN KEY (ID_TARGET) REFERENCES R_MDTASK_OTHERGOALS(ID_TARGET)');
+END;
+/
+COMMENT ON TABLE TARGET_GROUP_LIMIT_TYPE IS 'целевое назначение, входящее в лимит группы целевых назначений'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT_TYPE.ID_TARGET_GROUP_LIMIT_TYPE IS 'первичный ключ'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT_TYPE.ID_TARGET_GROUP_LIMIT IS 'id лимита группы целевых назначений'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT_TYPE.ID_TARGET IS 'id целевого назначения из заявки СПО'
+/
+COMMENT ON COLUMN TARGET_GROUP_LIMIT_TYPE.TARGET_TYPE_NAME IS 'наименование целевого назначения'
+/
+--changeset akirilchev:spo-18.00-VTBSPO-431-fix logicalFilePath:spo-18.00-VTBSPO-431-fix endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_CONSTRAINT('EARLY_PAYMENT_PERIOD_TYPE_CK',
+'ALTER TABLE EARLY_PAYMENT ADD CONSTRAINT EARLY_PAYMENT_PERIOD_TYPE_CK CHECK (PERIOD_TYPE IS NULL OR PERIOD_TYPE IN (''alldays'', ''workdays''))');
+END;
+/
+COMMENT ON COLUMN EARLY_PAYMENT.PERIOD_TYPE IS 'Тип периода - рабочие ("workdays") или календарные ("alldays") дни'
+/
+
+--changeset apavlenko:spo-18.00-VTBSPO-577 logicalFilePath:spo-18.00-VTBSPO-577 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE TARGET_GROUP_LIMIT_TYPE DROP CONSTRAINT TARGET_GR_L_T_GOAL_FK');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE TARGET_GROUP_LIMIT_TYPE DROP CONSTRAINT TARGET_GR_L_T_GROUP_FK');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE TARGET_GROUP_LIMIT_TYPE ADD CONSTRAINT TARGET_GR_L_T_GOAL_FK FOREIGN KEY (ID_TARGET) REFERENCES R_MDTASK_OTHERGOALS (ID_TARGET) ON DELETE CASCADE');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE TARGET_GROUP_LIMIT_TYPE ADD CONSTRAINT TARGET_GR_L_T_GROUP_FK FOREIGN KEY (ID_TARGET_GROUP_LIMIT) REFERENCES TARGET_GROUP_LIMIT (ID_TARGET_GROUP_LIMIT) ON DELETE CASCADE');
+END;
+/
+
+--changeset ebekkauer:spo-18.00-VTBSPO-537 logicalFilePath:spo-18.00-VTBSPO-537 endDelimiter:/
+ALTER TABLE WITHDRAW ADD SUM_SCOPE VARCHAR2(30)
+/
+COMMENT ON COLUMN WITHDRAW.SUM_SCOPE IS 'поле селект «Граница суммы», значение которого выбирается из списка: пустое значение, «Не более» и «Не менее»'
+/
+
+ALTER TABLE WITHDRAW ADD FROM_PERIOD NUMBER
+/
+COMMENT ON COLUMN WITHDRAW.FROM_PERIOD IS 'поле инпут текст c количеством дней, недель, месяцев, от нижнего диапазона периода'
+/
+
+ALTER TABLE WITHDRAW ADD BEFORE_PERIOD NUMBER
+/
+COMMENT ON COLUMN WITHDRAW.BEFORE_PERIOD IS 'поле инпут текст c количеством дней, недель, месяцев, до верхнего диапазона периода'
+/
+
+ALTER TABLE WITHDRAW ADD PERIOD_DIMENSION_FROM VARCHAR2(30)
+/
+COMMENT ON COLUMN WITHDRAW.PERIOD_DIMENSION_FROM IS 'поле селект c единицами измерения времени день, неделя, месяц, год от нижнего диапазона периода'
+/
+
+ALTER TABLE WITHDRAW ADD PERIOD_DIMENSION_BEFORE VARCHAR2(30)
+/
+COMMENT ON COLUMN WITHDRAW.PERIOD_DIMENSION_BEFORE IS 'поле селект c единицами измерения времени день, неделя, месяц, год от верхнего диапазона периода'
+/
+--changeset akirilchev:spo-18.00-VTBSPO-626 logicalFilePath:spo-18.00-VTBSPO-626 endDelimiter:/
+CREATE OR REPLACE PROCEDURE SP_INSERT_CONTRACTOR(PAR_ID_R NUMBER, PAR_ID_MDTASK NUMBER, PAR_ID_CRMORG VARCHAR2, PAR_ID_PERSON NUMBER, PAR_ID_CONTRACTOR_TYPE NUMBER)
+IS
+--ver 1.01
+--author akirilchev@masterdm.ru
+  VAR_ID_CREDIT_DEAL_CONTRACTOR NUMBER;
+BEGIN
+  VAR_ID_CREDIT_DEAL_CONTRACTOR := PAR_ID_R;
+
+  IF PAR_ID_MDTASK IS NOT NULL AND (PAR_ID_CRMORG IS NOT NULL OR PAR_ID_PERSON IS NOT NULL) THEN
+    IF VAR_ID_CREDIT_DEAL_CONTRACTOR IS NULL THEN
+      SELECT MIN(ID_R)
+        INTO VAR_ID_CREDIT_DEAL_CONTRACTOR
+        FROM R_ORG_MDTASK S
+       WHERE ID_MDTASK = PAR_ID_MDTASK
+         AND ID_CRMORG = PAR_ID_CRMORG;
+    END IF;
+
+    IF VAR_ID_CREDIT_DEAL_CONTRACTOR IS NULL THEN
+      SELECT R_ORG_MDTASK_SEQ.NEXTVAL
+        INTO VAR_ID_CREDIT_DEAL_CONTRACTOR
+        FROM DUAL;
+    END IF;
+
+    INSERT INTO R_ORG_MDTASK_SUPPLY(ID_R, ID_MDTASK, ID_CRMORG, ID_PERSON)
+    SELECT VAR_ID_CREDIT_DEAL_CONTRACTOR ID_R, PAR_ID_MDTASK ID_MDTASK, PAR_ID_CRMORG ID_CRMORG, PAR_ID_PERSON ID_PERSON
+      FROM DUAL
+     WHERE NOT EXISTS(SELECT 1
+                        FROM R_ORG_MDTASK_SUPPLY
+                       WHERE ID_R = VAR_ID_CREDIT_DEAL_CONTRACTOR
+                             OR
+                             (
+                               ID_MDTASK = PAR_ID_MDTASK
+                               AND (
+                                 ID_CRMORG = PAR_ID_CRMORG
+                                 OR
+                                 ID_PERSON = PAR_ID_PERSON
+                               )
+                             )
+                     );
+
+    SELECT MIN(ID_R)
+      INTO VAR_ID_CREDIT_DEAL_CONTRACTOR
+      FROM R_ORG_MDTASK_SUPPLY
+     WHERE ID_MDTASK = PAR_ID_MDTASK
+       AND (
+              ID_CRMORG = PAR_ID_CRMORG
+              OR
+              ID_PERSON = PAR_ID_PERSON
+           );
+  END IF;
+
+  IF PAR_ID_CONTRACTOR_TYPE IS NOT NULL AND VAR_ID_CREDIT_DEAL_CONTRACTOR IS NOT NULL THEN
+    INSERT INTO CONTRACTOR_TYPE_SUPPLY (ID_R, ID_CONTRACTOR_TYPE)
+    SELECT VAR_ID_CREDIT_DEAL_CONTRACTOR, PAR_ID_CONTRACTOR_TYPE
+      FROM DUAL
+     WHERE NOT EXISTS(SELECT 1
+                        FROM CONTRACTOR_TYPE_SUPPLY S
+                       WHERE S.ID_R = VAR_ID_CREDIT_DEAL_CONTRACTOR
+                         AND S.ID_CONTRACTOR_TYPE = PAR_ID_CONTRACTOR_TYPE);
+  END IF;
+END;
+/
+CREATE OR REPLACE PROCEDURE SPO_CONTRACTOR_SYNC(PAR_ID_MDTASK IN MDTASK.ID_MDTASK%TYPE)
+IS
+--ver 1.01
+--author akirilchev@masterdm.ru
+  CURRENT_DATE DATE := SYSDATE;
+
+  VAR_ID_CONTRACTOR_TYPE NUMBER;
+BEGIN
+  FOR R_ORG_MDTASK_ROW IN (SELECT *
+                             FROM R_ORG_MDTASK
+                            WHERE ID_MDTASK = PAR_ID_MDTASK) LOOP
+    SP_INSERT_CONTRACTOR(R_ORG_MDTASK_ROW.ID_R, PAR_ID_MDTASK, R_ORG_MDTASK_ROW.ID_CRMORG, NULL, NULL);
+
+    FOR REC IN (SELECT *
+                  FROM R_CONTRACTOR_TYPE_MDTASK
+                 WHERE ID_R = R_ORG_MDTASK_ROW.ID_R) LOOP
+      SP_INSERT_CONTRACTOR(REC.ID_R, NULL, NULL, NULL, REC.ID_CONTRACTOR_TYPE);
+    END LOOP;
+  END LOOP;
+
+  SELECT ID_CONTRACTOR_TYPE
+    INTO VAR_ID_CONTRACTOR_TYPE
+    FROM CONTRACTOR_TYPE
+   WHERE KEY = 'WARRANTY';
+
+  FOR REC IN (SELECT *
+                FROM WARRANTY
+               WHERE ID_MDTASK = PAR_ID_MDTASK) LOOP
+    SP_INSERT_CONTRACTOR(NULL, PAR_ID_MDTASK, REC.ORG, REC.ID_PERSON, VAR_ID_CONTRACTOR_TYPE);
+  END LOOP;
+
+  SELECT ID_CONTRACTOR_TYPE
+    INTO VAR_ID_CONTRACTOR_TYPE
+    FROM CONTRACTOR_TYPE
+   WHERE KEY = 'GARANT';
+
+  FOR REC IN (SELECT *
+                FROM GARANT
+               WHERE ID_MDTASK = PAR_ID_MDTASK) LOOP
+    SP_INSERT_CONTRACTOR(NULL, PAR_ID_MDTASK, REC.ORG, REC.ID_PERSON, VAR_ID_CONTRACTOR_TYPE);
+  END LOOP;
+
+  SELECT ID_CONTRACTOR_TYPE
+    INTO VAR_ID_CONTRACTOR_TYPE
+    FROM CONTRACTOR_TYPE
+   WHERE KEY = 'DEPOSIT';
+
+  FOR REC IN (SELECT *
+                FROM DEPOSIT
+               WHERE ID_MDTASK = PAR_ID_MDTASK) LOOP
+    SP_INSERT_CONTRACTOR(NULL, PAR_ID_MDTASK, REC.ID_CRMORG, REC.ID_PERSON, VAR_ID_CONTRACTOR_TYPE);
+  END LOOP;
+
+  UPDATE R_ORG_MDTASK_SUPPLY S
+     SET DELETE_DATE = SYSDATE
+   WHERE DELETE_DATE IS NULL
+     AND ID_MDTASK = PAR_ID_MDTASK
+     AND NOT EXISTS (
+            SELECT 1
+              FROM SPO_ALL_CONTRACTOR
+             WHERE ID_MDTASK = PAR_ID_MDTASK
+               AND
+                 (
+                     ID_CRMORG = S.ID_CRMORG
+                     OR
+                     ID_PERSON = S.ID_PERSON
+                 )
+         );
+
+  UPDATE MDTASK T
+     SET T.MAIN_ORG = (SELECT F.ID_UNITED_CLIENT
+                         FROM CRM_FINANCE_ORG F INNER JOIN R_ORG_MDTASK R ON R.ID_CRMORG=F.ID_ORG
+                        WHERE R.ID_MDTASK=T.ID_MDTASK
+                          AND R.ORDER_DISP=0)
+   WHERE T.ID_MDTASK=PAR_ID_MDTASK;
+END;
+/
+--changeset akirilchev:spo-18.00-VTBSPO-626-sync logicalFilePath:spo-18.00-VTBSPO-626-sync endDelimiter:/
+BEGIN
+FOR REC IN (SELECT ID_MDTASK FROM MDTASK) LOOP
+ SPO_CONTRACTOR_SYNC(REC.ID_MDTASK);
+END LOOP;
+END;
+/
+COMMIT
+/
+--changeset apavlenko:spo-18.00-VTBSPO-831 logicalFilePath:spo-18.00-VTBSPO-831 endDelimiter:/
+INSERT INTO GLOBAL_SETTINGS  (MNEMO,VALUE,DESCRIPTION,SYSTEM)
+VALUES ('isEdsRequiredSPO','true','Обязательность наличия ЭЦП при вложении документов','СПО')
+/
+--changeset apavlenko:spo-18.00-VTBSPO-837-1 logicalFilePath:spo-18.00-VTBSPO-837-1 endDelimiter:/
+ALTER TABLE mdtask ADD (tmpdetails  CLOB)
+/
+UPDATE mdtask SET tmpdetails=changed_conditions
+/
+ALTER TABLE mdtask DROP COLUMN changed_conditions
+/
+ALTER TABLE mdtask RENAME COLUMN tmpdetails TO changed_conditions
+/
+
+--changeset slysenkov:spo-18.00-VTBSPO-535-placehistory-1 logicalFilePath:spo-18.00-VTBSPO-535-placehistory-1 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('PLACE_HISTORY', 
+'CREATE TABLE PLACE_HISTORY (ID_MDTASK NUMBER NOT NULL, ID_OLD_PLACE NUMBER, ID_NEW_PLACE NUMBER NOT NULL, USERID NUMBER NOT NULL, LOG_DATE TIMESTAMP(6) NOT NULL)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('PLACE_HISTORY_FK1', 'ALTER TABLE PLACE_HISTORY ADD CONSTRAINT PLACE_HISTORY_FK1 FOREIGN KEY (ID_MDTASK) REFERENCES MDTASK (ID_MDTASK) ON DELETE CASCADE');
+PKG_DDL_UTILS.ADD_CONSTRAINT('PLACE_HISTORY_FK2', 'ALTER TABLE PLACE_HISTORY ADD CONSTRAINT PLACE_HISTORY_FK2 FOREIGN KEY (ID_OLD_PLACE) REFERENCES DEPARTMENTS (ID_DEPARTMENT) ON DELETE CASCADE');
+PKG_DDL_UTILS.ADD_CONSTRAINT('PLACE_HISTORY_FK3', 'ALTER TABLE PLACE_HISTORY ADD CONSTRAINT PLACE_HISTORY_FK3 FOREIGN KEY (ID_NEW_PLACE) REFERENCES DEPARTMENTS (ID_DEPARTMENT) ON DELETE CASCADE');
+PKG_DDL_UTILS.ADD_CONSTRAINT('PLACE_HISTORY_FK4', 'ALTER TABLE PLACE_HISTORY ADD CONSTRAINT PLACE_HISTORY_FK4 FOREIGN KEY (USERID) REFERENCES USERS (ID_USER) ON DELETE CASCADE');
+END;
+/
+--changeset slysenkov:spo-18.00-VTBSPO-535-departmenthistory-1 logicalFilePath:spo-18.00-VTBSPO-535-departmenthistory-1 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('DEPARTMENT_HISTORY', 
+'CREATE TABLE DEPARTMENT_HISTORY (ID_MDTASK NUMBER NOT NULL, ID_OLD_DEPARTMENT NUMBER, ID_NEW_DEPARTMENT NUMBER NOT NULL, USERID NUMBER NOT NULL, LOG_DATE TIMESTAMP(6) NOT NULL)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('DEPARTMENT_HISTORY_FK1', 'ALTER TABLE DEPARTMENT_HISTORY ADD CONSTRAINT DEPARTMENT_HISTORY_FK1 FOREIGN KEY (ID_MDTASK) REFERENCES MDTASK (ID_MDTASK) ON DELETE CASCADE');
+PKG_DDL_UTILS.ADD_CONSTRAINT('DEPARTMENT_HISTORY_FK2', 'ALTER TABLE DEPARTMENT_HISTORY ADD CONSTRAINT DEPARTMENT_HISTORY_FK2 FOREIGN KEY (ID_OLD_DEPARTMENT) REFERENCES DEPARTMENTS (ID_DEPARTMENT) ON DELETE CASCADE');
+PKG_DDL_UTILS.ADD_CONSTRAINT('DEPARTMENT_HISTORY_FK3', 'ALTER TABLE DEPARTMENT_HISTORY ADD CONSTRAINT DEPARTMENT_HISTORY_FK3 FOREIGN KEY (ID_NEW_DEPARTMENT) REFERENCES DEPARTMENTS (ID_DEPARTMENT) ON DELETE CASCADE');
+PKG_DDL_UTILS.ADD_CONSTRAINT('DEPARTMENT_HISTORY_FK4', 'ALTER TABLE DEPARTMENT_HISTORY ADD CONSTRAINT DEPARTMENT_HISTORY_FK4 FOREIGN KEY (USERID) REFERENCES USERS (ID_USER) ON DELETE CASCADE');
+END;
+/
+--changeset ebekkauer:spo-18.00-VTBSPO-669 logicalFilePath:spo-18.00-VTBSPO-669 endDelimiter:/
+alter table MDTASK add PROJECT_NAME VARCHAR2(255)
+/
+comment on column MDTASK.PROJECT_NAME is 'Поле Название проекта Контрагент'
+/
+--changeset apavlenko:spo-18.00-VTBSPO-690 logicalFilePath:spo-18.00-VTBSPO-690 endDelimiter:/
+alter table MDTASK add PROJECT_CLASS VARCHAR2(1000)
+/
+alter table MDTASK add PROJECT_INDUSTRY VARCHAR2(1000)
+/
+alter table MDTASK add PROJECT_REGION VARCHAR2(1000)
+/
+alter table MDTASK add PROJECT_RATING1 VARCHAR2(255)
+/
+alter table MDTASK add PROJECT_RATING2 VARCHAR2(255)
+/
+alter table MDTASK add PROJECT_RATING3 VARCHAR2(255)
+/
+alter table MDTASK add PROJECT_RATING4 VARCHAR2(255)
+/
+comment on column MDTASK.PROJECT_CLASS is 'Поле Класс Заемщика проекта'
+/
+comment on column MDTASK.PROJECT_INDUSTRY is 'Поле Отрасль экономики СРР проекта'
+/
+comment on column MDTASK.PROJECT_REGION is 'Поле Регион СРР проекта'
+/
+comment on column MDTASK.PROJECT_RATING1 is 'Поле Рейтинг кредитного подразделения проекта'
+/
+comment on column MDTASK.PROJECT_RATING2 is 'Поле Рейтинг подразделения рисков проекта'
+/
+comment on column MDTASK.PROJECT_RATING3 is 'Поле Утверждённый рейтинг проекта'
+/
+comment on column MDTASK.PROJECT_RATING4 is 'Поле Рейтинг ПКР проекта'
+/
+--changeset apavlenko:spo-18.00-VTBSPO-502 logicalFilePath:spo-18.00-VTBSPO-502 endDelimiter:/ runOnChange:true
+BEGIN
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE INDRATE_MDTASK ADD (value number(38,5))');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE INDRATE_MDTASK ADD (reason varchar2(1000))');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE INDRATE_MDTASK ADD (usefrom TIMESTAMP(6))');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE factpercent ADD (reason varchar2(1000))');
+PKG_DDL_UTILS.EXECUTE_STRING('ALTER TABLE factpercent ADD (usefrom TIMESTAMP(6))');
+END;
+/
+--changeset apavlenko:spo-18.00-VTBSPO-503 logicalFilePath:spo-18.00-VTBSPO-503 endDelimiter:/
+alter table MDTASK add monitoring_mode VARCHAR2(2000)
+/
+alter table MDTASK add monitoring_user_work NUMBER
+/
+alter table MDTASK add monitoring_price_user NUMBER
+/
+comment on column MDTASK.monitoring_mode is 'Режим редактирования сделки для МИУ-2'
+/
+comment on column MDTASK.monitoring_user_work is 'Какой пользователь сейчас работает над заявкий по МИУ-2'
+/
+comment on column MDTASK.monitoring_price_user is 'Какой пользователь редактировал ставку для МИУ-2'
+/
+--changeset apavlenko:spo-18.00-VTBSPO-503-2 logicalFilePath:spo-18.00-VTBSPO-503-2 endDelimiter:/
+alter table MDTASK add monitoring_mdtask NUMBER
+/
+comment on column MDTASK.monitoring_mdtask is 'Временная версия стоимостных условий для сделки'
+/
+--changeset svaliev:spo-18.00-VTBSPO-507 logicalFilePath:spo-18.00-VTBSPO-507 endDelimiter:/
+CREATE OR REPLACE PACKAGE SPO_INTEREST_RATE_CNG_RECIPS IS
+    /**
+     * Набор функций расчета получателей уведомлений,
+     * в случае изменения процентной ставки.
+     */
+
+	TYPE USER_ID_TABLE IS TABLE OF USERS.ID_USER%TYPE;
+
+	/**
+     * Возвращает получателей по роли по алгоритму:
+     * - выборка назначенного участника по роли
+     * - выборка добавленных участников по роли
+     * - выборка всех пользователей с заданной ролью
+     * @param PAR_CURRENT_USER_ID текущий пользователь
+     * @param PAR_MDTASK_ID идентификатор сделки
+     * @param PAR_ROLE_KEY ключ роли
+     * @param PAR_SKIP_NOT_MEMBER если 1, то выборка пользователей с заданной ролью осуществляться не будет
+     * @return список получателей
+     */
+	FUNCTION FIND_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE,
+        PAR_ROLE_KEY        IN CPS_ROLE.ID_%TYPE,
+        PAR_SKIP_NOT_MEMBER IN NUMBER := 0
+    ) RETURN USER_ID_TABLE PIPELINED;
+
+	/**
+	 * Возвращает получателей в случае направления на акцепт.
+	 * @param PAR_CURRENT_USER_ID текущий пользователь
+     * @param PAR_MDTASK_ID идентификатор сделки
+     * @return список получателей
+	 */
+    FUNCTION GET_TO_ACCEPT_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE
+    ) RETURN USER_ID_TABLE PIPELINED;
+
+    /**
+     * Возвращает получателей в случае отправки на доработку.
+     * @param PAR_CURRENT_USER_ID текущий пользователь
+     * @param PAR_MDTASK_ID идентификатор сделки
+     * @return список получателей
+     */
+    FUNCTION GET_RETURN_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE
+    ) RETURN USER_ID_TABLE PIPELINED;
+
+    /**
+     * Возвращает получателей в случае акцепта.
+     * @param PAR_CURRENT_USER_ID текущий пользователь
+     * @param PAR_MDTASK_ID идентификатор сделки
+     * @return список получателей
+     */
+    FUNCTION GET_ACCEPTED_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE
+    ) RETURN USER_ID_TABLE PIPELINED;
+END SPO_INTEREST_RATE_CNG_RECIPS;
+/
+
+CREATE OR REPLACE PACKAGE BODY SPO_INTEREST_RATE_CNG_RECIPS IS
+
+    FUNCTION FIND_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE,
+        PAR_ROLE_KEY        IN CPS_ROLE.ID_%TYPE,
+        PAR_SKIP_NOT_MEMBER IN NUMBER := 0
+    ) RETURN USER_ID_TABLE PIPELINED IS
+        IS_EMPTY NUMBER(1) := 1;
+    BEGIN
+	    /*есть пользователь в участниках с признаком исполнения и это не текущий пользователь*/
+        FOR REC IN (SELECT SM.USER_ID
+                      FROM CPS_SECTION_MEMBER SM
+                     WHERE EXISTS (SELECT 1
+                                     FROM CPS_SECTION_BINDING SB
+                                    WHERE SB.SECTION_BINDING_ID = SM.SECTION_BINDING_ID
+                                      AND SB.MDTASK_ID = PAR_MDTASK_ID
+                                      AND SB.DEAL_CONCLUSION_ID IS NULL)
+                       AND EXISTS (SELECT 1
+                                     FROM CPS_ROLE R
+                                    WHERE R.ID_ROLE = SM.ROLE_ID
+                                      AND R.ID_ = PAR_ROLE_KEY)
+                       AND SM.IS_EXECUTOR = 1
+                       AND SM.USER_ID != PAR_CURRENT_USER_ID) LOOP
+            IS_EMPTY := 0;
+            PIPE ROW(REC.USER_ID);
+        END LOOP;
+
+        IF IS_EMPTY = 0 THEN
+            RETURN;
+        END IF;
+
+        /*всем кто в участниках и без признака исполнения по роли, кроме текущего пользователя*/
+        FOR REC IN (SELECT SM.USER_ID
+                      FROM CPS_SECTION_MEMBER SM
+                     WHERE EXISTS (SELECT 1
+                                     FROM CPS_SECTION_BINDING SB
+                                    WHERE SB.SECTION_BINDING_ID = SM.SECTION_BINDING_ID
+                                      AND SB.MDTASK_ID = PAR_MDTASK_ID
+                                      AND SB.DEAL_CONCLUSION_ID IS NULL)
+                       AND EXISTS (SELECT 1
+                                     FROM CPS_ROLE R
+                                    WHERE R.ID_ROLE = SM.ROLE_ID
+                                      AND R.ID_ = PAR_ROLE_KEY)
+                       AND SM.IS_EXECUTOR = 0
+                       AND SM.USER_ID != PAR_CURRENT_USER_ID) LOOP
+            IS_EMPTY := 0;
+            PIPE ROW(REC.USER_ID);
+        END LOOP;
+
+        IF IS_EMPTY = 0 THEN
+            RETURN;
+        END IF;
+
+        IF PAR_SKIP_NOT_MEMBER = 1 THEN
+            RETURN;
+        END IF;
+
+        /*вообще всем пользователям по роли, кроме текущего пользователя*/
+        FOR REC IN (SELECT U.ID_USER USER_ID
+                      FROM USERS U
+                     WHERE EXISTS (SELECT 1
+                                     FROM CPS_MEMBERSHIP M
+                                    WHERE M.IS_ACTIVE = 1
+                                      AND M.USER_ID_ = U.LOGIN
+                                      AND M.GROUP_ID_ = PAR_ROLE_KEY)
+                       AND U.ID_USER != PAR_CURRENT_USER_ID) LOOP
+            PIPE ROW(REC.USER_ID);
+        END LOOP;
+
+        RETURN;
+    END FIND_RECIPIENTS;
+
+    FUNCTION GET_TO_ACCEPT_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE
+    ) RETURN USER_ID_TABLE PIPELINED IS
+    BEGIN
+        FOR REC IN (SELECT T.COLUMN_VALUE USER_ID
+                      FROM TABLE(SPO_INTEREST_RATE_CNG_RECIPS.FIND_RECIPIENTS(PAR_CURRENT_USER_ID, PAR_MDTASK_ID, 'MIDDLE_OFFICE_CHIEF_KM')) T) LOOP
+            PIPE ROW(REC.USER_ID);
+        END LOOP;
+
+        RETURN;
+    END GET_TO_ACCEPT_RECIPIENTS;
+
+    FUNCTION GET_RETURN_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE
+    ) RETURN USER_ID_TABLE PIPELINED IS
+        IS_HAS_ROLES NUMBER(1);
+        ASSIGNEE USERS.ID_USER%TYPE;
+        IS_EMPTY NUMBER(1) := 1;
+    BEGIN
+	    /*пользователь который работал в режиме «Редактирование ставки»*/
+	    SELECT MAX(T.MONITORING_PRICE_USER)
+	      INTO ASSIGNEE
+          FROM MDTASK T
+         WHERE T.ID_MDTASK = PAR_MDTASK_ID
+           AND T.MONITORING_PRICE_USER IS NOT NULL;
+
+        /*проверка ролей пользователя*/
+	    SELECT CASE WHEN EXISTS (SELECT 1
+		                           FROM USERS U
+		                          WHERE EXISTS (SELECT 1
+		                                          FROM CPS_MEMBERSHIP M
+		                                         WHERE M.IS_ACTIVE = 1
+		                                           AND M.USER_ID_ = U.LOGIN
+		                                           AND M.GROUP_ID_ IN ('MIDDLE_OFFICE_CHIEF_KM', 'MIDDLE_OFFICE_STAFF_KM'))
+		                            AND U.ID_USER = ASSIGNEE)
+                    THEN 1
+                    ELSE 0
+               END CASE
+          INTO IS_HAS_ROLES
+          FROM DUAL;
+
+        IF IS_HAS_ROLES = 1 THEN
+            PIPE ROW(ASSIGNEE);
+            RETURN;
+        END IF;
+
+        /*всем кто в участниках по роли, кроме текущего пользователя*/
+        FOR REC IN (SELECT SM.USER_ID
+                      FROM CPS_SECTION_MEMBER SM
+                     WHERE EXISTS (SELECT 1
+                                     FROM CPS_SECTION_BINDING SB
+                                    WHERE SB.SECTION_BINDING_ID = SM.SECTION_BINDING_ID
+                                      AND SB.MDTASK_ID = PAR_MDTASK_ID
+                                      AND SB.DEAL_CONCLUSION_ID IS NULL)
+                       AND EXISTS (SELECT 1
+                                     FROM CPS_ROLE R
+                                    WHERE R.ID_ROLE = SM.ROLE_ID
+                                      AND R.ID_ IN ('MIDDLE_OFFICE_CHIEF_KM', 'MIDDLE_OFFICE_STAFF_KM'))
+                       AND SM.USER_ID != PAR_CURRENT_USER_ID) LOOP
+            IS_EMPTY := 0;
+            PIPE ROW(REC.USER_ID);
+        END LOOP;
+
+        IF IS_EMPTY = 0 THEN
+            RETURN;
+        END IF;
+
+        /*вообще всем пользователям по ролям, кроме текущего пользователя*/
+        FOR REC IN (SELECT U.ID_USER USER_ID
+                      FROM USERS U
+                     WHERE EXISTS (SELECT 1
+                                     FROM CPS_MEMBERSHIP M
+                                    WHERE M.IS_ACTIVE = 1
+                                      AND M.USER_ID_ = U.LOGIN
+                                      AND M.GROUP_ID_ IN ('MIDDLE_OFFICE_CHIEF_KM', 'MIDDLE_OFFICE_STAFF_KM'))
+                       AND U.ID_USER != PAR_CURRENT_USER_ID) LOOP
+            PIPE ROW(REC.USER_ID);
+        END LOOP;
+
+        RETURN;
+	END GET_RETURN_RECIPIENTS;
+
+	FUNCTION GET_ACCEPTED_RECIPIENTS (
+        PAR_CURRENT_USER_ID IN USERS.ID_USER%TYPE,
+        PAR_MDTASK_ID       IN MDTASK.ID_MDTASK%TYPE
+    ) RETURN USER_ID_TABLE PIPELINED IS
+    BEGIN
+	    FOR ROLE_KEY_REC IN (SELECT 'MIDDLE_OFFICE_STAFF_KM' ROLE_KEY FROM DUAL
+	                           UNION ALL
+	                          SELECT 'MIDDLE_OFFICE_STAFF_KM_COV' ROLE_KEY FROM DUAL
+	                           UNION ALL
+	                          SELECT 'MIDDLE_OFFICE_CHIEF_KM_COV' ROLE_KEY FROM DUAL
+	                           UNION ALL
+	                          SELECT 'STRUCTURE_INSPECTOR_STAFF' ROLE_KEY FROM DUAL
+	                           UNION ALL
+	                          SELECT 'CLIENT_MANAGER_STAFF' ROLE_KEY FROM DUAL
+	                           UNION ALL
+	                          SELECT 'PRODUCT_MANAGER_STAFF' ROLE_KEY FROM DUAL
+	                           UNION ALL
+	                          SELECT 'CLIENT_MANAGER_SUPPORT_STAFF' ROLE_KEY FROM DUAL) LOOP
+	        FOR USER_ID_REC IN (SELECT T.COLUMN_VALUE USER_ID
+	                              FROM TABLE(SPO_INTEREST_RATE_CNG_RECIPS.FIND_RECIPIENTS(PAR_CURRENT_USER_ID,
+	                                                                                      PAR_MDTASK_ID,
+	                                                                                      ROLE_KEY_REC.ROLE_KEY,
+	                                                                                      1)) T) LOOP
+	            PIPE ROW(USER_ID_REC.USER_ID);
+	        END LOOP;
+	    END LOOP;
+	    RETURN;
+    END GET_ACCEPTED_RECIPIENTS;
+END SPO_INTEREST_RATE_CNG_RECIPS;
+/
+--changeset akirilchev:spo-18.00-VTBSPO-505-structure-4 logicalFilePath:spo-18.00-VTBSPO-505-structure-4 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('MDTASK_AUDIT',
+'CREATE TABLE MDTASK_AUDIT
+(
+  ID_AUDIT                   NUMBER(38) NOT NULL,
+  ID_MDTASK                  NUMBER(38) NOT NULL,
+  MDTASK_NUMBER              NUMBER(38) NOT NULL,
+  INTEREST_RATE_DERIVATIVE   NUMBER(1),
+  INTEREST_RATE_FIXED        NUMBER(1),
+  ID_CHANGE_USER_AUDIT       NUMBER(38) NOT NULL,
+  CHANGE_DATE_AUDIT          TIMESTAMP(6) NOT NULL,
+  VALIDTO                    DATE,
+  ID_CHANGE_DEPARTMENT_AUDIT NUMBER(38) NOT NULL
+)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('MDTASK_AUDIT_PK', 'ALTER TABLE MDTASK_AUDIT ADD CONSTRAINT MDTASK_AUDIT_PK PRIMARY KEY (ID_AUDIT)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('MDTASK_AUDIT_MDTASK_FK', 'ALTER TABLE MDTASK_AUDIT ADD CONSTRAINT MDTASK_AUDIT_MDTASK_FK FOREIGN KEY (ID_MDTASK) REFERENCES MDTASK(ID_MDTASK)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('MDTASK_AUDIT_USER_FK', 'ALTER TABLE MDTASK_AUDIT ADD CONSTRAINT MDTASK_AUDIT_USER_FK FOREIGN KEY (ID_CHANGE_USER_AUDIT) REFERENCES USERS(ID_USER)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('MDTASK_AUDIT_DEPARTMENT_FK', 'ALTER TABLE MDTASK_AUDIT ADD CONSTRAINT MDTASK_AUDIT_DEPARTMENT_FK FOREIGN KEY (ID_CHANGE_DEPARTMENT_AUDIT) REFERENCES DEPARTMENTS(ID_DEPARTMENT)');
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('MDTASK_AUDIT', 'VALIDTO', 'DATE');
+END;
+/
+COMMENT ON TABLE MDTASK_AUDIT IS 'хронология изменения общих данных для процентной ставки сделки (аналог MDTASK)'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.ID_AUDIT IS 'первичный ключ'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.ID_MDTASK IS 'id сделки'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.ID_MDTASK IS 'номер сделки'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.INTEREST_RATE_DERIVATIVE IS 'признак плавающей ставки'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.INTEREST_RATE_FIXED IS 'признак фиксированной ставки'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.ID_CHANGE_USER_AUDIT IS 'id пользователя, нажавшего акцептовать или одобрить'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.CHANGE_DATE_AUDIT IS 'дата внесения в хронологию'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.ID_CHANGE_DEPARTMENT_AUDIT IS 'id подразделения пользователя, нажавшего акцептовать или одобрить'
+/
+COMMENT ON COLUMN MDTASK_AUDIT.VALIDTO IS 'срок окончания сделки'
+/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('FACTPERCENT_AUDIT',
+'CREATE TABLE FACTPERCENT_AUDIT
+(
+  ID_AUDIT                 NUMBER(38) NOT NULL,
+  ID_MDTASK_AUDIT          NUMBER(38) NOT NULL,
+  ID                       NUMBER(38) NOT NULL,
+  START_DATE               DATE,
+  END_DATE                 DATE,
+  RATE4                    NUMBER,
+  RATE4DESC                VARCHAR2(4000),
+  USEFROM                  TIMESTAMP(6),
+  REASON                   VARCHAR2(4000),
+  INTEREST_RATE_FIXED      NUMBER(1),
+  INTEREST_RATE_DERIVATIVE NUMBER(1)
+)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('FACTPERCENT_AUDIT_PK', 'ALTER TABLE FACTPERCENT_AUDIT ADD CONSTRAINT FACTPERCENT_AUDIT_PK PRIMARY KEY (ID_AUDIT)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('FACTPERCENT_AUDIT_MDTASK_FK', 'ALTER TABLE FACTPERCENT_AUDIT ADD CONSTRAINT FACTPERCENT_AUDIT_MDTASK_FK FOREIGN KEY (ID_MDTASK_AUDIT) REFERENCES MDTASK_AUDIT(ID_AUDIT)');
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('FACTPERCENT_AUDIT', 'USEFROM', 'TIMESTAMP(6)');
+END;
+/
+COMMENT ON TABLE FACTPERCENT_AUDIT IS 'хронология изменения периодов для процентной ставки сделки (аналог FACTPERCENT)'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.ID_AUDIT IS 'первичный ключ'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.ID_MDTASK_AUDIT IS 'id скопированных общих данных сделки'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.ID IS 'оригинальный id в таблице FACTPERCENT'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.START_DATE IS 'дата начала'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.END_DATE IS 'дата окончания'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.RATE4 IS 'значение ставки размещения'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.RATE4DESC IS 'комментарий к ставке размещения'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.USEFROM IS 'дата начала применения ставки размещения'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.REASON IS 'основание изменения ставки размещения'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.INTEREST_RATE_FIXED IS 'признак фиксированной ставки'
+/
+COMMENT ON COLUMN FACTPERCENT_AUDIT.INTEREST_RATE_DERIVATIVE IS 'признак плавающей ставки'
+/
+BEGIN
+PKG_DDL_UTILS.ADD_OBJECT('INDRATE_MDTASK_AUDIT',
+'CREATE TABLE INDRATE_MDTASK_AUDIT
+(
+  ID_AUDIT             NUMBER(38) NOT NULL,
+  ID_MDTASK_AUDIT      NUMBER(38) NOT NULL,
+  ID_FACTPERCENT_AUDIT NUMBER(38),
+  ID                   NUMBER NOT NULL,
+  ID_MDTASK            NUMBER,
+  ID_FACTPERCENT       NUMBER(38),
+  RATE                 NUMBER,
+  VALUE                NUMBER,
+  REASON               VARCHAR2(4000),
+  USEFROM              TIMESTAMP(6),
+  IND_RATE             CHAR(12)
+)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('INDRATE_MDTASK_AUDIT_PK', 'ALTER TABLE INDRATE_MDTASK_AUDIT ADD CONSTRAINT INDRATE_MDTASK_AUDIT_PK PRIMARY KEY (ID_AUDIT)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('INDRATE_MDTASK_AUDIT_MDTASK_FK', 'ALTER TABLE INDRATE_MDTASK_AUDIT ADD CONSTRAINT INDRATE_MDTASK_AUDIT_MDTASK_FK FOREIGN KEY (ID_MDTASK_AUDIT) REFERENCES MDTASK_AUDIT(ID_AUDIT)');
+PKG_DDL_UTILS.ADD_CONSTRAINT('INDRATE_MDTASK_AUDIT_PERC_FK', 'ALTER TABLE INDRATE_MDTASK_AUDIT ADD CONSTRAINT INDRATE_MDTASK_AUDIT_PERC_FK FOREIGN KEY (ID_FACTPERCENT_AUDIT) REFERENCES FACTPERCENT_AUDIT(ID_AUDIT)');
+END;
+/
+COMMENT ON TABLE INDRATE_MDTASK_AUDIT IS 'хронология изменения процентной ставки сделки (аналог INDRATE_MDTASK)'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.ID_AUDIT IS 'первичный ключ'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.ID_MDTASK_AUDIT IS 'id скопированных общих данных сделки'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.ID_FACTPERCENT_AUDIT IS 'id скопированного периода'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.ID IS 'оригинальный id в таблице INDRATE_MDTASK'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.ID_MDTASK IS 'id сделки'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.ID_FACTPERCENT IS 'id оригинального периода'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.RATE IS 'значение надбавки к плавающей ставке'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.VALUE IS 'значение плавающей ставки'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.REASON IS 'основание'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.USEFROM IS 'применяется с'
+/
+COMMENT ON COLUMN INDRATE_MDTASK_AUDIT.IND_RATE IS 'id ставки в CRM_FLOAT'
+/
+--changeset akirilchev:spo-18.00-VTBSPO-505-fill-percent-history-5 logicalFilePath:spo-18.00-VTBSPO-505-fill-percent-history-5 endDelimiter:/
+DECLARE
+  --заполняет таблицы хронологии процентной ставки, если она пустая, на основе секции процентной ставки СПО для СПО
+  PROCEDURE SP_PERCENT_COPY(PAR_ID_MDTASK NUMBER, PAR_ID_USER NUMBER, PAR_ENDED_DATE DATE) IS
+    VAR_ID_NEW_MDTASK NUMBER;
+  BEGIN
+    IF PAR_ID_MDTASK IS NULL THEN
+      RAISE_APPLICATION_ERROR(-20001, 'PAR_ID_MDTASK IS NULL');
+    END IF;
+    IF PAR_ID_USER IS NULL THEN
+      RAISE_APPLICATION_ERROR(-20001, 'PAR_ID_USER IS NULL');
+    END IF;
+    IF PAR_ENDED_DATE IS NULL THEN
+      RAISE_APPLICATION_ERROR(-20001, 'PAR_ENDED_DATE IS NULL');
+    END IF;
+
+    SELECT MDTASK_SEQ.NEXTVAL
+      INTO VAR_ID_NEW_MDTASK
+      FROM DUAL;
+
+    INSERT INTO MDTASK_AUDIT(
+      ID_AUDIT,
+      ID_MDTASK,
+      MDTASK_NUMBER,
+      INTEREST_RATE_DERIVATIVE,
+      INTEREST_RATE_FIXED,
+      ID_CHANGE_USER_AUDIT,
+      CHANGE_DATE_AUDIT,
+      ID_CHANGE_DEPARTMENT_AUDIT,
+      VALIDTO)
+    SELECT VAR_ID_NEW_MDTASK,
+           ID_MDTASK,
+           MDTASK_NUMBER,
+           INTEREST_RATE_DERIVATIVE,
+           INTEREST_RATE_FIXED,
+           PAR_ID_USER ID_CHANGE_USER_AUDIT,
+           PAR_ENDED_DATE CHANGE_DATE_AUDIT,
+           (SELECT ID_DEPARTMENT
+              FROM USERS
+             WHERE ID_USER = PAR_ID_USER) ID_CHANGE_DEPARTMENT_AUDIT,
+           VALIDTO
+      FROM MDTASK
+     WHERE ID_MDTASK = PAR_ID_MDTASK;
+
+    INSERT INTO FACTPERCENT_AUDIT(
+      ID_AUDIT,
+      ID_MDTASK_AUDIT,
+      ID,
+      START_DATE,
+      END_DATE,
+      RATE4,
+      RATE4DESC,
+      USEFROM,
+      REASON,
+      INTEREST_RATE_FIXED,
+      INTEREST_RATE_DERIVATIVE)
+    SELECT FACTPERCENT_SEQ.NEXTVAL,
+           VAR_ID_NEW_MDTASK,
+           ID,
+           START_DATE,
+           END_DATE,
+           RATE4,
+           RATE4DESC,
+           USEFROM,
+           REASON,
+           INTEREST_RATE_FIXED,
+           INTEREST_RATE_DERIVATIVE
+      FROM (SELECT ID,
+                   START_DATE,
+                   END_DATE,
+                   RATE4,
+                   RATE4DESC,
+                   USEFROM,
+                   REASON,
+                   INTEREST_RATE_FIXED,
+                   INTEREST_RATE_DERIVATIVE
+              FROM FACTPERCENT
+             WHERE ID_MDTASK = PAR_ID_MDTASK
+             ORDER BY ID);
+
+    INSERT INTO INDRATE_MDTASK_AUDIT (
+      ID_AUDIT,
+      ID_MDTASK_AUDIT,
+      ID_FACTPERCENT_AUDIT,
+      ID,
+      ID_MDTASK,
+      ID_FACTPERCENT,
+      RATE,
+      VALUE,
+      REASON,
+      USEFROM,
+      IND_RATE)
+    SELECT INDRATE_MDTASK_SEQ.NEXTVAL,
+           VAR_ID_NEW_MDTASK,
+           ID_FACTPERCENT_AUDIT,
+           ID,
+           ID_MDTASK,
+           ID_FACTPERCENT,
+           RATE,
+           VALUE,
+           REASON,
+           USEFROM,
+           IND_RATE
+     FROM (
+       SELECT (SELECT ID_AUDIT
+                  FROM FACTPERCENT_AUDIT
+                 WHERE ID = IM.ID_FACTPERCENT
+                   AND ID_MDTASK_AUDIT = VAR_ID_NEW_MDTASK) ID_FACTPERCENT_AUDIT,
+               ID,
+               ID_MDTASK,
+               ID_FACTPERCENT,
+               RATE,
+               VALUE,
+               REASON,
+               USEFROM,
+               IND_RATE
+          FROM INDRATE_MDTASK IM
+         WHERE ID_MDTASK = PAR_ID_MDTASK
+         ORDER BY ID
+     );
+  END;
+BEGIN
+  FOR REC IN
+  (
+    SELECT M2.ID_MDTASK, Z.ID_USER, Z.LAST_DATE_EVENT
+      FROM V_CED_CREDIT_DEAL M2 JOIN MDTASK M ON M.ID_MDTASK = M2.ID_MDTASK
+      JOIN (
+       SELECT ID_PROCESS, DATE_EVENT LAST_DATE_EVENT, ID_USER
+         FROM (
+         SELECT PE.*, ROW_NUMBER() OVER(PARTITION BY ID_PROCESS
+                                            ORDER BY DATE_EVENT DESC) RN
+           FROM PROCESS_EVENTS PE
+          WHERE PE.ID_USER IS NOT NULL AND PE.DATE_EVENT IS NOT NULL
+            AND PE.ID_PROCESS_TYPE_EVENT IN (1, 4) --тип 'создание', 'завершение'
+        )
+       WHERE RN = 1
+      ) Z ON M2.ID_PUP_PROCESS = Z.ID_PROCESS
+     WHERE NVL(M.IS_IMPORTED, 0) = 0
+           AND M2.ID_PUP_PROCESS IS NOT NULL
+           AND M2.IS_MDTASK_ENDED = 1
+           AND M2.IS_MDTASK_CONFIRMED = 1
+           AND MDTASK_TYPE_KEY = 'DEAL'
+           AND NOT EXISTS(SELECT 1
+                            FROM MDTASK_AUDIT
+                           WHERE ID_MDTASK = M2.ID_MDTASK)
+     ORDER BY M2.ID_MDTASK
+  )
+  LOOP
+    SP_PERCENT_COPY(REC.ID_MDTASK, REC.ID_USER, REC.LAST_DATE_EVENT);
+  END LOOP;
+END;
+/
+--changeset apavlenko:spo-18.00-VTBSPO-731 logicalFilePath:spo-18.00-VTBSPO-731 endDelimiter:/
+ALTER TABLE EARLY_PAYMENT DROP CONSTRAINT EARLY_PAYMENT_PERIOD_TYPE_CK
+/
+ALTER TABLE EARLY_PAYMENT ADD CONSTRAINT EARLY_PAYMENT_PERIOD_TYPE_CK CHECK
+(PERIOD_TYPE IS NULL OR PERIOD_TYPE IN ('alldays', 'workdays','')) ENABLE
+/
+--changeset apavlenko:spo-18.00-VTBSPO-905-1 logicalFilePath:spo-18.00-VTBSPO-905-1 endDelimiter:/
+insert into DEPARTMENT_HISTORY(ID_MDTASK, ID_OLD_DEPARTMENT, ID_NEW_DEPARTMENT, USERID, LOG_DATE)
+select id_mdtask,initdepartment,initdepartment,e.id_user,e.date_event from mdtask t
+inner join process_events e on e.id_process=t.id_pup_process and e.id_process_type_event=1
+where initdepartment is not null and e.id_user is not null
+and not exists (select 1 from DEPARTMENT_HISTORY h where h.id_mdtask=t.id_mdtask)
+and e.id_user in (select id_user from users u)
+/
+insert into PLACE_HISTORY(ID_MDTASK, ID_OLD_PLACE, ID_NEW_PLACE, USERID, LOG_DATE)
+select id_mdtask,place,place,e.id_user,e.date_event from mdtask t
+inner join process_events e on e.id_process=t.id_pup_process and e.id_process_type_event=1
+where place is not null and e.id_user is not null
+and not exists (select 1 from PLACE_HISTORY h where h.id_mdtask=t.id_mdtask)
+and e.id_user in (select id_user from users u)
+/
+--changeset apavlenko:spo-18.00-VTBSPO-925 logicalFilePath:spo-18.00-VTBSPO-925 endDelimiter:/
+update standard_period_group set name='Экспертиза подразделения целевых резервов' where name='Экспертиза подразделения целевых резевов'
+/
+--changeset apavlenko:spo-18.00-VTBSPO-944 logicalFilePath:spo-18.00-VTBSPO-944 endDelimiter:/
+BEGIN
+PKG_DDL_UTILS.ADD_TABLE_COLUMN('MDTASK', 'IS_IMPORTED_BM', 'VARCHAR2(50)');
+END;
+/
+COMMENT ON COLUMN MDTASK.IS_IMPORTED_BM IS 'Импортировано из банка москвы'
+/
+--changeset akirilchev:spo-18.08-VTBSPO-1002-col-null logicalFilePath:spo-18.08-VTBSPO-1002-col-null endDelimiter:/
+DECLARE
+  PROCEDURE SP_SET_NULL(PAR_TABLE_NAME VARCHAR2, PAR_COLUMN_NAME VARCHAR2, PAR_MANDATORY NUMBER) IS 
+    VAR_NULLABLE VARCHAR2(1);
+  BEGIN
+    SELECT MAX(NULLABLE)
+       INTO VAR_NULLABLE
+      FROM USER_TAB_COLS
+     WHERE TABLE_NAME = UPPER(PAR_TABLE_NAME)
+       AND COLUMN_NAME = UPPER(PAR_COLUMN_NAME);
+       
+    IF VAR_NULLABLE IS NULL THEN
+      RAISE_APPLICATION_ERROR(-20001, 'SP_SET_NULL. Can not find column "'|| PAR_TABLE_NAME || '.' || PAR_COLUMN_NAME || '"');
+    END IF;
+
+    IF PAR_MANDATORY = 1 AND VAR_NULLABLE = 'Y' THEN
+      EXECUTE IMMEDIATE 'ALTER TABLE '|| UPPER(PAR_TABLE_NAME) || ' MODIFY ' || UPPER(PAR_COLUMN_NAME) || ' NOT NULL';
+    ELSIF PAR_MANDATORY = 0 AND VAR_NULLABLE = 'N' THEN
+      EXECUTE IMMEDIATE 'ALTER TABLE '|| UPPER(PAR_TABLE_NAME) || ' MODIFY ' || UPPER(PAR_COLUMN_NAME) || ' NULL';
+    END IF;
+  END;
+BEGIN
+SP_SET_NULL('MDTASK_AUDIT', 'ID_CHANGE_USER_AUDIT', 0);
+SP_SET_NULL('MDTASK_AUDIT', 'ID_CHANGE_DEPARTMENT_AUDIT', 0);
+END;
+/
+--changeset akirilchev:spo-18.08-VTBSPO-1002-data logicalFilePath:spo-18.08-VTBSPO-1002-data endDelimiter:/
+DECLARE
+
+  PROCEDURE SP_PERCENT_COPY(PAR_ID_MDTASK NUMBER, PAR_ID_USER NUMBER, PAR_ENDED_DATE DATE) IS
+    VAR_ID_NEW_MDTASK NUMBER;
+  BEGIN
+    IF PAR_ID_MDTASK IS NULL THEN
+      RAISE_APPLICATION_ERROR(-20001, 'PAR_ID_MDTASK IS NULL');
+    END IF;
+    IF PAR_ENDED_DATE IS NULL THEN
+      RAISE_APPLICATION_ERROR(-20001, 'PAR_ENDED_DATE IS NULL');
+    END IF;
+
+    SELECT MDTASK_SEQ.NEXTVAL
+      INTO VAR_ID_NEW_MDTASK
+      FROM DUAL;
+
+    INSERT INTO MDTASK_AUDIT(
+      ID_AUDIT,
+      ID_MDTASK,
+      MDTASK_NUMBER,
+      INTEREST_RATE_DERIVATIVE,
+      INTEREST_RATE_FIXED,
+      VALIDTO,
+      ID_CHANGE_USER_AUDIT,
+      CHANGE_DATE_AUDIT,
+      ID_CHANGE_DEPARTMENT_AUDIT)
+    SELECT VAR_ID_NEW_MDTASK,
+           ID_MDTASK,
+           MDTASK_NUMBER,
+           INTEREST_RATE_DERIVATIVE,
+           INTEREST_RATE_FIXED,
+           VALIDTO,
+           PAR_ID_USER ID_CHANGE_USER_AUDIT,
+           PAR_ENDED_DATE CHANGE_DATE_AUDIT,
+           (SELECT ID_DEPARTMENT
+              FROM USERS
+             WHERE ID_USER = PAR_ID_USER) ID_CHANGE_DEPARTMENT_AUDIT
+      FROM MDTASK
+     WHERE ID_MDTASK = PAR_ID_MDTASK;
+
+    INSERT INTO FACTPERCENT_AUDIT(
+      ID_AUDIT,
+      ID_MDTASK_AUDIT,
+      ID,
+      START_DATE,
+      END_DATE,
+      RATE4,
+      RATE4DESC,
+      USEFROM,
+      REASON,
+      INTEREST_RATE_FIXED,
+      INTEREST_RATE_DERIVATIVE)
+    SELECT FACTPERCENT_SEQ.NEXTVAL,
+           VAR_ID_NEW_MDTASK,
+           ID,
+           START_DATE,
+           END_DATE,
+           RATE4,
+           RATE4DESC,
+           USEFROM,
+           REASON,
+           INTEREST_RATE_FIXED,
+           INTEREST_RATE_DERIVATIVE
+      FROM (SELECT *
+              FROM FACTPERCENT
+             WHERE ID_MDTASK = PAR_ID_MDTASK
+             ORDER BY ID);
+
+    INSERT INTO INDRATE_MDTASK_AUDIT (
+      ID_AUDIT,
+      ID_MDTASK_AUDIT,
+      ID_FACTPERCENT_AUDIT,
+      ID,
+      ID_MDTASK,
+      ID_FACTPERCENT,
+      RATE,
+      VALUE,
+      REASON,
+      USEFROM,
+      IND_RATE)
+    SELECT INDRATE_MDTASK_SEQ.NEXTVAL,
+           VAR_ID_NEW_MDTASK,
+           (SELECT ID_AUDIT
+                  FROM FACTPERCENT_AUDIT
+                 WHERE ID = IM.ID_FACTPERCENT
+                   AND ID_MDTASK_AUDIT = VAR_ID_NEW_MDTASK) ID_FACTPERCENT_AUDIT,
+           ID,
+           ID_MDTASK,
+           ID_FACTPERCENT,
+           RATE,
+           VALUE,
+           REASON,
+           USEFROM,
+           IND_RATE
+     FROM (
+        SELECT *
+          FROM INDRATE_MDTASK
+         WHERE ID_MDTASK = PAR_ID_MDTASK
+         ORDER BY ID
+     ) IM;
+  END;
+BEGIN
+FOR REC IN (SELECT ID_MDTASK
+              FROM MDTASK M
+             WHERE M.IS_IMPORTED_BM IS NOT NULL
+               AND NOT EXISTS(SELECT 1
+                                FROM MDTASK_AUDIT MA
+                               WHERE MA.ID_MDTASK = M.ID_MDTASK )) LOOP
+  SP_PERCENT_COPY(REC.ID_MDTASK, NULL, SYSDATE);
+END LOOP;
+END;
+/
+COMMIT
+/

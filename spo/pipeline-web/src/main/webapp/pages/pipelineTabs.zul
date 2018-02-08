@@ -1,0 +1,22 @@
+    <!--<tabbox id="tb" onSelect="@command('navigateTab', targetTab=self.selectedTab.id)">-->
+    <tabbox id="tb">
+        <!--<attribute name="onCreate">
+            B.setSelected(true);
+        </attribute>-->
+        <tabs id="tabs">
+            <tab id="favorites" label="Избранное" selected="@load(vm.currentTab eq 'favorites')"/>
+            <tab id="branchesAndGCo" label="Отрасли и ГК" selected="@load(vm.currentTab eq 'branchesAndGCo')"/>
+            <tab id="issuesAndDeals" label="Сделки и выдачи" selected="@load(vm.currentTab eq 'issuesAndDeals')"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <include id="content_A" mode="instant" sclass="content" src="pages/welcomes/favorites.zul"/>
+            </tabpanel>
+            <tabpanel>
+                <include id="content_B" mode="instant" sclass="content" src="pages/branchesAndGCo.zul"/>
+            </tabpanel>
+            <tabpanel>
+                <include id="content_C" mode="instant" sclass="content" src="pages/issuesAndDeals.zul"/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>

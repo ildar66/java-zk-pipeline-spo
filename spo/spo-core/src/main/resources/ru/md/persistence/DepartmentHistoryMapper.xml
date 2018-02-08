@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.DepartmentHistoryMapper">
+
+  <sql id="departmentHistoryFilter">
+  </sql>
+
+  <sql id="departmentHistorySelect">
+  SELECT DH.ID_MDTASK,
+      DH.ID_OLD_DEPARTMENT,
+      DH.ID_NEW_DEPARTMENT,
+ 	  (SELECT M.VERSION FROM MDTASK M WHERE ID_MDTASK=DH.ID_MDTASK) VERSION,
+      (SELECT FULLNAME FROM DEPARTMENTS WHERE ID_DEPARTMENT=DH.ID_OLD_DEPARTMENT) OLD_DEPARTMENT_NAME,
+      (SELECT FULLNAME FROM DEPARTMENTS WHERE ID_DEPARTMENT=DH.ID_NEW_DEPARTMENT) NEW_DEPARTMENT_NAME,
+      DH.USERID AS ID_PERFORMER,
+      (SELECT FULLNAME FROM V_CED_USER WHERE ID_USER=DH.USERID) PERFORMER_NAME,
+	  (SELECT LOGIN FROM USERS WHERE ID_USER=DH.USERID) PERFORMER_LOGIN,
+	  DH.LOG_DATE CHANGE_DATE
+	FROM DEPARTMENT_HISTORY DH
+	WHERE DH.ID_MDTASK
+  		<if test="filter.allversions == null">
+  			= #{filter.idmdtask}
+  		</if>
+  		<if test="filter.allversions != null">
+			IN (SELECT ID_MDTASK FROM MDTASK WHERE ID_PUP_PROCESS IS NOT NULL AND MDTASK_NUMBER=(SELECT MDTASK_NUMBER FROM MDTASK WHERE ID_MDTASK=#{filter.idmdtask}))
+  		</if>
+	 
+  </sql>
+  
+  <select id="getDepartmentHistory" parameterType="map" resultType="ru.md.domain.DepartmentHistory">
+    <include refid="departmentHistorySelect"/>
+	ORDER BY DH.LOG_DATE
+  </select>
+
+  <select id="getDepartmentHistoryPage" parameterType="map" resultType="ru.md.domain.DepartmentHistory">
+    select * from (select rownum rnum, a.* from (
+
+    <include refid="departmentHistorySelect"/>
+	ORDER BY DH.LOG_DATE
+
+    <![CDATA[
+	    ) a where rownum <= #{count} + #{start} ) where rnum >= #{start} + 1
+    ]]>
+  </select>
+
+  <select id="getDepartmentHistoryCount" resultType="java.lang.Long">
+    select count(*) from 
+    (
+    	<include refid="departmentHistorySelect"/>
+	    <include refid="departmentHistoryFilter"/>
+    )
+  </select>
+
+  <insert id="setDepartmentHistory">
+    INSERT INTO DEPARTMENT_HISTORY(ID_MDTASK, ID_OLD_DEPARTMENT, ID_NEW_DEPARTMENT, USERID, LOG_DATE)
+	VALUES(#{idmdtask}, #{olddepartment}, #{newdepartment}, #{iduser}, #{date})
+  
+  </insert>
+  
+</mapper>

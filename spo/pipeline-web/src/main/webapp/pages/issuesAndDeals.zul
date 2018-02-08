@@ -1,0 +1,9 @@
+<zk>
+    Сделки и выдачи PAGE
+    <if test="@load(vm.navigationData eq 'issues' or vm.navigationData eq '')">
+        <include id="nearbyIssues" mode="instant" sclass="content" src="pages/welcomes/nearbyIssues.zul"/>
+    </if>
+    <if test="@load(vm.navigationData eq 'deals' or vm.navigationData eq '')">
+        <div>СДЕЛКИ // TODO</div>
+    </if>
+</zk>

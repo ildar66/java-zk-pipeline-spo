@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.DashboardMapper">
+  <select id="getAllNewTask" resultType="ru.md.domain.dashboard.DashboardEvent">
+      SELECT t.id_mdtask,t.create_date event_date FROM v_spo_task_timing t
+where t.create_date is not null and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status in (1,5,6,7))
+  </select>
+
+  <select id="getOldLimitStruct" resultType="ru.md.domain.dashboard.DashboardEvent">
+    SELECT t.id_mdtask,t.struct event_date FROM v_spo_task_timing t
+     inner join mdtask m on m.id_mdtask=t.id_mdtask
+     where  m.tasktype='l' and t.struct is not null and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status =12)
+  </select>
+  <select id="getOldLimitExper" resultType="ru.md.domain.dashboard.DashboardEvent">
+    SELECT t.id_mdtask,t.exper event_date FROM v_spo_task_timing t
+     inner join mdtask m on m.id_mdtask=t.id_mdtask
+     where  m.tasktype='l' and t.exper is not null and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status =13)
+  </select>
+  <select id="getOldLimitAccept" resultType="ru.md.domain.dashboard.DashboardEvent">
+    select t.id_mdtask,
+     (select  max(e.date_event) from process_events e
+     where e.id_process_type_event=4 and e.id_process=t.id_pup_process) event_date
+        from mdtask t
+        inner join processes p on p.id_process=t.id_pup_process
+        where p.id_status=4 and t.tasktype='l'
+        and exists (select 1 from attributes a
+        inner join variables v on v.id_var=a.id_var
+        where a.id_process=t.id_pup_process and a.value_var='Одобрено' and v.name_var='Статус')
+        and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status in (14))
+  </select>
+
+  <select id="getOldProduct2fix" resultType="ru.md.domain.dashboard.DashboardEvent">
+      SELECT t.id_mdtask,t.fix_date event_date FROM v_spo_task_timing t
+      inner join mdtask m on m.id_mdtask=t.id_mdtask
+      where  m.version=1 and m.tasktype='p' and t.fix_date is not null and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status =2)
+  </select>
+
+  <select id="getOldProduct2trance" resultType="ru.md.domain.dashboard.DashboardEvent">
+     SELECT t.id_mdtask,t.tranche event_date FROM v_spo_task_timing t
+     inner join mdtask m on m.id_mdtask=t.id_mdtask
+     where  m.version=1 and m.tasktype='p' and t.tranche is not null and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status =3)
+  </select>
+
+    <select id="getLostDate" resultType="Date">
+      select  max(e.date_event) from mdtask t inner join process_events e on e.id_process=t.id_pup_process
+        where e.id_process_type_event=4 and t.id_mdtask=#{idMdtask}
+  </select>
+
+  <select id="getTaskTiming" resultType="ru.md.domain.TaskTiming">
+    select create_date, refuse_date, accept_date, fix_date, tranche, struct, exper
+    from v_spo_task_timing
+    where id_mdtask=#{idMdtask}
+  </select>
+
+  <select id="getAllLostTask" resultType="Long">
+      select t.id_mdtask from mdtask t
+        inner join processes p on p.id_process=t.id_pup_process
+        where p.id_status=4
+        and exists (select 1 from attributes a
+        inner join variables v on v.id_var=a.id_var
+        where a.id_process=t.id_pup_process and a.value_var='Отказано' and v.name_var='Статус')
+        and t.id_mdtask not in (select id_mdtask from SPO_SUM_HISTORY where id_status in (4,9,11,15))
+  </select>
+
+  <select id="getYesterdayTask" resultType="Long">
+      select distinct h.id_mdtask from spo_sum_history h where h.save_date = #{changeDate}
+  </select>
+
+    <update id="updateSpoSumHistory">
+    BEGIN
+    MERGE INTO spo_sum_history USING (SELECT #{sum} sum, #{currency} currency, #{idMdtask} id_mdtask, #{statusDate} status_date,
+    #{idStatus} id_status, #{saveDate} save_date, #{creditDocumentary} credit_documentary,
+    #{periodMonth} period_month, #{margin} margin, #{profit} profit, #{wal} wal, #{lineCount} line_count, #{availibleLineVolume} availible_line_volume,
+    #{sumProbability} sum_probability, #{weeks} weeks, #{statusPipeline} status_pipeline, #{productName} product_name, #{loanRate} loan_rate,
+    #{tradeDesc} trade_desc , #{proposedDtSigning} proposed_dt_signing, #{prolongation} prolongation, #{contractor} contractor, #{vtbContractor} vtb_contractor,
+    #{usePeriodMonth} use_period_month, #{rate} rate, #{pub} pub, #{cmnt} cmnt, #{planDate} plan_date, #{sumLast} sum_last, #{closeProbability} close_probability,
+    #{comission} comission, #{groupname} groupname, #{orgname} orgname, #{initdepartment} initdepartment,
+    #{interestRateFixed} interest_rate_fixed, #{interestRateDerivative} interest_rate_derivative
+    FROM DUAL) Z
+    ON (spo_sum_history.ID_MDTASK = Z.ID_MDTASK and spo_sum_history.id_status=Z.id_status and spo_sum_history.save_date=Z.save_date)
+    WHEN NOT MATCHED THEN
+    INSERT (id_sum_history, sum, currency, id_mdtask, status_date, id_status, save_date, credit_documentary,
+    period_month, margin, profit, wal, line_count, availible_line_volume, sum_probability, weeks, status_pipeline, product_name, loan_rate,
+    trade_desc, proposed_dt_signing, prolongation, contractor, vtb_contractor, use_period_month, rate, pub, cmnt, plan_date, sum_last,
+    close_probability, comission, groupname, orgname,initdepartment,interest_rate_fixed,interest_rate_derivative)
+    VALUES (SPO_SUM_HISTORY_SEQ.nextval, Z.sum, Z.currency, Z.id_mdtask, Z.status_date, Z.id_status, Z.save_date, Z.credit_documentary,
+    Z.period_month, Z.margin, Z.profit, Z.wal, Z.line_count, Z.availible_line_volume, Z.sum_probability, Z.weeks, Z.status_pipeline, Z.product_name, Z.loan_rate,
+    Z.trade_desc, Z.proposed_dt_signing, Z.prolongation, Z.contractor, Z.vtb_contractor, Z.use_period_month, Z.rate, Z.pub, Z.cmnt, Z.plan_date, Z.sum_last,
+    Z.close_probability, Z.comission, Z.groupname, Z.orgname,Z.initdepartment,Z.interest_rate_fixed,Z.interest_rate_derivative)
+    WHEN MATCHED THEN
+    UPDATE SET sum = Z.sum, currency = Z.currency,status_date = Z.status_date, credit_documentary = Z.credit_documentary,
+    period_month = Z.period_month, margin = Z.margin, profit = Z.profit, wal = Z.wal, line_count = Z.line_count,
+    availible_line_volume = Z.availible_line_volume, sum_probability = Z.sum_probability,
+    weeks = Z.weeks, status_pipeline = Z.status_pipeline, product_name = Z.product_name, loan_rate = Z.loan_rate,
+    trade_desc = Z.trade_desc, proposed_dt_signing = Z.proposed_dt_signing,
+    prolongation = Z.prolongation, contractor = Z.contractor, vtb_contractor = Z.vtb_contractor, use_period_month = Z.use_period_month, rate = Z.rate,
+    pub = Z.pub, cmnt = Z.cmnt, plan_date = Z.plan_date, sum_last = Z.sum_last, close_probability = Z.close_probability, comission = Z.comission, groupname = Z.groupname,
+    orgname = Z.orgname, initdepartment=Z.initdepartment,interest_rate_fixed=Z.interest_rate_fixed,interest_rate_derivative=Z.interest_rate_derivative;
+    delete from spo_sum_history_dep where SPO_SUM_HISTORY_ID in
+        (select id_sum_history from spo_sum_history
+        where spo_sum_history.ID_MDTASK = #{idMdtask} and spo_sum_history.id_status=#{idStatus} and spo_sum_history.save_date=#{saveDate});
+    delete from spo_sum_history_indrate where SPO_SUM_HISTORY_ID in
+        (select id_sum_history from spo_sum_history
+        where spo_sum_history.ID_MDTASK = #{idMdtask} and spo_sum_history.id_status=#{idStatus} and spo_sum_history.save_date=#{saveDate});
+    INSERT INTO spo_sum_history_dep (DEPARTMENT_ID, SPO_SUM_HISTORY_ID)
+        select id_department,
+        (select max(id_sum_history) from spo_sum_history
+            where spo_sum_history.ID_MDTASK = #{idMdtask} and spo_sum_history.id_status=#{idStatus} and spo_sum_history.save_date=#{saveDate})
+        from (select distinct u.id_department from project_team pt
+        inner join users u on u.id_user=pt.id_user
+        where id_mdtask=#{idMdtask});
+    <foreach collection="indRates" item="fo">
+        insert into spo_sum_history_indrate(spo_sum_history_id,RATE,indrate)
+        select (select max(id_sum_history) from spo_sum_history
+        where spo_sum_history.ID_MDTASK = #{idMdtask} and spo_sum_history.id_status=#{idStatus} and spo_sum_history.save_date=#{saveDate}),
+        #{fo.rate},#{fo.name} from dual;
+    </foreach>
+    END;
+    </update>
+
+    <sql id="baseForReports">
+        with rate as (
+            select curr.rate,
+                   curr.currencycode,
+                   usd.rate usd
+              from (select m.rate,
+                           m.currencycode
+                      from crm_fb_exchangerate m join(select currencycode,
+                                                             max(fb_exchangerateid) fb_exchangerateid
+                                                        from crm_fb_exchangerate <!-- таблица не имеет уникального ключа по currencycode, activedate. обезопасим запрос выходом на ключ по валюте -->
+                                                       where (currencycode, activedate) in (select currencycode, max(activedate)
+                                                                                              from crm_fb_exchangerate
+                                                                                             where activedate &lt;= #{endDate}
+                                                                                             group by currencycode)
+                                                       group by currencycode) i on m.fb_exchangerateid = i.fb_exchangerateid) curr,
+                   (select *
+                      from (select cr.rate
+                              from crm_fb_exchangerate cr
+                             where cr.currencycode = 'USD' and cr.activedate &lt;= #{endDate}
+                             order by cr.activedate desc)
+                             where rownum = 1) usd
+            ),
+            trance as (
+            select sum(dp.payment_amount * case when dp.payment_amount_currency != 'RUR' then r.rate else 1 end) sum_payment_amount_in_rub,
+                   sum(dp.payment_amount * case dp.payment_amount_currency when 'USD' then 1 when 'RUR' then 1/r.usd else r.rate/r.usd end) sum_payment_amount_in_usd,
+                   m.mdtask_number
+              from dp_payment dp join rate r on r.currencycode = dp.payment_amount_currency
+              join ced_common_deal_conclusion com on com.id_common_deal_conclusion = dp.id_common
+              join mdtask m on m.id_mdtask = com.id_mdtask
+             where com.status = 'PAYMENT_COMPLETED'
+               and dp.payment_completed_date between #{startDate} and #{endDate} + 1
+               and dp.payment_amount is not null
+               and dp.payment_amount_currency is not null
+             group by m.mdtask_number
+            ),
+            sh as (
+              select h.id_sum_history,
+                    h.initdepartment,
+                    h.id_mdtask,
+                    t.mdtask_number,
+                    t.version,
+                    h.id_status,
+                    s.task_type,
+                    s.status,
+                    s.orderdisp,
+                    h.currency,
+                    h.status_pipeline, <!-- стадия -->
+                    h.period_month, <!-- срок сделки -->
+                    h.margin, <!-- маржа % -->
+                    h.profit,
+                    h.profit * case when h.currency != 'RUR' then r.rate else 1 end profit_rub, <!-- ожидаемый доход, млн.руб. -->
+                    h.wal, <!-- средневзвешенный срок сделки -->
+                    h.close_probability, <!-- вероятность закрытия -->
+                    h.weeks, <!-- кол-во недель в пайплайне -->
+                    h.availible_line_volume,
+        round(h.availible_line_volume /1000000 * case when h.currency != 'RUR' then r.rate else 1 end, 1) availible_line_volume_rub, <!-- объем линии, доступный для выборки -->
+                    h.line_count,
+        round(h.line_count /1000000 * case when h.currency != 'RUR' then r.rate else 1 end, 1) line_count_rub, <!-- объем утилизации (выбранный обьём линии) -->
+                    case h.id_status
+                        when 3 then tr.sum_payment_amount_in_rub
+                        else (h."SUM" * case when h.currency != 'RUR' then r.rate else 1 end)
+                    end sum_in_rub, <!-- cумма сделки : сумма выдачи : cумму лимита выдачи -->
+                    case h.id_status
+                        when 3 then tr.sum_payment_amount_in_usd
+                        else (h."SUM" * case h.currency when 'USD' then 1 when 'RUR' then 1/r.usd else r.rate/r.usd end)
+                    end sum_in_usd, <!-- сумма, млн. дол. сша -->
+                    r.usd,
+                    r.rate usd_rate,
+                    h.trade_desc,
+                    h.groupname,
+                    h.product_name,
+                    h.prolongation,
+                    h.contractor,
+                    h.vtb_contractor,
+                    h.rate,
+                    h.loan_rate,
+                    h.pub,
+                    h.cmnt,
+                    h.plan_date,
+                    h.sum,
+                    h.sum_last,
+        round(h.availible_line_volume*h.CLOSE_PROBABILITY /100000000 * case when h.currency != 'RUR' then r.rate else 1 end, 1) sum_last_rub,
+                    h.orgname,
+                    h.use_period_month,
+        round(h.comission,2) comission,
+                    h.interest_rate_derivative,
+                    h.interest_rate_fixed,
+                    h.branch,
+                    t.main_org,
+                    h.proposed_dt_signing
+        from spo_sum_history h join spo_dashboard_status s on h.id_status = s.id_status and task_type = #{taskType}
+                               join rate r on r.currencycode = h.currency
+                               join mdtask t on t.id_mdtask = h.id_mdtask
+                               left outer join trance tr on t.mdtask_number = tr.mdtask_number
+               where (h.id_mdtask, h.id_status, h.save_date, h.id_sum_history) in (select id_mdtask, id_status, max(save_date), max(id_sum_history)
+                                                         from spo_sum_history
+                                                        where save_date between #{startDate}
+                                                                            and #{endDate}
+                                                          and status_date between #{startDate}
+                                                                              and #{endDate} + 1
+                                                        group by id_status, id_mdtask)
+                <!-- Обязательные фильтры -->
+                 and not exists (select 1 from pipeline where hideInReport = 'y' and id_mdtask = h.id_mdtask)
+                <!-- Условия гибкой фильтрации -->
+                <choose>
+                 <when test="tradingDesk != null and tradingDesk.size() > 0 and !tradingDeskOthers">
+                     <!-- задан только список трейдингдесков -->
+                    and h.trade_desc in
+                        <foreach item="item" index="index" collection="tradingDesk" open="(" separator="," close=")">
+                             '${item.name}'
+                        </foreach>
+                 </when>
+                 <when test="tradingDesk != null and tradingDesk.size() > 0 and tradingDeskOthers">
+                     <!-- задан и список трейдингдесков, и опция поиска не входящих в список -->
+                     and (h.trade_desc in
+                             <foreach item="item" index="index" collection="tradingDesk" open="(" separator="," close=")">
+                                 '${item.name}'
+                             </foreach>
+                             or not h.trade_desc in (select name from cd_pipeline_trading_desk)
+                         )
+                 </when>
+                 <when test="(tradingDesk == null or tradingDesk.size() == 0) and tradingDeskOthers">
+                     <!-- задан только опция поиска не входящих в список -->
+                     and (not h.trade_desc in (select name from cd_pipeline_trading_desk) or h.trade_desc is null)
+                 </when>
+                 <otherwise><!-- фильтр не учавствует в запросе --></otherwise>
+               </choose>
+                <if test="departments != null and departments.size() > 0">
+                    and exists(select 1
+                                 from spo_sum_history_dep d
+                                where d.department_id in
+                                        <foreach item="item" index="index" collection="departments" open="(" separator="," close=")">
+                                            #{item.id}
+                                        </foreach>
+                                  and d.spo_sum_history_id = h.id_sum_history)
+                </if>
+                <if test="creditDocumentary != null">
+                   and h.credit_documentary = #{creditDocumentary}
+                </if>
+            )
+    </sql>
+
+    <select id="getMainReport" resultType="ru.md.domain.dashboard.MainReportRow">
+        <include refid="baseForReports"/>
+            select s.id_status,
+                   s.task_type,
+                   s.orderdisp,
+                   round(sum(sh.sum_in_rub) / 1000000) sum_rub, <!-- cумма сделки : сумма выдачи : cумму лимита выдачи -->
+                   round(sum(sh.sum_in_usd) / 1000000) sum_usd, <!-- сумма, млн. дол. сша -->
+                   count(sh.id_status) count_all, <!-- количество сделк -->
+                   round(avg(period_month)) avg_period_month, <!-- средний срок -->
+                   round(sum(period_month)) sum_period_month,
+                   round((sum(case when not margin is null and not sum_in_rub is null and sum_in_rub != 0 then sh.sum_in_rub * margin / 100. end) / sum(case when not margin is null and not sum_in_rub is null and sum_in_rub != 0 then sh.sum_in_rub end)) * 100., 2) wav_margin, <!-- средневсзвешенная маржа %  пример, две сделки 100 р 5% и 500 р 10%. средневзвешенная маржа: (100*0,05+500*0,1)/(100+500)=0,0917=9,17% -->
+                   round(sum(profit_rub) / 1000000) sum_profit, <!-- ожидаемый доход, млн.руб. ??? верно ли считаем -->
+                   round(avg(wal)) avg_wal, <!-- средневзвешенный срок сделки -->
+                   round(sum(case when sh.id_status in (1,6,7) and not close_probability is null then sh.sum_in_rub * close_probability / 100. end) / 1000000) sum_rub_prob, <!-- сумма сделки с учетом вероятности для новых -->
+                   round(avg(weeks)) avg_weeks, <!-- среднее кол-во недель в пайплайне -->
+                   round(sum(weeks)) sum_weeks,
+                   round(avg(sh.sum_in_rub) / 1000000) avg_sum_rub, <!-- средняя сумма, млн. руб. -->
+                   round(sum(case when sh.id_status in (2,8,10) then availible_line_volume_rub end)) sum_availible_line_volume, <!-- объем линии, доступный для выборки    для "Заключенные сделки" -->
+                   round(sum(case when sh.id_status in (2,8,10) then line_count_rub end)) sum_line_count, <!-- объем утилизации (выбранный обьём линии) -->
+                   round(avg(line_count_rub)) avg_line_count <!-- средняя сумма выборки, -->
+            from spo_dashboard_status s left outer join sh on sh.id_status = s.id_status
+            where s.task_type = #{taskType}
+            group by s.id_status, s.task_type, s.orderdisp
+            order by s.orderdisp
+    </select>
+
+    <select id="getTopReport" resultType="ru.md.domain.dashboard.TopReportRow">
+        select rownum nn, tt.* from (
+        <include refid="baseForReports"/>
+         select ek.inn, sh.main_org slx_code_ek, r.id_crmorg slx_code_kz, o.industry, tt.fix_date,
+                case when #{endDate, jdbcType=DATE} >= cast(tt.create_date as date) then round((#{endDate, jdbcType=DATE} - cast(tt.create_date as date))/7) else 0 end weeks_calc,
+                sh.*
+           from sh left outer join crm_ek ek on sh.main_org = ek.id
+                   left outer join r_org_mdtask r on sh.id_mdtask = r.id_mdtask and r.order_disp = 0
+                   left outer join crm_organization o on o.id_org = r.id_crmorg
+                   left outer join v_spo_task_timing tt on tt.id_mdtask = sh.id_mdtask
+          where sh.id_status in (6,1,7,5,12)
+          order by sum_in_rub desc nulls last) tt
+         where rownum &lt;= #{topLimit}
+    </select>
+
+    <select id="getDetailReport" resultType="ru.md.domain.dashboard.DetailReportRow">
+        <include refid="baseForReports"/>
+        select tp.description_process bpName,
+               t.mdtask_number,
+               t.version,
+               sh.*
+        from sh join mdtask t on t.id_mdtask = sh.id_mdtask
+                join processes p on p.id_process = t.id_pup_process
+                join type_process tp on tp.id_type_process = p.id_type_process
+        <where>
+            <if test = "idStatus != null">
+                and sh.id_status = #{idStatus}
+            </if>
+            <if test = "branch != null">
+                and sh.branch = #{branch}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTaskTypeStatuses" resultType="ru.md.domain.dashboard.TaskTypeStatus" >
+        select ID_STATUS,
+               STATUS,
+               TASK_TYPE,
+               ORDERDISP
+          from SPO_DASHBOARD_STATUS S
+         where S.TASK_TYPE = #{taskType}
+         order by S.TASK_TYPE, S.ORDERDISP
+    </select>
+
+    <select id="getTaskTypeStatus" resultType="ru.md.domain.dashboard.TaskTypeStatus" >
+        select ID_STATUS,
+               STATUS,
+               TASK_TYPE,
+               ORDERDISP
+          from SPO_DASHBOARD_STATUS S
+         where S.ID_STATUS = #{id}
+    </select>
+
+
+    <select id="getPipelineTradingDesk" resultType="ru.md.domain.dashboard.PipelineTradingDesk">
+        select ptd.ID,
+               ptd.NAME
+          from cd_pipeline_trading_desk ptd
+         order by ptd.name
+    </select>
+
+    <update id="clearOldClientReport">
+        <![CDATA[
+        delete from SPO_CLIENT_REPORT r where r.save_date<CURRENT_TIMESTAMP - interval '7' day
+        ]]>
+    </update>
+
+    <update id="insertSpoClientReport">
+        insert into spo_client_report
+        (id_mdtask, save_date, mdtask_number, version, category, state, task_type, task_sum, currency, cur_rate, rate_date, sum_rub, sum_usd,
+        period_month, margin, profit, weeks, create_date, proposed_dt_signing, plan_date, update_date, industry, id_group, group_name,
+        id_org, id_kz, main_org, kz_name, supply_org, status, close_probability, product_name, supply, ensurings, targets, description, cmnt,
+        addition_business, use_period_month, wal, fixed_float, base_rate, fixrate, loan_rate, comission, pc_der, pc_total, line_count,
+        availible_line_volume, pub, priority, new_client, flow_investment, product_manager, analyst, client_manager, structurator, gss, contractor,
+        vtb_contractor, trade_desc, prolongation, project_name)
+        values
+        (#{idMdtask}, #{saveDate}, #{mdtaskNumber}, #{version}, #{category}, #{state}, #{taskType}, #{taskSum}, #{currency}, #{curRate}, #{rateDate},
+        #{sumRub}, #{sumUsd}, #{periodMonth}, #{margin}, #{profit}, #{weeks}, #{createDate}, #{proposedDtSigning}, #{planDate}, #{updateDate},
+        #{industry}, #{idGroup}, #{groupName}, #{idOrg}, #{idKz}, #{mainOrg}, #{kzName}, #{supplyOrg}, #{status}, #{closeProbability}, #{productName},
+        #{supply}, #{ensurings}, #{targets}, #{description}, #{cmnt}, #{additionBusiness}, #{usePeriodMonth}, #{wal}, #{fixedFloat}, #{baseRate},
+        #{fixrate}, #{loanRate}, #{comission}, #{pcDer}, #{pcTotal}, #{lineCount}, #{availibleLineVolume}, #{pub}, #{priority},
+        #{newClient}, #{flowInvestment}, #{productManager}, #{analyst}, #{clientManager}, #{structurator}, #{gss}, #{contractor},
+        #{vtbContractor}, #{tradeDesc}, #{prolongation}, #{projectName})
+    </update>
+    <select id="getBranchStatistic" resultType="ru.md.domain.BranchStatistic">
+        select h.branch name,sum(h.sum) sum,h.currency
+        <include refid="getTaskList_from"/>
+        group by h.branch,h.currency
+    </select>
+    <sql id="getTaskList">
+        select distinct h.id_mdtask
+        <include refid="getTaskList_from"/>
+    </sql>
+    <sql id="getTaskList_from">
+        from SPO_SUM_HISTORY h
+        inner join mdtask t on t.id_mdtask=h.id_mdtask
+        where h.id_status in
+        <foreach item="item" index="index" collection="statusids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and h.status_date between #{from} AND #{to}+1
+        and h.save_date between #{from} AND #{to}
+        and not exists (select 1 from pipeline where hideInReport='y' and id_mdtask=h.id_mdtask)
+        and not exists
+        (select *
+        from SPO_SUM_HISTORY hl
+        where hl.id_status = h.id_status
+        and hl.status_date between #{from} AND #{to}+1
+        and hl.save_date between #{from} AND #{to}
+        and hl.id_sum_history > h.id_sum_history and hl.id_mdtask=h.id_mdtask
+        )
+        <if test="filter.searchNumber != null">
+            AND t.mdtask_number = #{filter.searchNumber}
+        </if>
+        <if test="filter.searchCurrency != ''">
+            AND h.currency = #{filter.searchCurrency}
+        </if>
+        <if test="filter.searchPriority != ''">
+            and exists (select 1 from  variables  v inner join
+             attributes a on a.id_var=v.id_var where v.name_var='Приоритет' and a.id_process=t.id_pup_process
+            and lower(a.value_var) like '%' || lower(#{filter.searchPriority}) || '%')
+        </if>
+        <if test="filter.searchProcessType != ''">
+            AND t.id_pup_process in
+            (select p.id_process from processes p where p.id_type_process=#{filter.searchProcessType})
+        </if>
+        <if test="filter.searchSumFrom != null">
+            <![CDATA[
+            AND h.SUM >= #{filter.searchSumFrom}
+            ]]>
+        </if>
+        <if test="filter.searchSumTo != null">
+            <![CDATA[
+            AND h.SUM <= #{filter.searchSumTo}
+            ]]>
+        </if>
+        <if test="filter.searchType != ''">
+            and exists (select 1 from  variables  v inner join
+             attributes a on a.id_var=v.id_var where v.name_var='Тип кредитной заявки' and a.id_process=t.id_pup_process
+            and lower(a.value_var) like '%' || lower(#{filter.searchType}) || '%')
+        </if>
+        <if test="filter.searchStatus != ''">
+            and exists (select 1 from  variables  v inner join
+             attributes a on a.id_var=v.id_var where v.name_var='Статус' and a.id_process=t.id_pup_process
+            and lower(a.value_var) like '%' || lower(#{filter.searchStatus}) || '%')
+        </if>
+        <if test="filter.searchInitDepartment != ''">
+            and lower(h.INITDEPARTMENT) like '%' || lower(#{filter.searchInitDepartment}) || '%'
+        </if>
+        <if test="filter.searchContractor != ''">
+            and t.main_org like #{filter.searchContractor}
+        </if>
+        <if test="listParam.creditDocumentary > 0">
+            and h.CREDIT_DOCUMENTARY = #{listParam.creditDocumentary}
+        </if>
+        <if test="listParam.branch != '' and listParam.branch != 'Не определено'">
+            and h.branch like #{listParam.branch}
+        </if>
+        <if test="listParam.branch == 'Не определено'">
+            and h.branch is null
+        </if>
+        <if test="listParam.departmentsIds != null">
+            and exists(select 1 from spo_sum_history_dep where SPO_SUM_HISTORY_ID=h.ID_SUM_HISTORY
+            and DEPARTMENT_ID in
+            <foreach item="item" index="index" collection="listParam.departmentsIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="listParam.tradingDeskSelectedIds != null">
+            and (h.TRADE_DESC in (
+            SELECT PTD.NAME FROM CD_PIPELINE_TRADING_DESK PTD where PTD.ID in
+            <foreach item="item" index="index" collection="listParam.tradingDeskSelectedIds"
+                     open="(" separator="," close=")">#{item}
+            </foreach>
+            )
+            <if test="listParam.isTradingDeskOthers == 'true'">
+                or h.TRADE_DESC not in (SELECT PTD.NAME FROM CD_PIPELINE_TRADING_DESK PTD)
+            </if>
+            )
+        </if>
+    </sql>
+    <select id="getTaskListPage" resultType="Long">
+        select id_mdtask from (select rownum rnum, a.* from (
+        <include refid="getTaskList"/>
+        order by id_mdtask desc
+        <![CDATA[
+        ) a where rownum <= (10*(#{page}-1)+10) ) where rnum >= ((#{page}-1)*10+1)
+        ]]>
+    </select>
+    <select id="getTaskListCount" resultType="Long">
+        select count(*) from (
+        <include refid="getTaskList"/>
+        )
+    </select>
+    <select id="getTaskListSum" resultType="ru.md.domain.dashboard.Sum">
+        select sum(h.sum) value,h.currency
+        from SPO_SUM_HISTORY h
+        where h.id_status in
+        <foreach item="item" index="index" collection="statusids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and h.status_date between #{from} AND #{to}+1
+        and h.save_date between #{from} AND #{to}
+        <if test="listParam.creditDocumentary > 0">
+            and h.CREDIT_DOCUMENTARY = #{listParam.creditDocumentary}
+        </if>
+        <if test="listParam.departmentsIds != null">
+            and exists(select 1 from spo_sum_history_dep where SPO_SUM_HISTORY_ID=h.ID_SUM_HISTORY
+            and DEPARTMENT_ID in
+            <foreach item="item" index="index" collection="listParam.departmentsIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="listParam.tradingDeskSelectedIds != null">
+            and (h.TRADE_DESC in (
+            SELECT PTD.NAME FROM CD_PIPELINE_TRADING_DESK PTD where PTD.ID in
+            <foreach item="item" index="index" collection="listParam.tradingDeskSelectedIds"
+                     open="(" separator="," close=")">#{item}
+            </foreach>
+            )
+            <if test="listParam.isTradingDeskOthers == 'true'">
+                or h.TRADE_DESC not in (SELECT PTD.NAME FROM CD_PIPELINE_TRADING_DESK PTD)
+            </if>
+            )
+        </if>
+        and not exists
+        (select *
+        from SPO_SUM_HISTORY hl
+        where hl.id_status = h.id_status
+        and hl.status_date between #{from} AND #{to}+1
+        and hl.save_date between #{from} AND #{to}
+        and hl.id_sum_history > h.id_sum_history and hl.id_mdtask=h.id_mdtask
+        )
+        group by h.currency
+    </select>
+    <select id="getTaskListCedSum" resultType="ru.md.domain.dashboard.Sum">
+        SELECT sum(DP.PAYMENT_AMOUNT) value, DP.PAYMENT_AMOUNT_CURRENCY currency
+        FROM DP_PAYMENT DP JOIN CED_COMMON_DEAL_CONCLUSION COM ON COM.ID_COMMON_DEAL_CONCLUSION = DP.ID_COMMON
+        JOIN MDTASK M ON M.ID_MDTASK = COM.ID_MDTASK
+        WHERE COM.STATUS = 'PAYMENT_COMPLETED'
+        and DP.PAYMENT_COMPLETED_DATE between #{from} AND #{to}+1
+        and DP.PAYMENT_AMOUNT is not null and DP.PAYMENT_AMOUNT_CURRENCY is not null
+        and M.MDTASK_NUMBER in
+        (
+            select t.mdtask_number
+            from SPO_SUM_HISTORY h
+            inner join mdtask t on t.id_mdtask=h.id_mdtask
+            where h.id_status = #{statusid}
+            and h.status_date between #{from} AND #{to}+1
+            and h.save_date between #{from} AND #{to}
+            <if test="listParam.creditDocumentary > 0">
+                and h.CREDIT_DOCUMENTARY = #{listParam.creditDocumentary}
+            </if>
+            <if test="listParam.departmentsIds != null">
+                and exists(select 1 from spo_sum_history_dep where SPO_SUM_HISTORY_ID=h.ID_SUM_HISTORY
+                and DEPARTMENT_ID in
+                <foreach item="item" index="index" collection="listParam.departmentsIds"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="listParam.tradingDeskSelectedIds != null">
+                and (h.TRADE_DESC in (
+                SELECT PTD.NAME FROM CD_PIPELINE_TRADING_DESK PTD where PTD.ID in
+                <foreach item="item" index="index" collection="listParam.tradingDeskSelectedIds"
+                         open="(" separator="," close=")">#{item}
+                </foreach>
+                )
+                <if test="listParam.isTradingDeskOthers == 'true'">
+                    or h.TRADE_DESC not in (SELECT PTD.NAME FROM CD_PIPELINE_TRADING_DESK PTD)
+                </if>
+                )
+            </if>
+            and not exists
+            (select *
+            from SPO_SUM_HISTORY hl
+            where hl.id_status = h.id_status
+            and hl.status_date between #{from} AND #{to}+1
+            and hl.save_date between #{from} AND #{to}
+            and hl.id_sum_history > h.id_sum_history and hl.id_mdtask=h.id_mdtask)
+        )
+        group by DP.PAYMENT_AMOUNT_CURRENCY
+    </select>
+    <select id="getDealCreateDate" resultType="Date">
+       select tt.create_date
+         from v_spo_task_timing tt
+        where tt.id_mdtask = #{idMdtask}
+    </select>
+
+    <select id="getDealChangeDate" resultType="Date">
+       select max(te.date_event)
+         from task_events te join tasks t on t.id_task = te.id_task
+                             join mdtask m on m.id_pup_process = t.id_process
+        where m.id_mdtask = #{idMdtask}
+    </select>
+
+    <select id="getDealTeamMemberByRoleName" resultType="String">
+       select max(u.full_name)
+         from users u join project_team pt  on u.id_user = pt.id_user
+                      join user_in_role ur on ur.id_user = u.id_user
+                      join roles ro on ro.id_role = ur.id_role
+                      join mdtask t on t.id_mdtask = pt.id_mdtask
+                      join processes p on p.id_process = t.id_pup_process and p.id_type_process = ro.id_type_process
+        where pt.teamtype = 'p'
+          and pt.id_mdtask = #{idMdtask}
+          and ro.name_role = #{roleName}
+          and exists (select 1
+                        from assign a join process_events pe on a.id_process_event = pe.id_process_event
+                       where a.id_role = ro.id_role
+                         and a.id_user_to = u.id_user
+                         and pe.id_process = t.id_pup_process)
+    </select>
+
+    <select id="getRate" resultType="ru.md.domain.IndRate">
+       select i.indrate "name",
+              i.rate
+         from spo_sum_history_indrate i
+        where i.spo_sum_history_id = #{id}
+    </select>
+    <update id="savePipelineSettings">
+        BEGIN
+            insert into spo_dash_user_settings(user_id,SETTINGS_ID)
+            select #{idUser},spo_dash_user_settings_seq.nextval from dual where not exists (select * from spo_dash_user_settings where user_id=#{idUser} and report_name is null);
+            UPDATE spo_dash_user_settings SET setting=#{setting} where user_id=#{idUser} and report_name is null;
+        END;
+    </update>
+    <select id="getPipelineSettings" resultType="String">
+        select setting from spo_dash_user_settings where user_id=#{idUser} and report_name is null
+    </select>
+    <select id="getPipelineSettingsName" resultType="String">
+        select setting from spo_dash_user_settings where SETTINGS_ID=#{id}
+    </select>
+    <select id="getPipelinePubSettingsName" resultType="String">
+        select setting from spo_dash_user_settings where pub=1 and report_name=#{name}
+    </select>
+    <update id="fixClientRefused">
+        delete from spo_sum_history h where h.id_mdtask in
+(select t.id_mdtask from attributes a
+inner join variables v on a.id_var=v.id_var
+inner join mdtask t on t.id_pup_process=a.id_process
+where v.name_var='Статус' and a.value_var='Ошибочно заведенная заявка')
+    </update>
+    <select id="getNamedPipelineSettings" resultType="ru.md.domain.ReportSetting">
+        select SETTINGS_ID id, user_id, pub,report_name name from spo_dash_user_settings where user_id=#{idUser} and report_name is not null
+        and (pub is null or pub=0)
+        order by report_name
+    </select>
+    <select id="getNamedPubPipelineSettings" resultType="ru.md.domain.ReportSetting">
+        select SETTINGS_ID id, user_id, pub,report_name name from spo_dash_user_settings where report_name is not null and pub=1 order by report_name
+    </select>
+    <select id="getPipelineSetting" resultType="ru.md.domain.ReportSetting">
+        select SETTINGS_ID id, user_id, pub,report_name name from spo_dash_user_settings where SETTINGS_ID=#{id}
+    </select>
+    <update id="savePipelineSettingsByName">
+        BEGIN
+        insert into spo_dash_user_settings(user_id,report_name,SETTINGS_ID)
+        select #{idUser},#{name},spo_dash_user_settings_seq.nextval from dual
+        where not exists (select * from spo_dash_user_settings where user_id=#{idUser} and report_name =#{name});
+        UPDATE spo_dash_user_settings SET setting=(select setting from spo_dash_user_settings where user_id=#{idUser} and report_name is null) where user_id=#{idUser} and report_name =#{name};
+        END;
+    </update>
+    <update id="delPipelineSettings">
+        delete from spo_dash_user_settings where SETTINGS_ID=#{id}
+    </update>
+    <update id="renamePipelineSettingsByName">
+        update spo_dash_user_settings set report_name =#{newname} where user_id=#{idUser} and report_name =#{name}
+    </update>
+    <update id="renamePipelinePubSettingsByName">
+        update spo_dash_user_settings set report_name =#{newname} where pub=1 and report_name =#{name}
+    </update>
+    <update id="copyPipelineSettingsByName">
+        insert into spo_dash_user_settings (USER_ID,SETTING,REPORT_NAME,PUB,SETTINGS_ID)
+        select USER_ID,SETTING,#{newname},#{pub},spo_dash_user_settings_seq.nextval from spo_dash_user_settings where user_id=#{idUser} and report_name =#{name}
+    </update>
+    <select id="getLastUpdateDate" resultType="Date">
+        select max(h.save_date) from spo_sum_history h where h.id_mdtask=#{idMdtask}
+    </select>
+</mapper>

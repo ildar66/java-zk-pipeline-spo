@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>ru.masterdm.pup</groupId>
+  <artifactId>graphGen</artifactId>
+  <versioning>
+    <release>1.0</release>
+    <versions>
+      <version>1.0</version>
+    </versions>
+    <lastUpdated>20121128063810</lastUpdated>
+  </versioning>
+</metadata>

@@ -1,0 +1,355 @@
+
+/**
+This stylesheet defines 11 elements of a UI:
+
+	header (class)		the header area where the logo appears
+	header-menu			the header area where global menu options appear
+	header-search		the header area where the search bar appears
+	menu				a left-hand side menu area where menu links can be placed
+	main				where the main content of each page appears
+	footer 				the footer area at the bottom
+	panel				a panel that can be used to separate inline elements
+	tabnav				draws tabs for navigating
+	filelist			area for listing files
+	tabledata (class)	area for showing data in a table format (search results, lists of any type)
+	error (class)		area for displaying an error
+	fakelink (class)	buttons that look like html link
+    icon (class)		controls icon
+
+*/
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: white;
+    color: black;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 12pt;
+}
+
+/** Element: header */
+
+.header {
+    background: #EBF0F8;
+    text-align: left;
+    width:100%;
+}
+
+.header h1 {
+    font-size: 41pt;
+    color:#669;
+    margin:0;
+    padding:0;
+}
+
+.header h2 {
+    margin:0;
+    padding:0;
+    font-size:7pt;
+    color:#669;
+}
+
+/** Element: header-menu */
+
+#header-menu {
+    font-size:12px;
+    background: #EBF0F8;
+    text-align: right;
+    padding-bottom:2px;
+    border-bottom: 1px dotted #5B88C4;
+}
+
+#header-menu a{
+    color:#000;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+#header-menu a:hover {
+    color:#ccc;
+}
+
+/** Element: header-link */
+
+#header-link {
+    font-size:12px;
+    text-align: left;
+}
+
+#header-link a{
+    color:black;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+#header-link a:hover {
+    color:#ccc;
+}
+
+/** Element: header-search */
+
+#header-search {
+    font-size:12px;
+    color:#fff;
+    background: #69c;
+    border-bottom: 1px dotted #036;
+    padding-right: 5px;
+    text-align: right;
+    padding:3px;
+    margin:0px;
+}
+
+#header-search input,select {
+    font-size:12px;
+}
+
+#header-search a {
+    font-size:12px;
+    color:#fff;
+}
+
+#header-search form {
+    padding:0px;
+    margin:0px;
+}
+
+/** Element: menu */
+
+#menu {
+    width:100px;
+    height:100%;
+    background-color: #F0F0F0;
+    vertical-align: top;
+    font-size: 70%;
+    border-right: 1px dashed #ccc;
+    padding: 1em 0.3em 0.3em 0.3em;
+}
+
+#menu h3 {
+    font-size:12pt;
+    color:#000;
+    font-weight:bold;
+    font-family:Verdana;
+}
+
+#menu a {
+    color:#000;
+    font-family:Verdana;
+}
+
+/** Element: main */
+
+#main {
+    font-size:12px;
+    padding:6px;
+}
+
+#main h1 {
+    font-size:14pt;
+    color:#669;
+    font-weight:bold;
+    font-family:Verdana;
+}
+
+#main h2 {
+    margin-top:0px;
+    font-size:12pt;
+    color:#669;
+    font-variant:small-caps;
+}
+
+#main p {
+    font-size:12px;
+}
+
+#main td {
+    font-size:12px;
+}
+
+#main input {
+    font-size:12px;	
+}
+
+/** Element: footer */
+
+#footer {
+    font-size:10px;
+    vertical-align: top;
+    text-align:center;
+    padding: 6px;
+    border-top: 1px dashed #ccc;
+}
+
+/** Element: panel */
+
+#panel {
+	padding:5px;
+    border: 1px solid #8BA8C4;
+    margin: 20px;
+    text-align:center;
+    font-size:10px;
+}
+
+/** Element: tabnav */
+
+ul#tabnav {
+    padding-top:10px;
+    font: bold 12px verdana, arial, sans-serif;
+    list-style-type: none;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #8BA8C4;
+    margin: 0;
+}
+
+ul#tabnav li {
+    float: left;
+    height: 21px;
+    background-color: #EBF0F8;
+    margin: 2px 2px 0 2px;
+    border: 1px solid #8BA8C4;
+}
+
+#tabnav a {
+    float: left;
+    display: block;
+    color: #5B88C4;
+    text-decoration: none;
+    padding: 4px;
+}
+
+#tabnav a:hover {
+    background: #fff;
+}
+
+#tabnav a.active {
+     background: #fff;
+     border-bottom:1px solid #fff;
+}
+
+/** Element: filelist */
+
+#filelist{
+
+}
+
+#filelist p{
+    text-align:center;
+}
+
+
+#sidebar{
+    vertical-align: top;
+    text-align: center;
+    width:100px;
+
+}
+
+/** Class: tabledata */
+
+.tabledata table {
+    font-size:12px;
+    border:1px solid #ccc;
+    border-collapse:collapse;
+	margin:10px;
+}
+
+.tabledata td {
+     border:1px solid #ccc;
+	 padding:3px;
+	 margin:0px;
+}
+
+.tabledata th {
+    font-size:12px;
+    border:1px solid #ccc;
+	padding:3px;
+    margin:0px;
+}
+
+.tabledatapr table {
+    font-size:12px;
+    border:1px solid #ccc;
+    border-collapse:collapse;
+	margin:10px;
+}
+
+.tabledatapr td {
+     border:1px solid #ccc;
+	 padding:20px;
+	 margin:0px;
+}
+
+.tabledatapr th {
+    font-size:12px;
+    border:1px solid #ccc;
+	padding:3px;
+    margin:0px;
+}
+
+
+/** Element: buttonnav */
+
+ul#buttonnav {
+    float:left;
+    font: bold 12px verdana, arial, sans-serif;
+    list-style-type: none;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #8BA8C4;
+    margin: 0;
+}
+
+ul#buttonnav li {
+    padding-left:0px;
+    /**background-color: #DB9370;*/
+    background-color: #EBF0F8;
+    margin: 0px 4px 2px 0px;
+    /**border: 1px solid #990000;*/
+    border: 1px solid #8BA8C4;
+}
+
+ul#buttonnav li:hover {
+   background: #fff;
+}
+
+#buttonnav a {
+    display: block;
+    /**color: #990000;*/
+    color: #5B88C4;
+    text-decoration: none;
+    padding: 4px;
+}
+
+#buttonnav a:hover {
+    background: #fff;
+}
+
+
+/** class: error */
+.error {
+    color:#c00;
+    font-size:12px;
+    font-weight:bold;
+}
+
+/** class: fakelink */
+.fakelink {
+  	font-size:80%;
+    margin:0px;
+    text-align:left;
+    padding:0px;
+    border-style:none;
+    border-width:0px;
+    text-decoration:underline;
+    background:transparent;
+    color:blue;
+    cursor:pointer;
+}
+
+/** class: icon */
+.icon{
+    width:50px;
+}
+
+.r-aligned{
+	text-align:right;
+    margin-right:5%;
+}

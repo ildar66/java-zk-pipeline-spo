@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webappbnd:WebAppBinding xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:common="common.xmi" xmlns:webappbnd="webappbnd.xmi" xmi:id="WebAppBinding_1171428855613" virtualHostName="default_host">
+  <webapp href="WEB-INF/web.xml#WebApp_1171428855613"/>
+  <resRefBindings xmi:id="ResourceRefBinding_1233911984349" jndiName="jdbc/CRM">
+    <bindingResourceRef href="WEB-INF/web.xml#ResourceRef_1233911984363"/>
+  </resRefBindings>
+  <resRefBindings xmi:id="ResourceRefBinding_1272290742843" jndiName="jdbc/LOANS">
+    <bindingResourceRef href="WEB-INF/web.xml#ResourceRef_1272290742843"/>
+  </resRefBindings>
+  <ejbRefBindings xmi:id="EjbRefBinding_1275562892562" jndiName="ejb/org/uit/director/db/DBFlexWorkflowHome">
+    <bindingEjbRef xmi:type="common:EJBLocalRef" href="WEB-INF/web.xml#EJBLocalRef_1275562892562"/>
+  </ejbRefBindings>
+  
+</webappbnd:WebAppBinding>

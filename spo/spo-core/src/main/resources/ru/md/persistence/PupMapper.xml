@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.PupMapper">
+    <select id="getPipelineProcessTypes" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap">
+        SELECT TP.ID_TYPE_PROCESS ID, TP.DESCRIPTION_PROCESS NAME
+          FROM TYPE_PROCESS TP
+         WHERE EXISTS (SELECT 1
+                         FROM USER_IN_ROLE UR JOIN ROLES R ON R.ID_ROLE = UR.ID_ROLE
+                        WHERE UR.ID_USER = #{userId}
+                          AND UR.STATUS = 'Y'
+                          AND TP.ID_TYPE_PROCESS = R.ID_TYPE_PROCESS
+                          AND (    TP.DESCRIPTION_PROCESS = 'Крупный бизнес ГО'
+                               AND R.NAME_ROLE IN ('Структуратор', 'Руководитель структуратора')
+                                OR TP.DESCRIPTION_PROCESS = 'Крупный бизнес ГО (Структуратор за МО)'
+                               AND R.NAME_ROLE IN ('Руководитель структуратора (за МО)', 'Структуратор (за МО)')
+                              )
+                      )  
+         ORDER BY TP.DESCRIPTION_PROCESS
+    </select>
+    <select id="getAllProcessTypes" resultMap="ru.md.persistence.CompendiumMapper.commonDictionaryResultMap">
+        SELECT TP.ID_TYPE_PROCESS ID, TP.DESCRIPTION_PROCESS NAME
+          FROM TYPE_PROCESS TP
+         ORDER BY TP.DESCRIPTION_PROCESS
+    </select>
+    <select id="getPupTask" resultType="ru.md.domain.PupTask">
+        select ID_TASK,ID_STAGE_TO,ID_USER,ID_DEPARTMENT,ID_STATUS,ID_TYPE_PROCESS from tasks where ID_TASK=#{id}
+    </select>
+    <select id="getPUPAttributeValue" resultType="string">
+        SELECT max(a.value_var) FROM variables v INNER JOIN attributes a ON a.id_var=v.id_var
+        WHERE v.name_var LIKE #{nameVar} AND a.id_process=#{idProcess}
+    </select>
+</mapper>

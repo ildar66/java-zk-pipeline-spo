@@ -1,0 +1,39 @@
+<!DOCTYPE configuration>
+<!-- non-official xsd: https://raw.github.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd --> 
+<configuration debug="false">
+    <property name="logFile" value="./logs/master-domino/${project.parent.artifactId}/${project.parent.artifactId}.log" />
+    <logger name="liquibase" level="DEBUG" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logFile}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logFile}.%d.zip</fileNamePattern>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%date] [%level] %msg [%file:%line] [%logger{100}] [%thread] [CPPS-${project.version}]%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[CPPS-${project.version}] [%level] %msg [%file:%line] [%logger{100}]%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="ru.md.persistence" level="DEBUG" />
+    <logger name="ru.md.persistence.MdTaskMapper" level="TRACE" />
+    <logger name="ru.masterdm.spo.logic.RateLogic" level="DEBUG" />
+    <logger name="ru.masterdm.integration" level="DEBUG" />
+    <logger name="ru.masterdm.integration.cc" level="DEBUG" />
+    <logger name="ru.md.spo.ejb" level="TRACE" />
+    <logger name="ru.md.controller.ReturnToTaskListController" level="TRACE" />
+    <logger name="ru.md.helper.TaskHelper" level="TRACE" />
+    <logger name="ru.md.persistence.DashboardMapper" level="TRACE" />
+
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
+

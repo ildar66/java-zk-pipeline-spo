@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib>
+    <description>
+        Extending core methods and tags for zweb in DSP
+    </description>
+
+    <import>
+        <import-name>CommonFns</import-name>
+        <import-class>ru.masterdm.spo.dashboard.fn.CommonFns</import-class>
+    </import>
+
+    <function>
+        <name>formatNumberSafe</name>
+        <function-class>ru.masterdm.spo.dashboard.fn.CommonFns</function-class>
+        <function-signature>java.lang.String formatNumberSafe(java.lang.Object, java.lang.String)</function-signature>
+        <description>
+            Null safe. Returns the formatted number string.
+        </description>
+    </function>
+
+
+    <function>
+        <name>formatDateSafe</name>
+        <function-class>ru.masterdm.spo.dashboard.fn.CommonFns</function-class>
+        <function-signature>java.lang.String formatDateSafe(java.util.Date, java.lang.String)</function-signature>
+        <description>
+            Null safe. Returns the formatted time string.
+        </description>
+    </function>
+
+
+</taglib>

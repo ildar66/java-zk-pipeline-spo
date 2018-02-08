@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+    <!-- [Optional]
+    Uncomment if you want to defines the application's name
+
+    <preference>
+        <name>org.zkoss.zk.ui.WebApp.name</name>
+        <value>report</value>
+    </preference>
+    -->
+    <library-property>
+        <name>org.zkoss.zul.listbox.rightSelect</name>
+        <value>false</value>
+    </library-property>
+    <library-property>
+        <name>org.zkoss.zul.tree.rightSelect</name>
+        <value>false</value>
+    </library-property>
+
+    <!-- Developer mode. Should be removed. -->
+    <client-config>
+        <debug-js>true</debug-js>
+    </client-config>
+    <library-property>
+        <name>org.zkoss.web.classWebResource.cache</name>
+        <value>false</value>
+    </library-property>
+
+    <!--<library-property>
+        <name>org.zkoss.bind.DebuggerFactory.enable</name>
+        <value>false</value>
+    </library-property>
+ <library-property>
+  <name>org.zkoss.web.classWebResource.cache</name>
+  <value>false</value>
+ </library-property>
+ <client-config>
+  <debug-js>false</debug-js>
+ </client-config>-->
+</zk>

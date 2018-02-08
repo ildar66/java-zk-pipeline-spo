@@ -1,0 +1,50 @@
+<zk>
+    <window border="none" title="Избранное">
+        <grid>
+            <columns sizable="true" menupopup="auto" >
+                <column label="" />
+                <column label="Избранное" draggable="colFav" droppable="colFav" onDrop="move(event.dragged)" sort="auto"/>
+                <column label="Объем млн.руб." draggable="colFav" droppable="colFav" onDrop="move(event.dragged)" sort="auto"/>
+            </columns>
+            <rows>
+                <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                    <label value="icon" />
+                    <label value="Строительство" />
+                    <label value="29 000" />
+                </row>
+                <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                    <label value="icon" />
+                    <label value="ЗАО 'Нефтехимпром'" />
+                    <label value="3 000" />
+                </row>
+                <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                    <label value="icon" />
+                    <label value="ГК Строитель" />
+                    <label value="15 000" />
+                </row>
+                <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                    <label value="icon" />
+                    <label value="Сделка 34567(ГК ПИК)" />
+                    <label value="5 000" />
+                </row>
+            </rows>
+        </grid>
+    </window>
+    <zscript><![CDATA[
+  void move(Component dragged) {
+    if(dragged.getClass().getName().endsWith("Column")) {
+        int maxRows=dragged.getGrid().getRows().getChildren().size();
+        int i= dragged.getParent().getChildren().indexOf(dragged);
+        int j= self.getParent().getChildren().indexOf(self);
+
+        //move celles for each row
+        for(int k=0; k < maxRows; k++)
+           self.getGrid().getCell(k,j).parent.insertBefore(self.getGrid()
+              .getCell(k,i),self.getGrid().getCell(k,j));
+   }
+
+    self.parent.insertBefore(dragged, self);
+  }
+]]></zscript>
+</zk>
+

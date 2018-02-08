@@ -1,0 +1,495 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?taglib uri="/WEB-INF/mdtaglib.tld" prefix="md"?>
+
+<zk xmlns:n="native" xmlns:w="client">
+    <window id="dataWindow" apply="ru.masterdm.spo.dashboard.PipelineController"
+            viewModel="@id('dataVM') @init('ru.masterdm.spo.dashboard.PipelineVM')" hflex="1" vflex="1">
+        <style src="css/md-styles.css"/>
+        <borderlayout id="allPortalBorderLayout">
+            <north vflex="min" id="allPortalNorth">
+                <!-- Главный фильтр -->
+                <tablelayout columns="8" sclass="md-filter-table-marker" width="100%">
+                    <tablechildren rowspan="3" sclass="md-filter-table-marker" hflex="min">
+                        <vlayout hflex="min">
+                            <button label="День" id="dayMode" onClick="@command('dayMode')"
+                                    sclass="@load(dataVM.dayMode ? 'md-datemode-selected' : 'md-datemode-unselected')"
+                                    tooltiptext="Дневной шаг временного периода" width="70px"/>
+                            <button label="Месяц" id="monthMode" onClick="@command('monthMode')"
+                                    sclass="@load(dataVM.monthMode ? 'md-datemode-selected' : 'md-datemode-unselected')"
+                                    tooltiptext="Месячный шаг временного периода" width="70px"/>
+                            <button label="Год" id="yearMode" onClick="@command('yearMode')"
+                                    sclass="@load(dataVM.yearMode ? 'md-datemode-selected' : 'md-datemode-unselected')"
+                                    tooltiptext="Годовой шаг временного периода" width="70px"/>
+                        </vlayout>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" style="text-align:center;" hflex="min">
+                        <hlayout sclass="md-filter-date-hlayout" spacing="0px">
+                            <image id="toPreviousCompare" src="img/prev.png" style="cursor: pointer;"
+                                   sclass="@load(empty dataVM.dateMode ? 'md-datemode-shift-button-disabled' : '')"
+                                   onClick="@command('toPreviousCompare')"
+                                   tooltiptext="К предыдущему сравнительному временному периоду"/>
+                            <div sclass="@load(dataVM.dateFromCompareError ? 'md-warning-datebox-border' : 'md-normal-datebox-border')">
+                                <datebox id="dateFromCompare" width="105px" value="@bind(dataVM.dateFromCompare)"
+                                         tooltiptext="Дата начала периода сравнения"/>
+                            </div>
+                            <div sclass="@load(dataVM.dateToCompareError ? 'md-warning-datebox-border' : 'md-normal-datebox-border')">
+                                <datebox id="dateToCompare" width="105px" value="@bind(dataVM.dateToCompare)"
+                                         tooltiptext="Дата окончания периода сравнения"/>
+                            </div>
+                            <image id="toNextCompare" src="img/next.png" style="cursor: pointer;"
+                                   sclass="@load(empty dataVM.dateMode ? 'md-datemode-shift-button-disabled' : '')"
+                                   onClick="@command('toNextCompare')"
+                                   tooltiptext="К следующему сравнительному временному периоду"/>
+                        </hlayout>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" hflex="min">Сравнительный</tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" rowspan="2" width="20px">
+                        <hlayout sclass="md-filter-areference-plate">
+                            <button label="Трейдинг деск" popup="tradingDeskPopup, position=after_center" tooltiptext="Выбор Трейдинг деск"/>
+                        </hlayout>
+                        <popup id="tradingDeskPopup" width="190px">
+                            <vlayout>
+                                <listbox id="tradingDeskListbox" rows="15" checkmark="true" model="@load(dataVM.tradingDeskModel)">
+                                    <listhead>
+                                        <listheader label="Трейдинг деск"/>
+                                    </listhead>
+                                    <template name="model">
+                                        <listitem>
+                                            <listcell label="@load(each.name)">
+                                                <custom-attributes tradingDesk="@load(each)"/>
+                                            </listcell>
+                                        </listitem>
+                                    </template>
+                                </listbox>
+                                <div style="text-align: center;">
+                                    <button id="searchAtTradingDeskButton" label="Применить" onClick="@command('search')"
+                                            tooltiptext="Показать данные соответствующие настройкам поиска" width="65%"/>
+                                </div>
+                            </vlayout>
+                        </popup>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" rowspan="2" width="25%">
+                        <tablelayout id="tradingDesksSelected" columns="2" popup="tradingDesksSelectedPopup" sclass="md-filter-selected-plate">
+                            <forEach items="@load(dataVM.tradingDesksSelectedCut)">
+                                <tablechildren>
+                                    <label value="@load(each)" sclass="md-filter-selected-tile"/>
+                                </tablechildren>
+                            </forEach>
+                        </tablelayout>
+                        <popup id="tradingDesksSelectedPopup" width="400px">
+                            <tablelayout columns="3">
+                                <forEach items="@load(dataVM.tradingDesksSelected)">
+                                    <tablechildren>
+                                        <label value="@load(each.name)" sclass="md-filter-selected-popup-tile"/>
+                                    </tablechildren>
+                                </forEach>
+                            </tablelayout>
+                        </popup>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" rowspan="2" width="20px">
+                        <hlayout sclass="md-filter-areference-plate">
+                            <button label="Подразделение" popup="departmentPopup, position=after_start" tooltiptext="Выбор подразделений"/>
+                        </hlayout>
+                        <popup id="departmentPopup" width="450px">
+                            <vlayout>
+                                <hbox align="center" hflex="1">
+                                    <bandbox id="departmentSearch" sclass="edit-erase-bandbox" instant="true" value="@bind(dataVM.departmentSearch)"
+                                             placeholder="Наименование подразделения" hflex="1"
+                                             onChange="@command('changeDepartmentSearch')" onOpen="@command('clearDepartmentSearch')"/>
+                                </hbox>
+                                <tree id="departmentsTree" rows="25" checkmark="true" model="@load(dataVM.departmentsTreeModel)">
+                                    <template name="model">
+                                        <treeitem>
+                                            <treerow>
+                                                <treecell
+                                                        sclass="@load(each.hasChildUnselected ? 'md-treecell-unelected-child departments_tree' : 'departments_tree')">
+                                                    <span sclass="department_long_name">
+                                                        <label value="@load(each.data.longName)"/>
+                                                    </span>
+                                                </treecell>
+                                            </treerow>
+                                        </treeitem>
+                                    </template>
+                                </tree>
+                                <div style="text-align: center;">
+                                    <button id="searchAtDepartmentButton" label="Применить" onClick="@command('search')"
+                                            tooltiptext="Показать данные соответствующие настройкам поиска" width="65%"/>
+                                </div>
+                            </vlayout>
+                        </popup>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" rowspan="2" width="45%">
+                        <tablelayout id="departmentsSelected" columns="4" popup="departmentsSelectedPopup" sclass="md-filter-selected-plate">
+                            <forEach items="@load(dataVM.departmentsSelectedCut)">
+                                <tablechildren>
+                                    <label value="@load(each)" sclass="md-filter-selected-tile"/>
+                                </tablechildren>
+                            </forEach>
+                        </tablelayout>
+                        <popup id="departmentsSelectedPopup" width="480px">
+                            <tablelayout columns="4">
+                                <forEach items="@load(dataVM.departmentsSelected)">
+                                    <tablechildren>
+                                        <label value="@load(each.name)" sclass="md-filter-selected-popup-tile"/>
+                                    </tablechildren>
+                                </forEach>
+                            </tablelayout>
+                        </popup>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" style="text-align: right;" rowspan="2" hflex="min">
+                        <hbox align="left">
+                            <toolbarbutton id="detailReportInitiator" image="img/reports-q.png" height="" sclass="md-filter-settings-toolbarbutton"
+                                           tooltiptext="Детальные отчёты"
+                                           popup="detailReportSwitch, position=after_end"/>
+                            <toolbarbutton image="img/setting-q.png" sclass="md-filter-settings-toolbarbutton" context="editPopup"
+                                           popup="editSettingsPopup"
+                                           tooltiptext="Виджеты"/>
+                        </hbox>
+                        <popup id="editSettingsPopup" hflex="min" sclass="md-settings-popup">
+                            <vbox>
+                                <label value="Виджеты"/>
+                                <separator bar="true"/>
+                                <checkbox id="chartPanelSwitch" label="Сводный отчёт" checked="@load(dataVM.chartPanelVisible)"
+                                          onCheck="@command('settingsPanelCheck', checkEvent=event)"/>
+                                <checkbox id="summaryPanelSwitch" label="Показатели" checked="@load(dataVM.summaryPanelVisible)"
+                                          onCheck="@command('settingsPanelCheck', checkEvent=event)"/>
+                                <checkbox id="top3PanelSwitch" label="Top-10" checked="@load(dataVM.top3PanelVisible)"
+                                          onCheck="@command('settingsPanelCheck', checkEvent=event)"/>
+                            </vbox>
+                        </popup>
+
+
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" style="text-align:center;" hflex="min">
+                        <hlayout sclass="md-filter-date-hlayout" spacing="0px">
+                            <image id="toPrevious" src="img/prev.png" style="cursor: pointer;"
+                                   sclass="@load(empty dataVM.dateMode ? 'md-datemode-shift-button-disabled' : '')" onClick="@command('toPrevious')"
+                                   tooltiptext="К предыдущему отчётному временному периоду"/>
+                            <div sclass="@load(dataVM.dateFromError ? 'md-warning-datebox-border' : 'md-normal-datebox-border')">
+                                <datebox width="105px" id="dateFrom" value="@bind(dataVM.dateFrom)"
+                                         tooltiptext="Дата начала основного временного периода"/>
+                            </div>
+                            <div sclass="@load(dataVM.dateToError ? 'md-warning-datebox-border' : 'md-normal-datebox-border')">
+                                <datebox id="dateTo" width="105px" value="@bind(dataVM.dateTo)" tooltiptext="Дата окончания временного периода"/>
+                            </div>
+                            <image id="toNext" src="img/next.png" style="cursor: pointer;"
+                                   sclass="@load(empty dataVM.dateMode ? 'md-datemode-shift-button-disabled' : '')" onClick="@command('toNext')"
+                                   tooltiptext="К следующему отчётному временному периоду"/>
+                        </hlayout>
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" hflex="min">Отчётный</tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" style="text-align:center;" id="apply">
+                        <button id="searchButton" label="Применить" onClick="@command('search')" width="90%" style="margin-left: 4px"
+                                tooltiptext="Показать данные соответствующие настройкам поиска"
+                                disabled="@load(dataVM.disableSearchButton)"
+                        />
+                    </tablechildren>
+                    <tablechildren sclass="md-filter-table-marker" colspan="6">
+                        <label id="filterWarning" value="@load(dataVM.filterWarning)" style="color:red"/>
+                    </tablechildren>
+                </tablelayout>
+            </north>
+            <center autoscroll="true" border="none" id="allPortalCenter">
+                <!-- Панели с данными -->
+                <portallayout id="allPortal" width="100%" orient="vertical" style="border: 0px;">
+                    <portalchildren style="border: 0px;" hflex="1" id="allPortalChildren">
+                        <panel border="normal" hflex="1" style="border: 0px;" id="horPanel">
+                            <panelchildren id="horPanelChildren" style="border: 0px;">
+                                <!-- Верхняя панель chart-and-summary -->
+                                <portallayout orient="horizontal" width="100%" id="portalLayout">
+                                    <portalchildren id="mainPanelsParent">
+                                        <panel id="chartPanel"
+                                               title='@load(c:cat("Сводный отчет - ", dataVM.generalReportTitleAppend))'
+                                               border="normal" collapsible="true" visible="@load(dataVM.chartPanelVisible)"
+                                               closable="true" hflex="1" sclass="md-title-widget-panel"
+                                               onClose="@command('panelClose', closeEvent=event)">
+                                            <panelchildren>
+                                                <vlayout id="chartVLayout" hflex="1">
+                                                    <hlayout id="chartToolBar"
+                                                             style="margin-left: 5px; margin-bottom: 0px; margin-right: 5px; margin-top: 0px;"
+                                                             valign="top">
+                                                        <button id="columnChartMode" label="&#xf080;" onClick="@command('columnChartMode')"
+                                                                sclass="@load(dataVM.columnChartMode ? 'md-chartmode-selected' : 'md-chartmode-unselected')"
+                                                                tooltiptext="Столбчатые диаграммы"/>
+                                                        <button id="lineChartMode" label="&#xf201;" onClick="@command('lineChartMode')"
+                                                                sclass="@load(dataVM.lineChartMode ? 'md-chartmode-selected' : 'md-chartmode-unselected')"
+                                                                tooltiptext="Линейные диаграммы"/>
+                                                        <button id="pieChartMode" label="&#xf200;" onClick="@command('pieChartMode')"
+                                                                sclass="@load(dataVM.pieChartMode ? 'md-chartmode-selected' : 'md-chartmode-unselected')"
+                                                                tooltiptext="Круговые диаграммы"/>
+                                                        <div align="left" hflex="1" height="@load(dataVM.pieChartMode ? '80px' : '40px')">
+                                                            <if test="@load(dataVM.columnChartMode)">
+                                                                <charts use="ru.masterdm.spo.dashboard.ChartLegend" id="legendC"
+                                                                        type="column"
+                                                                        width="700" height="40"
+                                                                        series="@load(dataVM.chartLegendSeries)"
+                                                                        onPlotLegendItemClick="@command('chartLegendChange', chartEvent=event)"/>
+                                                            </if>
+                                                            <if test="@load(dataVM.lineChartMode)">
+                                                                <charts use="ru.masterdm.spo.dashboard.ChartLegend" id="legendL"
+                                                                        type="spline"
+                                                                        width="700" height="40"
+                                                                        series="@load(dataVM.chartLegendSeries)"
+                                                                        onPlotLegendItemClick="@command('chartLegendChange', chartEvent=event)"/>
+                                                            </if>
+                                                        </div>
+                                                    </hlayout>
+                                                    <div id="chartTableParent" align="center" style="overflow: hidden;">
+                                                        <tablelayout id="chartsTable" columns="2" width="100%" sclass="md-chart-table-marker"
+                                                                     style="border-spacing: 0px 5px; overflow: hidden;">
+                                                            <choose>
+                                                                <when test="@load(dataVM.columnChartMode)">
+                                                                    <forEach id="chartsTableForEach" items="@load(dataVM.taskTypeStatuses)">
+                                                                        <tablechildren sclass="md-chart-table-marker"
+                                                                                       style="text-align: center; padding-left: 20px; padding-right: 20px; width: 50%; height: 50%; overflow: hidden;">
+                                                                            <charts use="ru.masterdm.spo.dashboard.TrinityColumnCharts"
+                                                                                    id="@load(c:cat('statusChart',each.idStatus))"
+                                                                                    taskType="@load(dataVM.taskType)" idStatus="@load(each.idStatus)"
+                                                                                    model='@load(dataVM.generalChartModel[each.idStatus])'
+                                                                                    type="column" visible="true"
+                                                                                    title="@load(each.status)"
+                                                                                    seriesInvisible="@load(dataVM.chartSeriesIdInvisible)"/>
+                                                                            <!--<label value="@load(each.status)"></label>-->
+                                                                        </tablechildren>
+                                                                    </forEach>
+                                                                </when>
+                                                                <when test="@load(dataVM.pieChartMode)">
+                                                                    <forEach id="chartsTableForEachPie" items="@load(dataVM.taskTypeStatuses)">
+                                                                        <tablechildren sclass="md-chart-table-marker"
+                                                                                       style="text-align: center; padding-left: 20px; padding-right: 20px; width: 50%; height: 50%; overflow: hidden;">
+                                                                            <charts use="ru.masterdm.spo.dashboard.TrinityPieCharts"
+                                                                                    idStatus="@load(each.idStatus)"
+                                                                                    pieChartColors='@load(dataVM.pieChartColors)'
+                                                                                    model='@load(dataVM.generalPieChartModel[each.idStatus])'
+                                                                                    onClick="" visible="true"
+                                                                                    type="pie" title="@load(each.status)"/>
+                                                                        </tablechildren>
+                                                                    </forEach>
+                                                                </when>
+                                                                <when test="@load(dataVM.lineChartMode)">
+                                                                    <forEach id="chartsTableForEachLine" items="@load(dataVM.characteristics)">
+                                                                        <tablechildren sclass="md-chart-table-marker"
+                                                                                       style="text-align: center; padding-left: 20px; padding-right: 20px; width: 50%; height: 50%; overflow: hidden;">
+                                                                            <charts use="ru.masterdm.spo.dashboard.TrinityLineCharts"
+                                                                                    model='@load(dataVM.generalLineChartModel[each])'
+                                                                                    taskType="@load(dataVM.taskType)"
+                                                                                    type="spline" visible="true"
+                                                                                    title="@load(dataVM.generalLineChartTitle[each])"
+                                                                                    seriesInvisible="@load(dataVM.chartSeriesIdInvisible)"/>
+                                                                        </tablechildren>
+                                                                    </forEach>
+                                                                </when>
+                                                            </choose>
+                                                        </tablelayout>
+                                                    </div>
+                                                    <grid id="stateGrid" hflex="1" model="@load(dataVM.generalGridModel)"
+                                                          emptyMessage="не найдены данные для этого фильтра">
+                                                        <columns id="stateGridColumns" children="@load(dataVM.gridStateMetadata.columnMetadata)" menupopup="auto"
+                                                                 sizable="true">
+                                                            <template name="children" var="item">
+                                                                <column use="ru.masterdm.spo.dashboard.StateGridColumn"
+                                                                        label="@load(c:cat(item.description,(empty item.unitOfMeasure ? '' : ', '.concat(item.unitOfMeasure))))"
+                                                                        visible="@load(item.visible)" sort="@load(c:cat3('auto(',item.code,')'))"
+                                                                        sclass="@load(item.visible ? 'md-z-column-content' : 'md-z-column-content-hidden')"
+                                                                        onShow="@command('gridColumnVisibilityChange')"
+                                                                        onHide="@command('gridColumnVisibilityChange')"
+                                                                        draggable="true" droppable="true" onDrop="@command('dropGridColumn')"
+                                                                        metadata="@load(item)"/>
+                                                            </template>
+                                                        </columns>
+                                                        <template name="model" var="line">
+                                                            <row children="@load(dataVM.gridStateMetadata.columnMetadata) @template(forEachStatus.current.label ? 'labelTemplate' : 'hrefTemplate')">
+                                                                <template name="hrefTemplate" var="cell">
+                                                                    <a onClick="@command('detailTable', idStatus=line.idStatus)"
+                                                                       sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')">
+                                                                        ${line[cell.code]}
+                                                                    </a>
+                                                                </template>
+                                                                <template name="labelTemplate" var="cell">
+                                                                    <zk choose="">
+                                                                        <zk when="${not empty cell.numberFormat}">
+                                                                            <label value="@load(md:formatNumberSafe(line[cell.code], cell.numberFormat))"
+                                                                                   sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                                        </zk>
+                                                                        <zk when="${not empty cell.dateFormat}">
+                                                                            <label value="@load(md:formatDateSafe(line[cell.code], cell.dateFormat))"
+                                                                                   sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                                        </zk>
+                                                                        <zk>
+                                                                            <label value="@load(line[cell.code])" sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                                        </zk>
+                                                                    </zk>
+                                                                </template>
+                                                            </row>
+                                                        </template>
+                                                    </grid>
+                                                </vlayout>
+                                            </panelchildren>
+                                        </panel>
+                                        <panel id="summaryPanel" title="Показатели" border="normal" collapsible="true" closable="true" width="220px"
+                                               sclass="md-title-widget-panel" onClose="@command('panelClose', closeEvent=event)"
+                                               visible="@load(dataVM.summaryPanelVisible)">
+                                            <panelchildren
+                                                    style="padding-top:4px; border-top-width: 0px; border-top-color: #9BBDE7; background: #9BBDE7;">
+                                                <forEach items="@load(dataVM.summaryDataCreator.summaryData)">
+                                                    <panel id="${'panel-'.concat(each.summaryFigure.code)}"
+                                                           title="${c:cat3(each.name,(empty each.unitOfMeasure ? '' : ', '.concat(each.unitOfMeasure)),(empty each.count ? '' : '/шт.'))}"
+                                                           border="rounded" closable="true"
+                                                           sclass="md-summary-panel" visible="${each.selected}"
+                                                           use="ru.masterdm.spo.dashboard.SummaryFigurePanel"
+                                                           onClose="@command('closeSummaryFigure', summaryData=each, closeEvent=event)"
+                                                           summaryData="${each}">
+                                                        <panelchildren sclass="md-summary-content-plate" style="border-top: 0px none">
+                                                            <tablelayout columns="2" style="border-spacing: 2px 2px;" width="100%">
+                                                                <!-- big figures -->
+                                                                <tablechildren>
+                                                                    <div align="left" hflex="1">
+                                                                        <label value="${c:formatNumber(each.mainValue,'###,###,###,###.##')}"
+                                                                               sclass="md-summary-value"/>
+                                                                    </div>
+                                                                </tablechildren>
+                                                                <tablechildren>
+                                                                    <div align="right" width="40px">
+                                                                        <zk choose="">
+                                                                            <zk when="${each.compareMain &gt; 0}">
+                                                                                <image src="img/32_green_up.png"
+                                                                                       tooltiptext="${empty each.mainValueCompare ? '' : c:formatNumber(each.mainValueCompare,'###,###,###,###.##')}"/>
+                                                                            </zk>
+                                                                            <zk when="${each.compareMain &lt; 0}">
+                                                                                <image src="img/32_red_down.png"
+                                                                                       tooltiptext="${empty each.mainValueCompare ? '' : c:formatNumber(each.mainValueCompare,'###,###,###,###.##')}"/>
+                                                                            </zk>
+                                                                            <zk when="${each.compareMain == 0}">
+                                                                                <label style="font-family: FontAwesome; font-size: 24px; color: #B3B2B2"
+                                                                                       value="&#xf068;"/>
+                                                                            </zk>
+                                                                        </zk>
+                                                                    </div>
+                                                                </tablechildren>
+                                                                <!-- small figures -->
+                                                                <tablechildren>
+                                                                    <div align="left" hflex="1">
+                                                                        <label value="${each.count}" sclass="md-summary-count"/>
+                                                                    </div>
+                                                                </tablechildren>
+                                                                <tablechildren>
+                                                                    <div align="right" width="40px">
+                                                                        <zk choose="">
+                                                                            <zk when="${each.count &gt; each.compareCount}">
+                                                                                <image src="img/16_green_up.png"
+                                                                                       tooltiptext="${empty each.countCompare ? '' : c:formatNumber(each.countCompare,'###,###,###,###')}"/>
+                                                                            </zk>
+                                                                            <zk when="${each.count &lt; each.compareCount}">
+                                                                                <image src="img/16_red_down.png"
+                                                                                       tooltiptext="${empty each.countCompare ? '' : c:formatNumber(each.countCompare,'###,###,###,###')}"/>
+                                                                            </zk>
+                                                                            <zk when="${each.count == each.compareCount}">
+                                                                                <label style="font-family: FontAwesome; font-size: 14px; color: #B3B2B2"
+                                                                                       value="&#xf068;"/>
+                                                                            </zk>
+                                                                        </zk>
+                                                                    </div>
+                                                                </tablechildren>
+                                                            </tablelayout>
+                                                        </panelchildren>
+                                                    </panel>
+                                                </forEach>
+                                                <button label="&#xf055;" style="font-family: FontAwesome; font-size: 20px; color: #B3B2B2;"
+                                                        width="100%"
+                                                        popup="editSummaryPanels" visible="@load(dataVM.addSummaryVisible)" height="76px"/>
+                                                <menupopup id="editSummaryPanels">
+                                                    <menuitem id="${'summaryMenu-'.concat(each.summaryFigure.code)}" label="${each.name}"
+                                                              autocheck="true"
+                                                              checkmark="true"
+                                                              checked="${each.selected}" forEach="${dataVM.summaryDataCreator.summaryData}">
+                                                        <custom-attributes summaryData="${each}"/>
+                                                    </menuitem>
+                                                </menupopup>
+                                            </panelchildren>
+                                        </panel>
+                                    </portalchildren>
+                                </portallayout>
+                            </panelchildren>
+                        </panel>
+
+                        <!-- Нижняя панель TOP -->
+                        <panel id="top3Panel" width="100%" title="Топ-10 по сумме за период" border="normal" collapsible="true"
+                               visible="@load(dataVM.top3PanelVisible)"
+                               closable="true" sclass="md-title-widget-panel" onClose="@command('panelClose', closeEvent=event)">
+                            <panelchildren>
+
+                                <grid id="top3Grid" model="@load(dataVM.top3Model)" emptyMessage="не найдены заявки для этого фильтра" hflex="1">
+                                    <columns children="@load(dataVM.gridTopMetadata.columnMetadata)" menupopup="auto" sizable="true">
+                                        <template name="children" var="item">
+                                            <column use="ru.masterdm.spo.dashboard.DataGridColumn" hflex="@load(item.code.equals('nn') ? 1 : 3)"
+                                                    label="@load(c:cat(item.description,(empty item.unitOfMeasure ? '' : ', '.concat(item.unitOfMeasure))))"
+                                                    visible="@load(item.visible)" sort="@load(c:cat3('auto(',item.code,')'))"
+                                                    sclass="@load(item.visible ? 'md-z-column-content' : 'md-z-column-content-hidden')"
+                                                    onShow="@command('gridColumnVisibilityChange')"
+                                                    onHide="@command('gridColumnVisibilityChange')"
+                                                    draggable="true" droppable="true" onDrop="@command('dropGridColumn', isTop=true)"
+                                                    metadata="@load(item)"/>
+                                        </template>
+                                    </columns>
+                                    <template name="model" var="line">
+                                        <row children="@load(dataVM.gridTopMetadata.columnMetadata) @template(forEachStatus.current.label ? 'labelTemplate' : 'hrefTemplate')">
+                                            <template name="hrefTemplate" var="cell">
+                                                <a label="${c:cat3(line.mdtaskNumber, ' вер. ', line.version)}" sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"
+                                                   href="@load('/../ProdflexWorkflow/form.jsp?mdtaskid='.concat(line.idMdtask))" target="_blank"/>
+                                            </template>
+                                            <template name="labelTemplate" var="cell">
+                                                <zk choose="">
+                                                    <zk when="${cell.code == 'sum'}">
+                                                        <label value="@load(c:cat3(md:formatNumberSafe(line[cell.code], cell.numberFormat), ',' , line.currency))"
+                                                               sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                    </zk>
+                                                    <zk when="${not empty cell.numberFormat}">
+                                                        <label value="@load(md:formatNumberSafe(line[cell.code], cell.numberFormat))"
+                                                               sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                    </zk>
+                                                    <zk when="${not empty cell.dateFormat}">
+                                                        <label value="@load(md:formatDateSafe(line[cell.code], cell.dateFormat))"
+                                                               sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                    </zk>
+                                                    <zk when="${cell.code == 'prolongation' || cell.code == 'pub'}">
+                                                        <label value="@load(line[cell.code] ? 'Да' : 'Нет')" sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                    </zk>
+                                                    <zk when="${cell.code == 'nn'}">
+                                                        <div align="center">
+                                                            <label value="@load(line[cell.code])" sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                        </div>
+                                                    </zk>
+                                                    <zk>
+                                                        <label value="@load(line[cell.code])" sclass="@load(cell.right ? 'md-z-rowcell-content-right': 'md-z-rowcell-content')"/>
+                                                    </zk>
+                                                </zk>
+                                            </template>
+                                        </row>
+                                    </template>
+                                </grid>
+
+
+                            </panelchildren>
+                        </panel>
+                    </portalchildren>
+                </portallayout>
+            </center>
+        </borderlayout>
+        <!-- Reusable pupup -->
+        <popup id="detailReportSwitch">
+            <hlayout>
+                <toolbarbutton id="toTable"
+                               onClick="@command('detailTable', idStatus=detailReportSwitch.getAttribute('idStatus'), category=detailReportSwitch.getAttribute('category'), branch=detailReportSwitch.getAttribute('branch'))"
+                               image="img/table-view.png" tooltiptext="Переход в списочное состояние"/>
+                <toolbarbutton id="toPdf"
+                               onClick="@command('detailReportPdf', idStatus=detailReportSwitch.getAttribute('idStatus'), category=detailReportSwitch.getAttribute('category'), branch=detailReportSwitch.getAttribute('branch'))"
+                               image="img/pdf-file-format.png"
+                               tooltiptext="Сохранить детальный отчет в PDF"/>
+                <toolbarbutton id="toExcel"
+                               onClick="@command('detailReport', idStatus=detailReportSwitch.getAttribute('idStatus'), category=detailReportSwitch.getAttribute('category'), branch=detailReportSwitch.getAttribute('branch'))"
+                               image="img/xlsx-file-format.png"
+                               tooltiptext="Сохранить детальный отчет в XLSX"/>
+            </hlayout>
+        </popup>
+    </window>
+</zk>

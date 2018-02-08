@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_1171428855613" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>flexWorkflow</display-name>
+    
+    <listener>
+        <listener-class>ru.masterdm.integration.websupport.IntegrationContextListener</listener-class>
+    </listener>
+
+	<filter>
+		<filter-name>Charset Filter</filter-name>
+		<filter-class>org.uit.director.servletutil.CharsetFilter</filter-class>
+		<init-param>
+			<param-name>requestEncoding</param-name>
+			<param-value>Windows-1251</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<description>MDTaskFilter</description>
+		<display-name>MDTaskFilter</display-name>
+		<filter-name>MDTaskFilter</filter-name>
+		<filter-class>ru.md.servlet.MDTaskFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Charset Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MDTaskFilter</filter-name>
+		<url-pattern>/updateVariables.do</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>ru.md.servlet.ConfigurationListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/struts-config.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<init-param>
+			<param-name>detail</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<init-param>
+			<param-name>validate</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Sends report file from file system to output stream</description>
+		<display-name>DownloadReportServlet</display-name>
+		<servlet-name>DownloadReportServlet</servlet-name>
+		<servlet-class>org.uit.director.servlet.DownloadReportServlet</servlet-class>
+	</servlet>
+	<servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+	
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DownloadReportServlet</servlet-name>
+		<url-pattern>/getReport</url-pattern>
+	</servlet-mapping>
+
+
+	<mime-mapping>
+		<extension>css</extension>
+		<mime-type>text/css</mime-type>
+	</mime-mapping>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/tags/struts-bean</taglib-uri>
+			<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/struts-html</taglib-uri>
+			<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/struts-logic</taglib-uri>
+			<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/struts-nested</taglib-uri>
+			<taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/struts-tiles</taglib-uri>
+			<taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+	<resource-ref id="ResourceRef_1233911984363">
+		<description></description>
+		<res-ref-name>jdbc/CRM</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Application</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+	<resource-ref id="ResourceRef_1272290742843">
+		<description></description>
+		<res-ref-name>jdbc/VTBLOANS</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Application</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+	<security-constraint>
+		<display-name>workflowAdminConstraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>workflowAdminCollection</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>PUT</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>POST</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>OPTIONS</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>
+				Auto generated Authorization Constraint
+			</description>
+			<role-name>workflowAdmin</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<display-name>administratorConstraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>administratorCollection</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>PUT</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>POST</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>OPTIONS</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>
+				Auto generated Authorization Constraint
+			</description>
+			<role-name>administrator</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<display-name>workflowUserConstraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>workflowUserCollection</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>PUT</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>POST</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>OPTIONS</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>
+				Auto generated Authorization Constraint
+			</description>
+			<role-name>workflowUser</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>CLIENT-CERT</auth-method>
+	</login-config>
+	<security-role>
+		<description>Пользователь системы</description>
+		<role-name>workflowUser</role-name>
+	</security-role>
+	<security-role>
+		<description>Пользователь с правами Администратора</description>
+		<role-name>workflowAdmin</role-name>
+	</security-role>
+	<security-role>
+		<description>Администратор системы</description>
+		<role-name>administrator</role-name>
+	</security-role>
+	<ejb-local-ref id="EJBLocalRef_1275562892562">
+		<description></description>
+		<ejb-ref-name>ejb/DBFlexWorkflowEJBLocal</ejb-ref-name>
+		<ejb-ref-type>Session</ejb-ref-type>
+		<local-home>org.uit.director.db.ejb.DBFlexWorkflowLocalHome</local-home>
+		<local>org.uit.director.db.ejb.DBFlexWorkflowLocal</local>
+		<ejb-link>DBFlexWorkflowEJB.jar#DBFlexWorkflow</ejb-link>
+	</ejb-local-ref>
+
+</web-app>
+

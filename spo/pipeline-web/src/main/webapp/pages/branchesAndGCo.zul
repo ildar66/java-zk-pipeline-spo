@@ -1,0 +1,34 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="volumeDealOnBranchPage" border="none" title="Отрасли и ГК" apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('bcvm') @init('ru.masterdm.spo.pipeline.viewmodel.BranchesAndGCoVM', searchString=vm.searchString)">
+		<if test="@load(empty vm.searchString)">
+            <include id="industries" mode="instant" sclass="content" src="pages/branches/dealCountsSummary.zul"/>
+		</if>
+        <if test="@load(not empty vm.searchString)">
+            <vbox vflex="1" hflex="1" style="margin:50px;">
+                <hbox align="center" sclass="page-home-field-search" hflex="1">
+                    <separator hflex="1"/>
+                    <vbox hflex="2">
+                        <hlayout spacing="0" hflex="1">
+                            <textbox value="@bind(bcvm.searchString)" onOK="@command('search')" hflex="1" onCreate="@command('focus')"/>
+                            <button iconSclass="z-icon-search" autodisable="self" onClick="@command('search')" tooltiptext="@init(labels.search_button)"/>
+                        </hlayout>
+                        <label value="@init(labels.welcome_search_title)" sclass="label-search"/>
+                    </vbox>
+                    <separator hflex="1"/>
+                </hbox>
+                <if test="@load(bcvm.showDealCountsCoGroup)">
+                    <include id="companyCroups" mode="instant" sclass="content" src="pages/branches/dealCountsCoGroup.zul"/>
+                </if>
+                <if test="@load(bcvm.showIndustriesDealCounts)">
+                    <include id="industries" mode="instant" sclass="content" src="pages/branches/industriesDealCounts.zul"/>
+                </if>
+                <if test="@load(bcvm.showCompaniesDealCounts)">
+                    <include id="companies" mode="instant" sclass="content" src="pages/branches/companiesDealCounts.zul"/>
+                </if>
+            </vbox>
+        </if>
+	</window>
+</zk>
+

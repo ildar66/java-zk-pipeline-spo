@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="dashboard-reports-update" author="slysenkov" logicalFilePath="dashboard-reports-update"  runAlways="true">
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/dashboard.xlsx"> </column>
+                <where>filename='dashboard_report_xlsx'</where>
+        </update>
+    </changeSet>
+    <changeSet id="dashboard-reports-update-2" author="slysenkov" logicalFilePath="dashboard-reports-update-2"  runAlways="true">
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/dashboard_4pdf.xlsx"> </column>
+                <where>filename='dashboard_report_4pdf_xlsx'</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

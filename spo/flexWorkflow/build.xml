@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project name="flexWorkflow" default="debug form.js">
+	<property file="build.properties" />
+	<target name="info">
+		<echo>product делает сжатый скрипт для релиза</echo>
+		<echo>debug делает несжатый скрипт для отладки</echo>
+	</target>
+	<target name="product form.js" depends="concat-files, minify">
+		<echo>Done.</echo>
+	</target>
+	<target name="debug form.js" depends="concat-files">
+		<copy file="./WebContent/scripts/tmp/form.js" tofile="./WebContent/scripts/form.js" 
+			overwrite="true" encoding="utf-8" outputencoding="utf-8"/>
+		<echo>Done.</echo>
+	</target>
+
+	<target name="concat-files"> 
+		<echo>Concatenating files</echo>
+		<concat destfile="./WebContent/scripts/tmp/form.js" append="false" 
+			encoding="utf-8" outputencoding="utf-8">
+			<fileset dir="./WebContent/scripts/form">
+				<include name="*.js" />
+			</fileset>
+		</concat>
+	</target>
+    <target name="only-concat-files">
+        <echo>Concatenating files</echo>
+        <concat destfile="./WebContent/scripts/form.js" append="false" 
+            encoding="utf-8" outputencoding="utf-8">
+            <fileset dir="./WebContent/scripts/form">
+                <include name="*.js" />
+            </fileset>
+        </concat>
+    </target>
+
+	<target name="minify">
+		<echo>Minifying files</echo>
+		<yuicompress munge="yes" linebreak="5000" preserveallsemicolons="yes" 
+			outputfolder="./WebContent/scripts/" charset="utf-8">
+			<fileset dir="./WebContent/scripts/tmp">
+				<include name="*.js" />
+			</fileset>
+		</yuicompress>
+	</target>
+	<taskdef name="yuicompress" classname="com.yahoo.platform.yui.compressor.YUICompressTask">
+		<classpath>
+			<fileset dir="${yuicompress.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+</project>

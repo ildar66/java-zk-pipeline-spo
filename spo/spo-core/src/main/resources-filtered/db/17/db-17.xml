@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	<changeSet id="spo-17.00-init" author="apavlenko" logicalFilePath="spo-17.00-init">
+		<sqlFile path="spo17init.sql" dbms="oracle" endDelimiter="/"
+			splitStatements="true" stripComments="true" relativeToChangelogFile="true" />
+	</changeSet>
+	<changeSet id="spo-17.01-VTBSPO-72" author="rislamov" logicalFilePath="spo-17.01-VTBSPO-72">
+		<sqlFile path="VTBSPO-72.sql" dbms="oracle" endDelimiter="/" splitStatements="true"
+			stripComments="true" relativeToChangelogFile="true" />
+	</changeSet>
+	<changeSet id="spo-17.01-VTBSPO-84" author="apavlenko" logicalFilePath="spo-17.01-VTBSPO-84">
+		<sqlFile path="17.1.mo.108.sql" dbms="oracle" endDelimiter="/"
+			splitStatements="true" stripComments="true" relativeToChangelogFile="true" />
+    </changeSet>
+	<changeSet id="spo-17.07-early_payment_4000" author="apavlenko" logicalFilePath="spo-17.07-early_payment_4000">
+		<sqlFile path="early_payment_4000.sql" dbms="oracle" endDelimiter="/"
+			splitStatements="true" stripComments="true" relativeToChangelogFile="true" />
+    </changeSet>
+	<changeSet id="spo-reports-update" author="apavlenko" logicalFilePath="spo-reports-update"  runAlways="true">
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/1.1.doc"> </column>
+                <where>filename='limit_decision_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/1.2.doc"> </column>
+                <where>filename='limit_decision_1_2_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/2.1.doc"> </column>
+                <where>filename='limit_decision_2_1_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/2.2.doc"> </column>
+                <where>filename='limit_decision_2_2_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/2.3.doc"> </column>
+                <where>filename='limit_decision_2_3_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/2.4.doc"> </column>
+                <where>filename='limit_decision_2_4_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/3.doc"> </column>
+                <where>filename='limit_decision_3_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/4.doc"> </column>
+                <where>filename='limitdecision4word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/5.doc"> </column>
+                <where>filename='limit_decision_5_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/6.doc"> </column>
+                <where>filename='limit_decision_6_word'</where>
+        </update>
+        <update tableName="report_template">
+                <column name="DOC_PATTERN" valueBlobFile="../../reports/7.doc"> </column>
+                <where>filename='limit_decision_7_word'</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

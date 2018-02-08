@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="commonj.sdo" targetNamespace="commonj.sdo">
+
+	<xsd:complexType name="task4RatingListType">
+		<xsd:sequence>
+			<xsd:element name="task4RatingList" type="task4RatingType"
+				minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						Список сделок
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="task4RatingType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Сделка
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="idMdTask" type="xsd:long" minOccurs="1"
+				maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						Номер сделки
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="numberDisplay" type="xsd:string"
+				minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						numberDisplay
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="operationTypeCode" type="xsd:long"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Тип операции (для определения коэффициента
+						транзакционного риска C2) (из существующего справочника. Можно
+						передавать доменный объект)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="period" type="xsd:int" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Срок сделки в днях
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="rateType" type="xsd:boolean"
+				minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						Тип ставки: фиксированная(true) / плавающая
+						(false)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="sum" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Сумма сделки в рублях
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="supplyList" type="supply4RatingType"
+				nillable="true" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>
+						Массив
+						"Структура обеспечения" (для определения
+						коэффициента
+						транзакционного риска C1)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="supply4RatingType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Предмет обеспечения
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="depositorFinStatusCode" type="xsd:long"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Финансовое состояние (залогодателя, поручителя
+						или гаранта)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="liquidityLevelCode" type="xsd:long"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Категория обеспечения (уровень ликвидности) (из
+						существующего справочника СРР)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="sum" type="xsd:decimal" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Сумма (сумма залога, учитываемая в рамках сделки
+						или сумма поручительства или гарантии - соответственно)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="supplyTypeCode" type="xsd:long"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>
+						Вид обеспечения (из существующего справочника
+						СРР)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="typeCode" type="xsd:string" minOccurs="1"
+				maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						Вид обеспечения (d=залог, w=поручительство или
+						g=гарантия)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="voidType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Пустой тип данных
+            </xsd:documentation>
+		</xsd:annotation>
+	</xsd:complexType>
+</xsd:schema>

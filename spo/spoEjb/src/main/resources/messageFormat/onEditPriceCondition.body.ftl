@@ -1,0 +1,1 @@
+Стоимостные условия по ${tasktype} ${allOrg} № <a href="${baseurl}/showTaskList.do?typeList=all&projectteam=true&searchNumber=${mdtask_number}">${numberDisplay}</a> по процессу Крупный бизнес ГО были скорректированы пользователем ${fio} (см. список заявок "Работа проектной команды").

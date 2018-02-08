@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name="workflow.tabs.body">
+        <put name="selectedIndex" value="1"/>
+        <put name="parameterName" value="selected"/>
+        <putList name="tabList">
+            <item value="menu.init" link="/workflow.init.do"/>
+            <item value="menu.new" link="/workflow.tasks.do?accept=false"/>
+            <item value="menu.work" link="/workflow.tasks.do?accept=true"/>
+            <item value="menu.analysis" link="/WEB-INF/pages/analysis.jsp"/>
+            <item value="menu.admin" link="/restart.do"/>
+            <item value="menu.messages" link="/workflow.messages.do"/>
+            <item value="menu.about" link="/about.html"/>
+
+        </putList>
+    </definition>
+
+
+</tiles-definitions>

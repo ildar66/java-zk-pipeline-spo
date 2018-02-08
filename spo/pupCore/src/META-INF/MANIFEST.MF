@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Class-Path: DBFlexWorkflowEJBClient.jar 
+ GraphGen.jar 
+ SequenceGeneratorClient.jar 
+ VTB-AppLogic.jar 
+ lib/mq/com.ibm.mq.jar 
+ lib/mq/com.ibm.mqbind.jar 
+ lib/mq/com.ibm.mqjms.jar 
+ lib/mq/connector.jar 
+ lib/other/jep-2.3.0.jar 
+ lib/other/jgraph.jar 
+ lib/other/com-darwinsys-util.jar 
+ lib/other/crimson.jar 
+ lib/other/hsqldb.jar 
+ lib/other/jdom.jar 
+ lib/other/xml.jar 
+ lib/mq/mqUtils-1.4.jar
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <Data>
+    <LicensedTo>domino</LicensedTo>
+    <LicenseType>Developer Enterprise Subscription</LicenseType>
+    <LicenseNote>Limited to 1 developer.</LicenseNote>
+    <OrderID>100125103246</OrderID>
+    <OEM>This is a redistributable license</OEM>
+    <Products>
+      <Product>Aspose.Words for Java</Product>
+    </Products>
+    <EditionType>Enterprise</EditionType>
+    <SerialNumber>15afbd1b-ce0a-4896-a9a6-40be0c7577c8</SerialNumber>
+    <SubscriptionExpiry>20110125</SubscriptionExpiry>
+    <LicenseVersion>2.2</LicenseVersion>
+  </Data>
+  <Signature>WfnJ7N1hYN58XrcnZVA4JiVkS1d+sg/IkLeQaQ/Xj2bm5tFUVG6E0uUxKOSCVhWpLNoBfLmtduKsqocc8Iwla6MBvGrE8dqR2IF0YV/k07Rs5keMz4i1Jm78rbyAhzT+eR9GW/sngaejVpD1paQi6ixl4eycLAsJ1fFskYJnxYs=</Signature>
+</License>

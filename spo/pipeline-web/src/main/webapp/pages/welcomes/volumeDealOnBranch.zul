@@ -1,0 +1,33 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+    <window id="volumeDealOnBranchPage" border="none" title="Объем сделок по отраслям" apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('ru.masterdm.spo.pipeline.viewmodel.VolumeDealOnBranchVM')">
+    <grid id="dealVolumesGrid" model="@load(vm.dealVolumes)" mold="paging" pageSize="10">
+        <columns sizable="true" menupopup="auto" >
+            <column label="" width="50px"/>
+            <column label="Отрасль" draggable="colVD" droppable="colVD" onDrop="vm.move(event)" sort="auto(industryName)"/>
+            <column label="Объем млн.руб." draggable="colVD" droppable="colVD" onDrop="vm.move(event)"
+                    sort="auto(volume)" sortDirection="descending" width="100px"/>
+        </columns>
+        <!-- template for each element in model -->
+        <template name="model">
+            <row draggable="rowVD" droppable="rowVD" onDrop="vm.move(event)">
+                <button sclass="button-icon" iconSclass="z-icon-gears" tooltiptext="${labels.deals_title}"
+                        onClick="@global-command('navigateTabGlobal', currentPage=page, targetPage='pipelineTabs',
+                                        targetTab='issuesAndDeals', data='deals', key=each.industryName)"/>
+                <label value="@load(each.industryName)" />
+                <label value="${c:formatNumber(each.volume, '###,###,###')}" />
+            </row>
+        </template>
+        <foot>
+            <footer span="3" id="footer_category" class="footer_right">
+                <button sclass="button-icon" iconSclass="z-icon-gears" tooltiptext="${labels.deals_title}"
+                        onClick="@global-command('navigateTabGlobal', currentPage=page, targetPage='pipelineTabs',
+                                        targetTab='issuesAndDeals', data='deals')"/>
+                Все отрасли: <label value="${c:formatNumber(vm.sumDealVolumes, '###,###,###')}"/> млн.руб.
+            </footer>
+        </foot>
+    </grid>
+    </window>
+</zk>
+

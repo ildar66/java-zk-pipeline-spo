@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Class-Path: lib/hibernate/hibernate-annotations.jar 
+ lib/hibernate/hibernate-commons-annotations.jar 
+ lib/hibernate/hibernate-entitymanager.jar 
+ lib/hibernate/hibernate3.jar 
+ VTB-AppLogic.jar 
+ lib/hibernate/antlr-2.7.6.jar 
+ lib/hibernate/commons-collections-3.1.jar 
+ lib/hibernate/log4j.jar 
+ lib/hibernate/slf4j-api-1.5.2.jar 
+ lib/hibernate/slf4j-log4j12.jar
+

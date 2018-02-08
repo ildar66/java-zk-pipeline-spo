@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.CurrencyMapper">
+
+    <select id="getCurrencies" resultType="string">
+        SELECT CODE 
+          FROM V_CD_CURRENCY 
+         WHERE LOWER(IS_ACTIVE) = 'y'
+    </select>
+
+  <select id="getCurrencyList" resultType="ru.md.domain.Currency">
+    SELECT CODE,TEXT,CUR_ONE,CUR_TWO,CUR_MANY FROM V_CD_CURRENCY WHERE LOWER(IS_ACTIVE) = 'y'
+  </select>
+
+  <select id="getTaskCurrencies" resultType="ru.md.domain.Currency">
+    SELECT CODE, TEXT 
+      FROM V_CD_CURRENCY 
+     WHERE LOWER(IS_ACTIVE) = 'y'
+       AND CODE IN (
+           SELECT ID_CURRENCY 
+             FROM R_MDTASK_CURRENCY 
+            WHERE ID_MDTASK = #{mdTaskId}
+           )
+  </select>
+</mapper>

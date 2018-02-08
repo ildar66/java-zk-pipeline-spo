@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modulemap:EARProjectMap xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:application="application.xmi" xmlns:modulemap="modulemap.xmi" xmi:id="EARProjectMap_1164880617420">
+  <mappings xmi:id="ModuleMapping_1170935962368" projectName="DBFlexWorkflowEJB">
+    <module xmi:type="application:EjbModule" href="META-INF/application.xml#EjbModule_1170935962368"/>
+  </mappings>
+  <mappings xmi:id="ModuleMapping_1171280428498" projectName="flexWorkflow">
+    <module xmi:type="application:WebModule" href="META-INF/application.xml#WebModule_1171280428498"/>
+  </mappings>
+  <utilityJARMappings xmi:id="UtilityJARMapping_1171280582764" projectName="DBFlexWorkflowEJBClient" uri="DBFlexWorkflowEJBClient.jar"/>
+</modulemap:EARProjectMap>

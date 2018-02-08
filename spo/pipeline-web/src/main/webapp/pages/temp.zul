@@ -1,0 +1,43 @@
+<zk>
+    <grid>
+        <columns sizable="true" menupopup="auto">
+            <column label="Name" draggable="col" droppable="col" onDrop="move(event.dragged)"/>
+            <column label="Age" draggable="col" droppable="col" onDrop="move(event.dragged)"/>
+            <column label="Grade" draggable="col" droppable="col" onDrop="move(event.dragged)"/>
+        </columns>
+        <rows>
+            <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                <label value="Mike" />
+                <label value="29" />
+                <label value="C" />
+            </row>
+            <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                <label value="Todd" />
+                <label value="21" />
+                <label value="B" />
+            </row>
+            <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                <label value="Tony" />
+                <label value="31" />
+                <label value="A" />
+            </row>
+        </rows>
+    </grid>
+    <zscript><![CDATA[
+  void move(Component dragged) {
+    if(dragged.getClass().getName().endsWith("Column")) {
+        int maxRows=dragged.getGrid().getRows().getChildren().size();
+        int i= dragged.getParent().getChildren().indexOf(dragged);
+        int j= self.getParent().getChildren().indexOf(self);
+
+        //move celles for each row
+        for(int k=0; k < maxRows; k++)
+           self.getGrid().getCell(k,j).parent.insertBefore(self.getGrid()
+              .getCell(k,i),self.getGrid().getCell(k,j));
+   }
+
+    self.parent.insertBefore(dragged, self);
+  }
+]]></zscript>
+</zk>
+

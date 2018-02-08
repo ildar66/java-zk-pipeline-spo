@@ -1,0 +1,29 @@
+Формат для календаря
+По умолчанию суббота и воскресенье - это выходные дни. Остальные - рабочие.
+Для исключений можно указать статус дня в таком формате.
+
+Общий формат файла:
+BEGIN: VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+BEGIN:VEVENT
+(данные конкретного дня)
+END:VEVENT
+BEGIN:VEVENT
+(данные конкретного дня)
+END:VEVENT
+END: VCALENDAR
+
+Для конкретного дня 27.09.2011 пример
+BEGIN:VEVENT
+DTSTART:20110927
+SUMMARY:workday
+END:VEVENT
+
+Для 09 января
+BEGIN:VEVENT
+DTSTART:20120109
+SUMMARY:rest
+END:VEVENT
+
+В SUMMARY должно быть значение workday для рабочего дня rest для выходного

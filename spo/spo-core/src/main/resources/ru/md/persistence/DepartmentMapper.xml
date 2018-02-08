@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.md.persistence.DepartmentMapper">
+  <select id="getById" resultType="ru.md.domain.Department">
+	select d.ID_DEPARTMENT id, d.SHORTNAME name, d.is_active,d.IS_INITIAL_DEP,d.is_cc,d.IS_DASHBOARD_DEP,d.CC_QUESTION_COPY,
+      d.CC_NOMINATIVE_NAME nominative_case_name,
+	(select max(dep_name) from crm_fb_department where fb_departmentid=d.CRM_FB_DEPARTMENT) crm_name
+	from departments d
+	<where>
+	d.ID_DEPARTMENT= #{id}
+	</where>
+  </select>
+  <select id="getAll" resultType="ru.md.domain.Department">
+	select d.ID_DEPARTMENT id, d.SHORTNAME name, d.is_active,d.IS_INITIAL_DEP,d.is_cc,
+	(select max(dep_name) from crm_fb_department where fb_departmentid=d.CRM_FB_DEPARTMENT) crm_name
+	from departments d where d.is_active=1 order by d.SHORTNAME
+  </select>
+
+  <sql id="departmentFilter">
+  		<if test="filter.department != null">
+			AND LOWER(SHORTNAME) LIKE '%' || LOWER(TRIM(#{filter.department})) || '%'
+		</if>
+  </sql>
+
+  <sql id="initialDepartmentSelect">
+	SELECT 	D.ID_DEPARTMENT ID,
+			D.SHORTNAME NAME,
+			D.SHORTNAME,
+			D.IS_ACTIVE,
+			D.IS_INITIAL_DEP,
+			D.IS_CC,
+			(SELECT MAX(DEP_NAME) FROM CRM_FB_DEPARTMENT WHERE FB_DEPARTMENTID=D.CRM_FB_DEPARTMENT) CRM_NAME
+	FROM DEPARTMENTS D
+	WHERE D.IS_ACTIVE = 1 AND D.IS_INITIAL_DEP = 1
+    <include refid="departmentFilter"/>
+	ORDER BY D.SHORTNAME
+  </sql>
+
+  <select id="getInitialDepartmentPage" parameterType="map" resultType="ru.md.domain.Department">
+    select * from (select rownum rnum, a.* from (
+
+    <include refid="initialDepartmentSelect"/>
+    <![CDATA[
+	    ) a where rownum <= #{count} + #{start} ) where rnum >= #{start} + 1
+    ]]>
+  </select>
+
+  <select id="getInitialDepartmentCount" resultType="java.lang.Long">
+    select count(*) from 
+    (
+	    <include refid="initialDepartmentSelect"/>
+    )
+  </select>
+
+	<select id="getDepId4kz" resultType="java.lang.Long">
+		select max(d.ID_DEPARTMENT) from departments d where d.CRM_FB_DEPARTMENT in(
+        select cd.FB_DEPARTMENTID from CRM_FB_DEPARTMENT cd where cd.dep_name in (
+        select o.DEPARTMENT from V_ORGANISATION o where crmid=#{kzid}))
+	</select>
+	<select id="getAllowedCommittees" resultType="java.lang.Long">
+		SELECT m.id_dep_cc from CC_DEP_MAPPING m where m.id_dep=#{idDepartment}
+	</select>
+	<select id="getDepartmentsExtForTree" resultType="ru.md.domain.DepartmentExt" parameterType="Long">
+        with department_tree as (
+                select dp.id_department_par id_department_parent,
+                       D.ID_DEPARTMENT ID,
+                       D.SHORTNAME NAME,
+                       D.SHORTNAME,
+                       D.IS_ACTIVE,
+                       D.IS_INITIAL_DEP,
+                       D.IS_CC,
+                       D.IS_DASHBOARD_DEP,
+                       D.FULLNAME LONG_NAME,
+                       (select max(dep_name) from crm_fb_department where fb_departmentid = D.CRM_FB_DEPARTMENT) crm_name
+                  from DEPARTMENTS D left outer join DEPARTMENTS_PAR DP on dp.id_department_child = D.ID_DEPARTMENT
+                 where D.IS_ACTIVE = 1
+        )
+        select level, dt.*
+        from department_tree dt
+        <choose>
+            <when test="rootDepartment != null">
+                start with id = #{rootDepartment} connect by prior id = id_department_parent <!--selected subtree-->
+            </when>
+            <otherwise>
+                start with id_department_parent is null connect by prior id = id_department_parent <!--all-->
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>
+

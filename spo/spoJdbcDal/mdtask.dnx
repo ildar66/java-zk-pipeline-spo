@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--xtools2_universal_type_manager-->
+<?com.ibm.xtools.emf.core.signature <signature id="com.ibm.xtools.mmi.ui.signatures.diagram" version="7.0.0"><feature description="" name="Rational Modeling Platform (com.ibm.xtools.rmp)" url="" version="7.0.0"/></signature>?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.1/notation" xmlns:uml="http://www.eclipse.org/uml2/2.1.0/UML" xmlns:umlnotation="http://www.ibm.com/xtools/1.5.2/Umlnotation" xmi:id="__a9wcCjSEd6rMdrfciySvw" type="Class" name="mdtask.dnx">
+  <eAnnotations xmi:id="__a9wcijSEd6rMdrfciySvw" source="com.ibm.xtools.common.ui.reduction.editingCapabilities">
+    <details xmi:id="__a9wcyjSEd6rMdrfciySvw" key="com.ibm.xtools.activities.javaVisualizerActivity" value="1"/>
+    <details xmi:id="__a9wdCjSEd6rMdrfciySvw" key="com.ibm.xtools.activities.EJBVisualizerActivity" value="1"/>
+  </eAnnotations>
+  <children xmi:id="_5m7GhCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_5m7GhyjYEd6TaMM4SlXGHQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_5m7GiCjYEd6TaMM4SlXGHQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_5m7GiSjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+    <children xmi:id="_5m7GiijYEd6TaMM4SlXGHQ" type="Name"/>
+    <children xmi:id="_5m7GiyjYEd6TaMM4SlXGHQ" type="Parent"/>
+    <children xmi:id="_5m7GjCjYEd6TaMM4SlXGHQ" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_5m7GjSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_5m7GjijYEd6TaMM4SlXGHQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_5m7GjyjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_5m7GkCjYEd6TaMM4SlXGHQ" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_5m7GkSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_5m7GhSjYEd6TaMM4SlXGHQ" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=TaskContractor%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5m7GhijYEd6TaMM4SlXGHQ" x="9372" y="15708"/>
+  </children>
+  <children xmi:id="_7aQsYCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_7aQsYyjYEd6TaMM4SlXGHQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_7aQsZCjYEd6TaMM4SlXGHQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_7aQsZSjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+    <children xmi:id="_7aQsZijYEd6TaMM4SlXGHQ" type="Name"/>
+    <children xmi:id="_7aQsZyjYEd6TaMM4SlXGHQ" type="Parent"/>
+    <children xmi:id="_7aQsaCjYEd6TaMM4SlXGHQ" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_7aQsaSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_7aZ2UCjYEd6TaMM4SlXGHQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_7aZ2USjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_7aZ2UijYEd6TaMM4SlXGHQ" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_7aZ2UyjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_7aQsYSjYEd6TaMM4SlXGHQ" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=TaskSupply%5Bjcu%5Ename=TaskSupply.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_7aQsYijYEd6TaMM4SlXGHQ" x="10032" y="1188"/>
+  </children>
+  <children xmi:id="_8_SJcCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_8_SJcyjYEd6TaMM4SlXGHQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_8_SJdCjYEd6TaMM4SlXGHQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_8_SJdSjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+    <children xmi:id="_8_SJdijYEd6TaMM4SlXGHQ" type="Name"/>
+    <children xmi:id="_8_SJdyjYEd6TaMM4SlXGHQ" type="Parent"/>
+    <children xmi:id="_8_b6cCjYEd6TaMM4SlXGHQ" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_8_b6cSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_8_b6cijYEd6TaMM4SlXGHQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_8_b6cyjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_8_b6dCjYEd6TaMM4SlXGHQ" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_8_b6dSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_8_SJcSjYEd6TaMM4SlXGHQ" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Warrantor%5Bjcu%5Ename=Warrantor.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_8_SJcijYEd6TaMM4SlXGHQ" x="7656" y="9108"/>
+  </children>
+  <children xmi:id="_-SI4cCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_-SSpcCjYEd6TaMM4SlXGHQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_-SSpcSjYEd6TaMM4SlXGHQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_-SSpcijYEd6TaMM4SlXGHQ" type="Stereotype"/>
+    <children xmi:id="_-SSpcyjYEd6TaMM4SlXGHQ" type="Name"/>
+    <children xmi:id="_-SSpdCjYEd6TaMM4SlXGHQ" type="Parent"/>
+    <children xmi:id="_-SSpdSjYEd6TaMM4SlXGHQ" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_-SSpdijYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_-SSpdyjYEd6TaMM4SlXGHQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_-SSpeCjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="_-SSpeSjYEd6TaMM4SlXGHQ" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_-SSpeijYEd6TaMM4SlXGHQ"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_-SI4cSjYEd6TaMM4SlXGHQ" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Depositor%5Bjcu%5Ename=Depositor.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-SI4cijYEd6TaMM4SlXGHQ" x="12276" y="9240"/>
+  </children>
+  <children xmi:id="__J3xsCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="__J3xsyjYEd6TaMM4SlXGHQ" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="__J3xtCjYEd6TaMM4SlXGHQ" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="__J3xtSjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+    <children xmi:id="__J3xtijYEd6TaMM4SlXGHQ" type="Name"/>
+    <children xmi:id="__J3xtyjYEd6TaMM4SlXGHQ" type="Parent"/>
+    <children xmi:id="__J3xuCjYEd6TaMM4SlXGHQ" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="__J3xuSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="__J3xuijYEd6TaMM4SlXGHQ" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="__J3xuyjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <children xmi:id="__J3xvCjYEd6TaMM4SlXGHQ" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="__J3xvSjYEd6TaMM4SlXGHQ"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="__J3xsSjYEd6TaMM4SlXGHQ" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Guarantor%5Bjcu%5Ename=Guarantor.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="__J3xsijYEd6TaMM4SlXGHQ" x="17292" y="9372"/>
+  </children>
+  <children xmi:id="_MZXHAC5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZXHAy5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZXHBC5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZXHBS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZXHBi5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZXHBy5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZXHCC5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZXHCS5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZqB8C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZqB8S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZqB8i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZqB8y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZXHAS5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=OtherCondition%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZXHAi5ZEd6qNNaI9tQmDw" x="2640" y="23760"/>
+  </children>
+  <children xmi:id="_MZqB9C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZqB9y5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZqB-C5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZqB-S5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZqB-i5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZqB-y5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZqB_C5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZqB_S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZqB_i5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZqB_y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZqCAC5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZqCAS5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZqB9S5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Jur%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZqB9i5ZEd6qNNaI9tQmDw" x="7920" y="23760"/>
+  </children>
+  <children xmi:id="_MZqCAi5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZqCBS5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZqCBi5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZqCBy5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZqCCC5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZqCCS5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZqCCi5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZqCCy5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZzy8C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZzy8S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZzy8i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZzy8y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZqCAy5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Decision%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZqCBC5ZEd6qNNaI9tQmDw" x="13992" y="23760"/>
+  </children>
+  <children xmi:id="_MZzy9C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZzy9y5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZzy-C5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZzy-S5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZzy-i5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZzy-y5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZzy_C5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZzy_S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZzy_i5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZzy_y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZzzAC5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZzzAS5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZzy9S5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Main%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZzy9i5ZEd6qNNaI9tQmDw" x="20196" y="23760"/>
+  </children>
+  <children xmi:id="_MZzzAi5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZzzBS5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZzzBi5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZzzBy5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZzzCC5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZzzCS5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZzzCi5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZzzCy5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZ884C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ884S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZ884i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ884y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZzzAy5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Reserve%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZzzBC5ZEd6qNNaI9tQmDw" x="26268" y="23760"/>
+  </children>
+  <children xmi:id="_MZ885C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZ885y5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZ886C5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZ886S5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZ886i5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZ886y5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZ887C5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ887S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZ887i5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ887y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZ888C5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ888S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZ885S5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZ885i5ZEd6qNNaI9tQmDw" x="32868" y="4884"/>
+  </children>
+  <children xmi:id="_MZ888i5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZ889S5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZ889i5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZ889y5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZ88-C5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZ88-S5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZ88-i5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ88-y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZ88_C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ88_S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MZ88_i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ88_y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZ888y5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=GeneralCondition%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZ889C5ZEd6qNNaI9tQmDw" x="32472" y="23760"/>
+  </children>
+  <children xmi:id="_MZ89AC5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MZ89Ay5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MZ89BC5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MZ89BS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MZ89Bi5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MZ89By5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MZ89CC5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MZ89CS5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaGt4C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaGt4S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaGt4i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaGt4y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MZ89AS5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Risk%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MZ89Ai5ZEd6qNNaI9tQmDw" x="41316" y="23760"/>
+  </children>
+  <children xmi:id="_MaGt5C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MaGt5y5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MaGt6C5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MaGt6S5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MaGt6i5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MaGt6y5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MaGt7C5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaGt7S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaGt7i5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaGt7y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaGt8C5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaGt8S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MaGt5S5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Header%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MaGt5i5ZEd6qNNaI9tQmDw" x="47388" y="23760"/>
+  </children>
+  <children xmi:id="_MaGt8i5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MaGt9S5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MaGt9i5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MaGt9y5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MaGt-C5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MaGt-S5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MaGt-i5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaGt-y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaQe4C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe4S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaQe4i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe4y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MaGt8y5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=Comment%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MaGt9C5ZEd6qNNaI9tQmDw" x="53988" y="23760"/>
+  </children>
+  <children xmi:id="_MaQe5C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MaQe5y5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MaQe6C5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MaQe6S5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MaQe6i5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MaQe6y5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MaQe7C5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe7S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaQe7i5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe7y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaQe8C5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe8S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MaQe5S5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=SupplyConclusion%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MaQe5i5ZEd6qNNaI9tQmDw" x="59400" y="23760"/>
+  </children>
+  <children xmi:id="_MaQe8i5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MaQe9S5ZEd6qNNaI9tQmDw" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_MaQe9i5ZEd6qNNaI9tQmDw" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_MaQe9y5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+    <children xmi:id="_MaQe-C5ZEd6qNNaI9tQmDw" type="Name"/>
+    <children xmi:id="_MaQe-S5ZEd6qNNaI9tQmDw" type="Parent"/>
+    <children xmi:id="_MaQe-i5ZEd6qNNaI9tQmDw" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe-y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaQe_C5ZEd6qNNaI9tQmDw" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe_S5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <children xmi:id="_MaQe_i5ZEd6qNNaI9tQmDw" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_MaQe_y5ZEd6qNNaI9tQmDw"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_MaQe8y5ZEd6qNNaI9tQmDw" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=TaskContractor%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MaQe9C5ZEd6qNNaI9tQmDw" x="65604" y="23760"/>
+  </children>
+  <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="__a9wcSjSEd6rMdrfciySvw"/>
+  <element xsi:nil="true"/>
+  <edges xmi:id="_9Ca9ACjYEd6TaMM4SlXGHQ" source="_7aQsYCjYEd6TaMM4SlXGHQ" target="_8_SJcCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_9Ca9AyjYEd6TaMM4SlXGHQ" type="KindLabel">
+      <children xmi:id="_9Ca9BSjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+      <children xmi:id="_9Ca9ByjYEd6TaMM4SlXGHQ" type="Kind"/>
+      <children xmi:id="_9Ca9BijYEd6TaMM4SlXGHQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_9Ca9BCjYEd6TaMM4SlXGHQ" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_9Ca9ASjYEd6TaMM4SlXGHQ" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=TaskSupply%5Bjcu%5Ename=TaskSupply.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Warrantor%5Bjcu%5Ename=Warrantor.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_9Ca9AijYEd6TaMM4SlXGHQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_-VRE8CjYEd6TaMM4SlXGHQ" source="_7aQsYCjYEd6TaMM4SlXGHQ" target="_-SI4cCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_-VRE8yjYEd6TaMM4SlXGHQ" type="KindLabel">
+      <children xmi:id="_-VRE9SjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+      <children xmi:id="_-VRE9yjYEd6TaMM4SlXGHQ" type="Kind"/>
+      <children xmi:id="_-VRE9ijYEd6TaMM4SlXGHQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_-VRE9CjYEd6TaMM4SlXGHQ" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_-VRE8SjYEd6TaMM4SlXGHQ" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=TaskSupply%5Bjcu%5Ename=TaskSupply.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Depositor%5Bjcu%5Ename=Depositor.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_-VRE8ijYEd6TaMM4SlXGHQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="__M_-MCjYEd6TaMM4SlXGHQ" source="_7aQsYCjYEd6TaMM4SlXGHQ" target="__J3xsCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="__M_-MyjYEd6TaMM4SlXGHQ" type="KindLabel">
+      <children xmi:id="__M_-NSjYEd6TaMM4SlXGHQ" type="Stereotype"/>
+      <children xmi:id="__M_-NyjYEd6TaMM4SlXGHQ" type="Kind"/>
+      <children xmi:id="__M_-NijYEd6TaMM4SlXGHQ" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="__M_-NCjYEd6TaMM4SlXGHQ" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="__M_-MSjYEd6TaMM4SlXGHQ" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=TaskSupply%5Bjcu%5Ename=TaskSupply.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Guarantor%5Bjcu%5Ename=Guarantor.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="__M_-MijYEd6TaMM4SlXGHQ" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_MqWJUC5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_5m7GhCjYEd6TaMM4SlXGHQ">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_MqWJUS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MqWJUi5ZEd6qNNaI9tQmDw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_MqWJUy5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZXHAC5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_MqWJVC5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MqWJVS5ZEd6qNNaI9tQmDw" points="[0, 0, 28342, -1586]$[-28342, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bpi5ZEd6qNNaI9tQmDw" id="(0.09081164,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bpy5ZEd6qNNaI9tQmDw" id="(0.6664852,0.0)"/>
+  </edges>
+  <edges xmi:id="_MqWJVi5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZqB9C5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_MqWJVy5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MqWJWC5ZEd6qNNaI9tQmDw" points="[0, 0, 23096, -1586]$[-23095, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BsC5ZEd6qNNaI9tQmDw" id="(0.18177642,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BsS5ZEd6qNNaI9tQmDw" id="(0.66652,0.0)"/>
+  </edges>
+  <edges xmi:id="_MqWJWS5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZqCAi5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_MqWJWi5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MqWJWy5ZEd6qNNaI9tQmDw" points="[1, 0, 17557, -1586]$[-17555, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bui5ZEd6qNNaI9tQmDw" id="(0.27258804,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Buy5ZEd6qNNaI9tQmDw" id="(0.66652,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6UC5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZzy9C5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6US5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6Ui5ZEd6qNNaI9tQmDw" points="[1, 0, 13227, -1586]$[-13226, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3sC5ZEd6qNNaI9tQmDw" id="(0.31807044,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3sS5ZEd6qNNaI9tQmDw" id="(0.33333334,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6Uy5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZzzAi5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6VC5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6VS5ZEd6qNNaI9tQmDw" points="[0, 0, 7673, -1586]$[-7672, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bri5ZEd6qNNaI9tQmDw" id="(0.40903524,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bry5ZEd6qNNaI9tQmDw" id="(0.33326,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6Vi5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaGt5C5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6Vy5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6WC5ZEd6qNNaI9tQmDw" points="[1, 0, -13456, -1586]$[13458, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BtC5ZEd6qNNaI9tQmDw" id="(0.6817764,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BtS5ZEd6qNNaI9tQmDw" id="(0.66659886,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6WS5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaQe8i5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6Wi5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6Wy5ZEd6qNNaI9tQmDw" points="[1, 0, -29966, -1586]$[29967, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BvC5ZEd6qNNaI9tQmDw" id="(0.9545176,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BvS5ZEd6qNNaI9tQmDw" id="(0.66653734,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6XC5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZ89AC5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6XS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6Xi5ZEd6qNNaI9tQmDw" points="[0, 0, -6453, -1586]$[6454, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3uC5ZEd6qNNaI9tQmDw" id="(0.5453293,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3uS5ZEd6qNNaI9tQmDw" id="(0.33326,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6Xy5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaQe5C5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6YC5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6YS5ZEd6qNNaI9tQmDw" points="[0, 0, -22803, -1586]$[22804, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Boi5ZEd6qNNaI9tQmDw" id="(0.8180705,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Boy5ZEd6qNNaI9tQmDw" id="(0.33326,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6Yi5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZ888i5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6Yy5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ZC5ZEd6qNNaI9tQmDw" points="[0, 0, 0, -1586]$[0, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bqi5ZEd6qNNaI9tQmDw" id="(0.5,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bqy5ZEd6qNNaI9tQmDw" id="(0.5,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6ZS5ZEd6qNNaI9tQmDw" type="OwnedElement" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaGt8i5ZEd6qNNaI9tQmDw">
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6Zi5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6Zy5ZEd6qNNaI9tQmDw" points="[1, 0, -17688, -1586]$[17689, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3ti5ZEd6qNNaI9tQmDw" id="(0.7272588,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3ty5ZEd6qNNaI9tQmDw" id="(0.33316287,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6aC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZzzAi5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6ay5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6bS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6by5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6bi5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6bC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6aS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Reserve%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ai5ZEd6qNNaI9tQmDw" points="[1, 0, 6455, -1586]$[-6453, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bvi5ZEd6qNNaI9tQmDw" id="(0.4545176,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bvy5ZEd6qNNaI9tQmDw" id="(0.66652,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6cC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZqCAi5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6cy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6dS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6dy5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6di5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6dC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6cS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Decision%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ci5ZEd6qNNaI9tQmDw" points="[1, 0, 18776, -1586]$[-18774, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BpC5ZEd6qNNaI9tQmDw" id="(0.2272588,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BpS5ZEd6qNNaI9tQmDw" id="(0.33326,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6eC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZqB9C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6ey5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6fS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6fy5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6fi5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6fC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6eS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Jur%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ei5ZEd6qNNaI9tQmDw" points="[1, 0, 24314, -1586]$[-24312, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BrC5ZEd6qNNaI9tQmDw" id="(0.13629402,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BrS5ZEd6qNNaI9tQmDw" id="(0.33326,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6gC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaQe5C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6gy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6hS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6hy5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6hi5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6hC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6gS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=SupplyConclusion%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6gi5ZEd6qNNaI9tQmDw" points="[1, 0, -24021, -1586]$[24023, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BuC5ZEd6qNNaI9tQmDw" id="(0.8635528,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BuS5ZEd6qNNaI9tQmDw" id="(0.66652,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6iC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZzy9C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6iy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6jS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6jy5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6ji5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6jC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6iS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Main%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ii5ZEd6qNNaI9tQmDw" points="[0, 0, 12000, -1586]$[-12000, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BoC5ZEd6qNNaI9tQmDw" id="(0.36355284,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BoS5ZEd6qNNaI9tQmDw" id="(0.6666667,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6kC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_7aQsYCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_Mqf6ky5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6lS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6ly5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6li5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6lC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6kS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=TaskSupply%5Bjcu%5Ename=TaskSupply.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ki5ZEd6qNNaI9tQmDw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_Mqf6mC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZ89AC5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6my5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6nS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6ny5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6ni5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6nC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6mS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Risk%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6mi5ZEd6qNNaI9tQmDw" points="[1, 0, -7671, -1586]$[7673, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3ui5ZEd6qNNaI9tQmDw" id="(0.5908116,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3uy5ZEd6qNNaI9tQmDw" id="(0.66652,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6oC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaGt8i5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6oy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6pS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6py5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6pi5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6pC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6oS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Comment%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6oi5ZEd6qNNaI9tQmDw" points="[0, 0, -18696, -1586]$[18696, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BqC5ZEd6qNNaI9tQmDw" id="(0.7725881,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07BqS5ZEd6qNNaI9tQmDw" id="(0.66658145,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6qC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_5m7GhCjYEd6TaMM4SlXGHQ">
+    <children xmi:id="_Mqf6qy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6rS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6ry5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6ri5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6rC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6qS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=TaskContractor%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6qi5ZEd6qNNaI9tQmDw" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_Mqf6sC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaQe8i5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6sy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6tS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6ty5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6ti5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6tC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6sS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=TaskContractor%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6si5ZEd6qNNaI9tQmDw" points="[1, 0, -28545, -1586]$[28546, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3si5ZEd6qNNaI9tQmDw" id="(0.9090352,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3sy5ZEd6qNNaI9tQmDw" id="(0.33326867,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6uC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZXHAC5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6uy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6vS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6vy5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6vi5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6vC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6uS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=OtherCondition%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6ui5ZEd6qNNaI9tQmDw" points="[0, 0, 29269, -1586]$[-29269, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3tC5ZEd6qNNaI9tQmDw" id="(0.04532925,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M0x3tS5ZEd6qNNaI9tQmDw" id="(0.3332426,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6wC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MZ888i5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_Mqf6wy5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_Mqf6xS5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_Mqf6xy5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_Mqf6xi5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mqf6xC5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_Mqf6wS5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=GeneralCondition%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Mqf6wi5ZEd6qNNaI9tQmDw" points="[0, 0, 0, -1586]$[0, 1586, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bti5ZEd6qNNaI9tQmDw" id="(0.5,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bty5ZEd6qNNaI9tQmDw" id="(0.5,0.0)"/>
+  </edges>
+  <edges xmi:id="_Mqf6yC5ZEd6qNNaI9tQmDw" source="_MZ885C5ZEd6qNNaI9tQmDw" target="_MaGt5C5ZEd6qNNaI9tQmDw">
+    <children xmi:id="_MqpEQi5ZEd6qNNaI9tQmDw" type="KindLabel">
+      <children xmi:id="_MqpERC5ZEd6qNNaI9tQmDw" type="Stereotype"/>
+      <children xmi:id="_MqpERi5ZEd6qNNaI9tQmDw" type="Kind"/>
+      <children xmi:id="_MqpERS5ZEd6qNNaI9tQmDw" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MqpEQy5ZEd6qNNaI9tQmDw" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_MqpEQC5ZEd6qNNaI9tQmDw" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=Header%5Bjsrctype%5Ename=Task%5Bjcu%5Ename=Task.java%5Bjpack%5Ename=com.vtb.domain%5Bjsrcroot%5Esrcfolder=source%5Bproject%5Eid=VTB-AppLogic%5D%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MqpEQS5ZEd6qNNaI9tQmDw" points="[1, 0, -12114, -1586]$[12116, 1586, 1, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bsi5ZEd6qNNaI9tQmDw" id="(0.636294,1.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_M07Bsy5ZEd6qNNaI9tQmDw" id="(0.3331977,0.0)"/>
+  </edges>
+</notation:Diagram>

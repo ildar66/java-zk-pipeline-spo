@@ -1,0 +1,6 @@
+<attach for=element event=onmouseover handler=table> 
+<attach for=element event=onmouseout handler=tr>  
+<script> 
+	function table(){element.className='trhover';}  
+	function tr(){element.className='';} 
+</script> 

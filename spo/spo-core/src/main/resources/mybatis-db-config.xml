@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="aggressiveLazyLoading" value="false" />
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="cacheEnabled" value="true" />
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="logImpl" value="NO_LOGGING"/>
+		 <setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+    
+    <typeAliases>
+        <typeAlias type="ru.md.domain.MdTask" />
+        <typeAlias type="ru.md.domain.Org" />
+        <typeAlias type="ru.md.domain.Pipeline" />
+        <typeAlias type="ru.md.domain.InterestRate" />
+        <typeAlias type="ru.md.domain.User" />
+        <typeAlias type="ru.md.domain.ReportTemplate" alias="reportTemplate"/>
+        <typeAlias type="ru.md.domain.Product" />
+        <typeAlias type="ru.md.domain.Comission" />  
+        <typeAlias type="ru.md.domain.OtherGoal" />
+        <typeAlias type="ru.md.domain.TargetGroupLimitType" />        
+        <typeAlias type="ru.md.domain.TargetGroupLimit" />        
+        <typeAlias type="ru.md.domain.PlaceClientRecord" />        
+        <typeAlias type="ru.md.domain.percenthistory.DealPercentHistory"/>
+        <typeAlias type="ru.md.domain.percenthistory.FactPercentHistory"/>
+        <typeAlias type="ru.md.domain.percenthistory.IndrateHistory"/>
+        
+        <typeAlias type="ru.md.domain.dict.CommonDictionary" />
+        <typeAlias type="ru.md.domain.dict.FundingCompany" />  
+        <typeAlias type="ru.md.domain.dict.PipelineStage" />
+
+        <typeAlias type="ru.md.domain.pipeline.DealCount" />
+        <typeAlias type="ru.md.domain.pipeline.DealVolume" />
+
+        <package name="ru.md.domain" />
+    </typeAliases>
+</configuration>

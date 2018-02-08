@@ -1,0 +1,1 @@
+[ССКО] Одобрены новые условия по сделке №${mdTask.mdtaskNumber} версия ${mdTask.version} (${mdTask.mainOrganization.name})

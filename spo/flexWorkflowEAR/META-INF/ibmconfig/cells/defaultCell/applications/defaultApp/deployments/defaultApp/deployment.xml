@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appdeployment:Deployment xmi:version="2.0"
+	xmlns:xmi="http://www.omg.org/XMI"
+	xmlns:appdeployment="http://www.ibm.com/websphere/appserver/schemas/5.0/appdeployment.xmi"
+	xmi:id="Deployment_1228062518148">
+	<deployedObject xmi:type="appdeployment:ApplicationDeployment"
+		xmi:id="ApplicationDeployment_1228062518148" startingWeight="10">
+		<modules xmi:type="appdeployment:EJBModuleDeployment" xmi:id="EJBModuleDeployment_1228062518148"
+			startingWeight="5000" uri="DBFlexWorkflowEJB.jar" />
+		<modules xmi:type="appdeployment:WebModuleDeployment" xmi:id="WebModuleDeployment_1228062518149"
+			startingWeight="10000" uri="flexWorkflow.war" />
+		<modules xmi:type="appdeployment:EJBModuleDeployment" xmi:id="EJBModuleDeployment_1234272023537"
+			startingWeight="5000" uri="SequenceGenerator.jar" />
+		<modules xmi:type="appdeployment:EJBModuleDeployment" xmi:id="EJBModuleDeployment_1234272023538"
+			startingWeight="5000" uri="VtbSpoProcessor.jar" />
+		<modules xmi:type="appdeployment:WebModuleDeployment" xmi:id="WebModuleDeployment_1234272023537"
+			startingWeight="10000" uri="DictionaryApp.war" />
+		<modules xmi:type="appdeployment:EJBModuleDeployment" xmi:id="EJBModuleDeployment_1234272023539"
+			startingWeight="5000" uri="Vtb24Group.jar" />
+		<modules xmi:type="appdeployment:EJBModuleDeployment" xmi:id="EJBModuleDeployment_1306482818909"
+			startingWeight="5000" uri="flexWorkflowEJB.jar" />
+		<classloader xmi:id="Classloader_1285594608214" mode="PARENT_FIRST">
+		</classloader>
+	</deployedObject>
+</appdeployment:Deployment>

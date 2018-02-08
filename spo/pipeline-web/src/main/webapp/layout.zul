@@ -1,0 +1,128 @@
+<?page docType="html" contentType="text/html;charset=UTF-8" language="xul/html" ?>
+<?meta http-equiv="Content-Type" content="text/html; charset=UTF-8" ?>
+
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+    <style src="assets/styles/style.css"/>
+    <style src="assets/styles/progressbox.css"/>
+
+    <style src="assets/styles/wysiwyg/lib/codemirror.css"/>
+    <style src="assets/styles/wysiwyg/addon/hint/show-hint.css"/>
+    <style src="assets/styles/wysiwyg/doc/report.css"/>
+    <script src="assets/styles/wysiwyg/lib/codemirror.js"/>
+    <script src="assets/styles/wysiwyg/addon/hint/show-hint.js"/>
+    <script src="assets/styles/wysiwyg/addon/hint/javascript-hint.js"/>
+    <script src="assets/styles/wysiwyg/mode/javascript/javascript.js"/>
+    <script src="assets/styles/wysiwyg/mode/markdown/markdown.js"/>
+    <script src="assets/styles/wysiwyg/ajax/jshint/jshint.js"/>
+    <script src="assets/styles/wysiwyg/wysiwyg.js"/>
+
+    <style src="css/md-index-style.css"/>
+
+    <borderlayout sclass="vertical page-home" apply="org.zkoss.bind.BindComposer"
+                  viewModel="@id('vm') @init('ru.masterdm.spo.pipeline.LayoutVM')" vflex="1">
+        <north height="40px" visible="@load(vm.homePage)">
+            <h:table class="HeaderTable" cellpadding="0" cellspacing="0" width="100%">
+                <h:tbody>
+                    <h:tr>
+                        <h:td width="70px">
+                            <h:a href="./"><h:img src="img/logo-vtb.gif" style="margin:8px;" width="60" /></h:a>
+                        </h:td>
+                        <h:td class="Gradient"> <!--<label id="test" value="@load(vm.currentHeader)"/>--></h:td>
+                        <!-- <h:td class="TitleCaption">Pipeline</h:td>-->
+                    </h:tr>
+                </h:tbody>
+            </h:table>
+        </north>
+        <west autoscroll="true" flex="true" width="100px" vflex="1" margins="0, 0, 0, 0"
+              border="0"  splittable="false" collapsible="false">
+            <hlayout sclass="menu-main" vflex="1" spacing="0">
+                <borderlayout sclass="no-borders transparent-background" vflex="1" hflex="1">
+                    <center sclass="no-borders transparent-background">
+                        <vlayout>
+                            <div visible="@load(not vm.homePage)" sclass="button-icon icon-logo" style="cursor: pointer"
+                                 tooltiptext="${labels.layout_home_page}"
+                                 onClick="@command('navigate', currentPage=page, targetPage='welcome')"/>
+
+                            <separator height="20px"/>
+                            <button sclass="button-icon" iconSclass="z-icon-user" tooltiptext="${labels.branchesAndGC_title}"
+                                    onClick="@command('navigateTab', currentPage=page, targetPage='pipelineTabs', targetTab='branchesAndGCo')"/>
+                            <button sclass="button-icon" iconSclass="z-icon-gears" tooltiptext="${labels.deals_title}"
+                                    onClick="@command('navigateTab', currentPage=page, targetPage='pipelineTabs',
+                                        targetTab='issuesAndDeals', data='deals')">Сделки</button>
+                            <button sclass="button-icon" iconSclass="z-icon-gears" tooltiptext="${labels.issues_title}"
+                                    onClick="@command('navigateTab', currentPage=page, targetPage='pipelineTabs',
+                                        targetTab='issuesAndDeals', data='issues')">Выдачи</button>
+                            <button sclass="button-icon" iconSclass="z-icon-star" tooltiptext="${labels.favorites_title}"
+                                    onClick="@command('navigateTab', currentPage=page, targetPage='pipelineTabs', targetTab='favorites')"/>
+
+                            <separator height="20px"/>
+                            <div sclass="filter-panel-section">
+                                <div sclass="filter-title"><label value="Отчеты" sclass="filter-title"/></div>
+                                <navbar vflex="1" id="navbar_report" orient="vertical" collapsed="false">
+                                    <nav popup="reportSavePopup" label="Сохранить конфигурацию" iconSclass="z-icon-save" />
+                                </navbar>
+                                <h:br /><h:br />
+                                <h:ul class="filter-list">
+                                    <forEach items="@load(vm.reports)" var="rep">
+                                        <h:li><a sclass="filter-link" onClick="@global-command('reportApply', rn=rep.id)">
+                                            <label value="@load(rep.name)"></label></a>
+                                            <a href="#" sclass="filter-actions">
+                                                <span popup="reportPopup" onClick="@command('reportNameSetter', rn=rep.id)">
+                                                    <h:img src="img/buttones_01.png" /></span></a>
+                                            <div sclass="ajs-layer-placeholder"></div></h:li>
+                                    </forEach>
+                                </h:ul>
+                            </div>
+                            <!--<timer id="keepAliveTimer" delay="@load(vm.sessionKeepAliveInterval)" running="true" repeats="true"
+                                   onTimer="@command('keepAlive')"/>-->
+                        </vlayout>
+                    </center>
+                    <south height="100px" sclass="no-borders transparent-background">
+                        <vlayout>
+                            <!--<button sclass="button-icon" iconSclass="z-icon-user" tooltiptext="@init(vm.currentUser)"/>-->
+                            <button sclass="button-icon" iconSclass="z-icon-question-circle" tooltiptext="${labels.layout_help}"/>
+                        </vlayout>
+                    </south>
+                </borderlayout>
+            </hlayout>
+        </west>
+        <center sclass="no-borders transparent-background">
+            <borderlayout sclass="no-borders  transparent-background">
+
+                <center sclass="no-borders  transparent-background">
+                    <include id="pageInclude" src="@load(vm.pageName)"/>
+                </center>
+            </borderlayout>
+        </center>
+
+    </borderlayout>
+    <popup id="reportSavePopup" onOpen="@command('reportNameSetter', rn=0, pub=0)">
+        Сохранить конфигурацию
+        <div>Название: <textbox width="150px" tabindex="1" value="@bind(vm.reportName)" onCreate="self.setFocus(true)"/></div>
+        <div><button label="Сохранить" id="saveBtn" onClick="@command('reportSave')"/>
+            <button label="Отмена" onClick="reportSavePopup.close()" /></div>
+        <div><label sclass="error" style="color:#c00" value="@load(vm.reportNameErrorMsg)"/></div>
+    </popup>
+    <html>
+        <![CDATA[
+            <style>
+                    td.Gradient {
+                            background: url(img/gradient.jpg) 100% 100% no-repeat;
+                            background-size: cover;
+                            margin: auto;
+                            text-align: center;
+                            }
+                    td.Gradient .z-label {
+                            white-space: nowrap;
+                            color: #FFF;
+                            text-align: center;
+                            font-size: 27px;
+                            font-family: Arial, sans-serif;
+                            margin: auto;
+                            width: 100%;
+                            }
+             </style>
+
+        ]]>
+    </html>
+</zk>

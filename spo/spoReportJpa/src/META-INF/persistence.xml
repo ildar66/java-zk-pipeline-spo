@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+	<persistence-unit name="flexWorkflowJPA">		
+<!--		<provider>org.hibernate.ejb.HibernatePersistence</provider>	-->
+		<jta-data-source>jdbc/LOANS</jta-data-source>
+		
+		<class>com.vtb.mapping.entities.report.ReportTemplateJPA</class>
+		<class>com.vtb.mapping.entities.report.ReportTemplateTypeJPA</class>
+		<class>com.vtb.mapping.entities.attachment.AttachmentEntity</class>
+		
+		<properties>
+	    	<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+	        <property name="hibernate.show_sql" value="false"/>
+	        <property name="hibernate.cache.use_query_cache" value="false"/>
+	        <property name="hibernate.cache.use_second_level_cache" value="false"/>
+	        <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+	        
+<!--	        <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver"/>-->
+<!--    		<property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.128.0.51:1521:VTBLOANS"/>-->
+<!--		    <property name="hibernate.connection.username" value="VTB_ADMIN"/>-->
+<!--		    <property name="hibernate.connection.password" value="VTB_ADMIN"/>-->
+<!--		    <property name="hibernate.hbm2ddl.auto" value="update"/>-->
+ 	</properties>
+	</persistence-unit>
+</persistence>

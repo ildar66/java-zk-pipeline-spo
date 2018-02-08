@@ -1,0 +1,44 @@
+<zk>
+    <window border="none" title="Компании">
+        <grid id="companiesDealCounts" model="@load(bcvm.companiesDealCounts)" mold="paging" pageSize="10">
+            <columns sizable="true" menupopup="auto" >
+                <column label=""/>
+                <column label="Компании" draggable="colCDC" droppable="colCDC" onDrop="move(event.dragged)" sort="auto(orgName)" sortDirection="ascending"/>
+                <column label="Кол.сдел." draggable="colCDC" droppable="colCDC" onDrop="move(event.dragged)" sort="auto(count)"/>
+                <column label="Всего млн.руб" draggable="colCDC" droppable="colCDC" onDrop="move(event.dragged)" sort="auto(sum)"/>
+                <column label="Объем млн.руб" draggable="colCDC" droppable="colCDC" onDrop="move(event.dragged)" sort="auto(sumRUR)"/>
+                <column label="Объем млн.$" draggable="colCDC" droppable="colCDC" onDrop="move(event.dragged)" sort="auto(sumUSD)"/>
+                <column label="Объем млн.евро" draggable="colCDC" droppable="colCDC" onDrop="move(event.dragged)" sort="auto(sumEUR)"/>
+            </columns>
+            <!-- template for each element in model -->
+            <template name="model">
+                <row draggable="row" droppable="row" onDrop="move(event.dragged)">
+                    <label value="icon" />
+                    <label value="@load(each.orgName)" />
+                    <label value="@load(each.count)" />
+                    <label value="${c:formatNumber(each.sum, '###,###,###')}" />
+                    <label value="${c:formatNumber(each.sumRUR, '###,###,###')}" />
+                    <label value="${c:formatNumber(each.sumUSD, '###,###,###')}" />
+                    <label value="${c:formatNumber(each.sumEUR, '###,###,###')}" />
+                </row>
+            </template>
+        </grid>
+    </window>
+    <zscript><![CDATA[
+      void move(Component dragged) {
+        if(dragged.getClass().getName().endsWith("Column")) {
+            int maxRows=dragged.getGrid().getRows().getChildren().size();
+            int i= dragged.getParent().getChildren().indexOf(dragged);
+            int j= self.getParent().getChildren().indexOf(self);
+
+            //move celles for each row
+            for(int k=0; k < maxRows; k++)
+               self.getGrid().getCell(k,j).parent.insertBefore(self.getGrid()
+                  .getCell(k,i),self.getGrid().getCell(k,j));
+       }
+
+        self.parent.insertBefore(dragged, self);
+      }
+]]></zscript>
+</zk>
+

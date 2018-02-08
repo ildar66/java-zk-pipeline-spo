@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Windows-1251"?>
+<STRUCTURE>
+	<ITEM>
+		<NAME>user</NAME>
+		<DESCRIPTION>имя</DESCRIPTION>
+		<DATA-TYPE>TEXT</DATA-TYPE>
+		<PATTERN>^[А-Я][а-я]+$</PATTERN>
+		<PROPERTIES ISSIGNED="true" REQUIRED="true" CANBEEMPTY="false" TRIM="true"/>
+	</ITEM>
+	<ITEM>
+		<NAME>data</NAME>
+		<DESCRIPTION>Дата совершения действия</DESCRIPTION>
+		<DATA-TYPE>TEXT</DATA-TYPE>
+		<PATTERN>^\d{1,2}.\d{1,2}.\d{4}$</PATTERN>
+		<PROPERTIES ISSIGNED="true" REQUIRED="true" CANBEEMPTY="false" TRIM="true"/>
+	</ITEM>
+	<ITEM>
+		<NAME>idProc</NAME>
+		<DESCRIPTION>Идентификатор процесса</DESCRIPTION>
+		<DATA-TYPE>TEXT</DATA-TYPE>
+		<PATTERN>^[0-9]+$</PATTERN>
+		<PROPERTIES ISSIGNED="true" REQUIRED="true" CANBEEMPTY="false" TRIM="true"/>
+	</ITEM>
+	<!--
+	<ITEM>
+        <XML-NAME>RDAT</XML-NAME>
+        <HTML-NAME>BIRTHDATE</HTML-NAME>
+        <DESCRIPTION>дата рождения</DESCRIPTION>
+        <FORMAT-DESCRIPTION>гггг-мм-дд</FORMAT-DESCRIPTION>
+        <DATA-TYPE SUBTYPE="date">DATETIMES</DATA-TYPE>
+        <PROPERTIES ISSIGNED="true" REQUIRED="true" CANBEEMPTY="false" TRIM="true"/>
+    </ITEM>
+-->
+</STRUCTURE>

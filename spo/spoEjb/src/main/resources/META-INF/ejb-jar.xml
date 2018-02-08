@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+  <display-name>flexWorkflowEJB</display-name>
+  
+  <enterprise-beans>
+  	<session>
+  		<ejb-name>SPOCCIntegrationFacade</ejb-name>
+  		<ejb-class>ru.md.spo.ejb.SPOCCIntegrationFacade</ejb-class>
+  		<session-type>Stateless</session-type>
+  		<transaction-type>Bean</transaction-type>
+  		<resource-ref>
+  			<description></description>
+  			<res-ref-name>jdbc/VTBLOANS</res-ref-name>
+  			<res-type>javax.sql.DataSource</res-type>
+  			<res-auth>Container</res-auth>
+  			<res-sharing-scope>Shareable</res-sharing-scope>
+  		</resource-ref></session>
+  	<session>
+  		<ejb-name>FlexWorkflowIntegration</ejb-name>
+  		<ejb-class>ru.md.spo.ejb.FlexWorkflowIntegration</ejb-class>
+  		<session-type>Stateless</session-type>
+  		<transaction-type>Container</transaction-type>
+  		<resource-ref>
+  			<description></description>
+  			<res-ref-name>jdbc/VTBLOANS</res-ref-name>
+  			<res-type>javax.sql.DataSource</res-type>
+  			<res-auth>Container</res-auth>
+  			<res-sharing-scope>Shareable</res-sharing-scope>
+  		</resource-ref></session></enterprise-beans>
+  <ejb-client-jar>spoEjbClient.jar</ejb-client-jar></ejb-jar>

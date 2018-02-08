@@ -1,0 +1,256 @@
+/*
+ * Created on 28.08.2007
+ * 
+ */
+package org.uit.director.report.pensionAppointment;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.uit.director.calendar.BusinessCalendar;
+import org.uit.director.calendar.Duration;
+import org.uit.director.contexts.WPC;
+import org.uit.director.contexts.WorkflowSessionContext;
+import org.uit.director.report.ComponentReport;
+import org.uit.director.report.mainreports.PerformanceReport;
+
+public class PerformancePensReportAll extends PerformanceReport {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void init(WorkflowSessionContext wsc, List params) {
+
+		super.init(wsc, params);
+		nameReport = "Производительность процессов назначения, перерасчета и выплаты пенсии и ЕДВ";
+
+		ComponentReport cR = new ComponentReport("check",
+				"С учетом даты подачи последнего недостающего документа",
+				Boolean.TRUE);
+		componentList.add(cR);
+
+		cR = new ComponentReport("check", "С учетом выходных дней",
+				Boolean.TRUE);
+		componentList.add(cR);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.uit.director.report.mainreports.PerformanceReport#generateReport()
+	 */
+	@Override
+	public void generateReport() {
+		/*try {
+			String idTypeProcess = ComponentGenerator
+					.getSelectedItem(ComponentGenerator.getItemByName(
+							componentList, "Тип процесса"));
+			String dateLeft = ComponentGenerator.getDateForPeriod(
+					componentList, "Период", 0);
+			String dateRight = ComponentGenerator.getDateForPeriod(
+					componentList, "Период", 1);
+			String period = String.valueOf(ComponentGenerator.getItemByName(
+					componentList, "Срок выполнения (дней)").getValue());
+			String isCompleted = ((Boolean) ComponentGenerator.getItemByName(
+					componentList, "Завершенные процессы").getValue())
+					.booleanValue() ? "1" : "0";
+			String idStage = ComponentGenerator
+					.getSelectedItem(ComponentGenerator.getItemByName(
+							componentList, "Анализировать по этап"));
+			String isLastDate = ((Boolean) ComponentGenerator.getItemByName(
+					componentList,
+					"С учетом даты подачи последнего недостающего документа")
+					.getValue()).booleanValue() ? "1" : "0";
+			boolean isHoliday = ((Boolean) ComponentGenerator.getItemByName(
+					componentList, "С учетом выходных дней").getValue())
+					.booleanValue();
+
+			StringBuffer sb = new StringBuffer();
+
+			sb
+					.append("<SCRIPT language=JavaScript>")
+					.append(
+							"dd=document;NS=(dd.layers)?1:0;IE=(dd.all)?1:0;DOM=(dd.getElementById)?1:0;\t")
+					.append("flagDelay=false;flagNotDelay=false;\t")
+					.append(
+							"function setob(L){if (IE)obg=dd.all[''+L+''].style;else if (DOM)obg=dd.getElementById(''+L+'').style;}\t")
+					.append(
+							"function dsh(L){if (!NS){setob(L);obg.display='block'}}\t")
+					.append(
+							"function dhd(L){if (!NS){setob(L);obg.display='none'}}\t")
+					.append(
+							"function doHide(L) {var flag;if (L=='delay') flag = flagDelay;else flag = flagNotDelay;\t")
+					.append(
+							"if (flag==true) {dsh(L);} else {dhd(L);}if (L=='delay') flagDelay = !flagDelay;\n")
+					.append("\telse flagNotDelay = !flagNotDelay;}").append(
+							"</SCRIPT>");
+
+			DBFlexWorkflowCommon dbManager = getWsc().getDbManager()
+					.getDbFlexDirector();
+			StringBuffer sql = new StringBuffer().append("call ").append(
+					"DB2ADMIN.REPORT_PERFOMANCE_PENS_COMMON").append("(")
+					.append(idTypeProcess).append(",").append(idStage).append(
+							", '").append(dateLeft).append("', '").append(
+							dateRight).append("', ").append(isCompleted)
+					.append(",").append(isLastDate).append(")");
+
+			// все процесы
+			List processes = dbManager.execQuery(sql.toString());
+			calcDays(processes);
+			if (isHoliday) {
+				editCountDays(processes);
+			}
+
+			Collections.sort(processes, new PerformanceReport.Compare());
+			int periodInt = Integer.parseInt(period);
+			int allTasks = processes.size();
+			// индекс границы между просроченными и не просроченными делами
+			int border = allTasks;
+			for (int i = 0; i < allTasks; i++) {
+
+				int days = Integer.valueOf(((String) ((Map) processes.get(i)).get("O_DAYS"))).intValue();
+				if (days <= periodInt) {
+					border = i;
+					break;
+				}
+			}
+
+			String nameTypProcess = (String) WPC.getInstance()
+					.getData(Cnst.TBLS.typeProcesses, idTypeProcess,
+							Cnst.TTypeProc.name);
+
+			sb
+					.append("<div class=\"tabledata\">\n")
+					.append("<CENTER></CENTER>")
+					.append(
+							"<table width=\"98%\" border=\"1\" frame=\"box\" cellpadding=\"1\">");
+			sb
+					.append("<CAPTION> <BIG> Производительность  процесса \"")
+					.append(nameTypProcess)
+					.append("\" в период с ")
+					.append(dateLeft)
+					.append(" по ")
+					.append(dateRight)
+					.append(" в срок выполнения ")
+					.append(period)
+					.append(" дней по ")
+					.append(
+							isCompleted.equals("1") ? "завершенным"
+									: "активным")
+					.append(" процессам с учетом выходных дней</BIG></CAPTION>")
+					.append(
+							"<tr><th>Просроченные</th><th>Непросроченные</th></tr>")
+					.append("<tr><td align=center>").append(border)
+					.append(" (").append(
+							Math.round(((float) (border) / allTasks) * 100))
+					.append(" %)").append("</td>");
+			sb
+					.append("<td align=center>")
+					.append(allTasks - border)
+					.append(" (")
+					.append(
+							Math
+									.round((1 - ((float) (border) / allTasks)) * 100))
+					.append(" %)")
+					.append("</td></tr>")
+					.append(
+							"<tr><td align=center><INPUT onclick=\"doHide('delay');\" type=button value=\"Показать\\Скрыть\"></td>")
+					.append(
+							"<td align=center><INPUT onclick=\"doHide('notDelay');\" type=button value=\"Показать\\Скрыть\"></td></tr>");
+			sb.append("</table><br><br>");
+
+			sb.append("<p id=\"delay\" style=DISPLAY: block>");
+
+			sb
+					.append("<table class=\"sort\" width=\"98%\" border=\"1\" frame=\"box\" cellpadding=\"1\">");
+			sb.append("<CAPTION> <BIG>Просроченные процессы</BIG></CAPTION>");
+
+			if (border != 0)
+				sb.append(getRecordProcessData(processes.subList(0, border)
+						.toArray(), dbManager, idTypeProcess));
+			sb.append("</tbody></table>");
+
+			sb.append("</p><script>doHide('delay');</script>");
+
+			sb.append("<p id=\"notDelay\" style=DISPLAY: block>");
+			sb
+					.append("<table class=\"sort\" width=\"98%\" border=\"1\" frame=\"box\" cellpadding=\"1\">");
+			sb.append("<CAPTION> <BIG>Непросроченные процессы</BIG></CAPTION>");
+			if (border != allTasks)
+				sb.append(getRecordProcessData(processes.subList(border,
+						allTasks).toArray(), dbManager, idTypeProcess));
+
+			sb.append("</tbody></table>");
+			sb.append("</p><script>doHide('notDelay');</script>");
+			sb.append("</div>");
+
+			reportHTML += sb.toString();
+			isReportGenerate = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			reportHTML = "<br><br> <center>Ошибка при выполнении запроса</center>";
+		}*/
+	}
+
+	private void calcDays(List processes) {
+
+		try {
+			for (int i = 0; i < processes.size(); i++) {
+				Map strDb = (Map) processes.get(i);
+				String dateLeft = (String) strDb.get("O_DATE_START");
+				String dateRight = (String) strDb.get("O_DATE_COMPLATION");
+				Date dL = WPC.getInstance().dateFormat.parse(dateLeft);
+				Date dR = WPC.getInstance().dateFormat.parse(dateRight);
+				int daysDiff = (int) ((dR.getTime() - dL.getTime()) / 86400000);
+				strDb.put("O_DAYS", String.valueOf(daysDiff));
+
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void editCountDays(List allProcess) {
+		BusinessCalendar bCalendar = new BusinessCalendar();
+		SimpleDateFormat format = WPC.getInstance().dateFormat;
+
+		for (int i = 0; i < allProcess.size(); i++) {
+			Map map = (Map) allProcess.get(i);
+			try {
+				int days = Integer.valueOf(((String) map.get("O_DAYS"))).intValue();
+					
+				// String dateStart = (String) map.get("O_DATE_START");
+				String dateComplation = (String) map.get("O_DATE_COMPLATION");
+				// Date dateStartD = format.parse(dateStart);
+				Date dateComplationtD = format.parse(dateComplation);
+
+				// Date dateRes = bCalendar.add(dateComplationtD, new
+				// Duration("-1 day"));
+				int minus = 0;
+				// if (bCalendar.isHoliday(dateRes)) {
+				// minus++;
+				while (bCalendar.isHoliday(bCalendar.add(dateComplationtD,
+						new Duration("-" + (minus + 1) + " day")))) {
+					minus++;
+				}
+				days -= minus;
+				map.put("O_DAYS", String.valueOf(days));
+
+				// }
+
+			} catch (ParseException e) {
+				e.printStackTrace(); // To change body of catch statement use
+				// File | Settings | File Templates.
+			}
+
+		}
+	}
+}

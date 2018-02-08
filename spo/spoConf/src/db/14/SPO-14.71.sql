@@ -1,0 +1,4 @@
+begin
+    PKG_DDL_UTILS.EXECUTE_STRING('INSERT INTO CONDITION_TYPES  (ID_TYPE, NAME, SORT_ORDER) VALUES(5,''Финансовые ковенанты'',10)');
+end;
+
